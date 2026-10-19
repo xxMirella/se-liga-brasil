@@ -1,0 +1,83 @@
+name: Quality and build
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  quality:
+    needs: secrets
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17@sha256:2d2b8998d31037bf721cfdf764d76ba74171b4fab3431b7f72c27c56ddbdf9e3
+        env:
+          POSTGRES_USER: ci
+          POSTGRES_PASSWORD: ci-only-ephemeral
+          POSTGRES_DB: se_liga_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ci -d se_liga_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgresql://ci:ci-only-ephemeral@127.0.0.1:5432/se_liga_test
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install locked dependencies and application
+        run: |
+          python -m pip install -r requirements.lock
+          python -m pip install --no-build-isolation --no-deps -e .
+          python -m pip check
+      - name: Lint
+        run: ruff check src tests scripts
+      - name: Validate environment contract and cognitive complexity
+        run: |
+          python scripts/check_quality.py
+          python scripts/check_tracked_files.py
+      - name: Test with branch coverage (including isolated PostgreSQL)
+        run: python -m coverage run -m pytest -q --junitxml=reports/tests.xml
+      - name: Enforce 95 percent coverage
+        if: always()
+        run: |
+          python -m coverage xml --fail-under=0
+          python -m coverage html --fail-under=0
+          python -m coverage report
+      - name: Build static deliverable
+        run: se-liga-brasil build-static-site --output-directory dist/public
+      - name: Publish validation reports
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: quality-reports
+          path: reports/
+          retention-days: 7
+      - name: Publish static build
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: public-static-site
+          path: dist/public/
+          retention-days: 7
+  secrets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Scan full Git history with redacted output
+        run: |
+          docker run --rm -v "$PWD:/repo:ro" ghcr.io/gitleaks/gitleaks:v8.24.3@sha256:e1b35e12a8c6fa8901f060459cfb6b2fc4c484d3afbe3b029733a3bbfab07055 git /repo --redact --log-opts=--all

@@ -1,0 +1,29 @@
+# Primeira fatia do backend público: votos
+
+O serviço `service.public_profile.get_person_votes` lê exclusivamente tabelas canônicas pelo adaptador `database.public_profile.PublicProfileRepository`. Não consulta fontes remotas, artefatos originais ou Parquet; não dispara crawlers nem escreve fatos. O transporte HTTP pode chamar esse contrato sem conhecer SQL ou a estrutura privada de proveniência. Esta fatia não implementa o perfil completo, busca pública, remuneração, atribuições do cargo ou toda a linha do tempo.
+
+## Contrato
+
+`VoteQuery(person_id, start_on, end_on, office_kind=None, exercise_id=None, cursor=None, limit=30)` aceita UUID interno, datas inclusivas e até cem itens por página. O cursor é opaco, versionado e vinculado à pessoa, período e filtros de cargo/exercício. Filtro diferente invalida o cursor. Ordenação decrescente por dia e chave interna da votação evita repetir registros do mesmo dia entre páginas; a consulta busca somente uma linha adicional para identificar a próxima página. O cursor não é assinatura de autorização: a consulta sempre reaplica os filtros e o vínculo à pessoa.
+
+`get_person_votes(repository, query)` retorna `person`, `period`, `exercises`, `exercises_truncated`, `exercise_link_state`, `office_link_basis`, `items`, `next_cursor`, `coverage` e `empty_state`. Os itens possuem identidade interna da votação, dia comprovado, mês de agrupamento, precisão, timestamp somente quando publicado, instituição, proposição, objeto, modalidade, etapa/turno, órgão e disponibilidade nominal. `individual.participation_status` e `individual.choice` são independentes de `collective_result`. A interface pode mostrar uma escolha contrária mesmo quando o objeto foi aprovado coletivamente.
+
+O filtro por cargo/exercício exige instituição coincidente e data dentro de intervalo individual comprovado, com fim exclusivo. Uma legislatura esperada não substitui exercício. Essa associação temporal contextualiza o cargo; a participação vem exclusivamente do registro individual `person_vote`, não da presença no exercício. Não se usa o partido observado no voto como filiação atual; este contrato não publica partido.
+
+Ausência de votos gera `empty_state=no_linked_vote_records`. Ausência de exercício gera `exercise_link_state=unconfirmed`; um filtro de cargo não comprovado resulta em página vazia, sem inventar vínculo. Pessoa inexistente gera `PERSON_NOT_FOUND`/404; exercício que não pertence à pessoa ou não cruza o intervalo gera `EXERCISE_NOT_FOUND_IN_PERIOD`/404. Entradas inválidas recebem códigos estáveis 400, sem SQL, documentos ou caminhos privados. Não diferenciar exercício de outra pessoa de exercício inexistente evita divulgar vínculos indevidos.
+
+## Cobertura e limites
+
+Cobertura consulta recibos canônicos de votos e apresenta instituição, fonte, domínio, canal plenário/comissão, partição mensal segura, intervalo e data de verificação. Chaves de partição fora do contrato mensal não são divulgadas. Recibo de plenário não certifica comissão; `requested_period_state=not_certified` e `full_career_verified=false` permanecem explícitos. Estados de cada intervalo distinguem verificado, parcial e indisponível. Tabela de recibos ausente resulta em cobertura desconhecida. Sem dados não significa inatividade.
+
+As leituras acontecem em uma transação PostgreSQL `REPEATABLE READ READ ONLY`, com timeout de cinco segundos. A conexão é injetada; o transporte deve usar uma credencial com privilégio mínimo e uma conexão independente por requisição. Não compartilhar uma conexão concorrente nem iniciar transação externa incompatível antes do serviço. Os filtros são parâmetros SQL; não existe interpolação de valores fornecidos pelo usuário.
+
+A resposta usa projeção explícita: sem CPF/RG, nomes usados para identidade, documento pessoal, IDs pessoais externos, `source_record_id`, hashes de artefatos, payloads privados ou caminhos locais. A consulta retorna no máximo 101 votos, 101 exercícios e 201 recibos; somente cem exercícios e duzentos recibos são publicados, com truncamento informado. Esses limites impedem materialização integral da trajetória por visita, mas joins/ordenação podem examinar mais linhas no banco. Índices e planos precisam de medição; não se promete O(1). O custo de produzir k itens é pelo menos O(k).
+
+Votações sem observação individual vinculada não são enumeradas por este endpoint. Em particular, ele não fabrica participação em votação simbólica ou secreta, não transforma ausência em escolha contrária e não prova que todo o histórico nominal foi coletado. O conjunto atual de datas canônicas aceita dia ou instante; suporte mensal/anual aqui exige evolução do esquema antes de oferecer essa precisão.
+
+## Verificação
+
+Testes locais usam repositórios isolados, sem inserir pessoas fictícias no banco de produção. Cobrem separação entre escolha e resultado, ausência/presidência/informação indisponível, paginação e filtros do cursor, projeção pública, exercício ausente, recibos por canal e erros estáveis. A revisão estrutural e Ruff devem ser executados junto da integração do transporte. Validação real do SQL/rota permanece uma etapa de integração distinta desses testes de contrato.
+
+A integração SQL foi executada em schema descartável criado pela fixture `integration_database`, com rollback obrigatório. O teste real comprovou os joins entre pessoa/voto/votação/proposição/instituição, o filtro por exercício individual e seu fim exclusivo, a exclusão de outra instituição, a paginação de votações no mesmo dia sem repetição, a distinção entre escolha contrária e aprovação coletiva e a cobertura por canais de plenário/comissão. Pessoas fictícias existiram somente nesse schema isolado durante a transação. O teste passou junto aos quinze testes de contrato; nenhum relaxamento da transação de leitura de produção foi necessário.

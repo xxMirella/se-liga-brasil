@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 650" role="img"
+aria-labelledby="office-reach-title office-reach-description" class="civic-circle-drawing">
+<title id="office-reach-title">Executivo e Legislativo em cada esfera</title>
+<desc id="office-reach-description">Quatro círculos sem hierarquia separam as esferas.
+No município: Executivo, prefeito e vice; Legislativo, vereadores.
+No estado: Executivo, governador e vice; Legislativo, deputados estaduais.
+No país: Executivo, presidente e vice; Legislativo, deputados federais e senadores.
+No DF: Executivo, governador e vice; Legislativo, deputados distritais.
+Vices exercem suas atribuições e substituem os titulares conforme as regras.</desc>
+<g text-anchor="middle"><circle cx="155" cy="155" r="140" class="civic-role-circle"/>
+<text x="155" y="59" class="office-sphere-label">MUNICÍPIO</text>
+<text x="155" y="100" class="office-power-label">EXECUTIVO</text>
+<text x="155" y="126" class="office-member-label">Prefeito + vice</text>
+<text x="155" y="181" class="office-power-label">LEGISLATIVO</text>
+<text x="155" y="207" class="office-member-label">Vereadores</text>
+</g>
+<g text-anchor="middle"><circle cx="465" cy="155" r="140" class="civic-role-circle"/>
+<text x="465" y="59" class="office-sphere-label">ESTADO</text>
+<text x="465" y="100" class="office-power-label">EXECUTIVO</text>
+<text x="465" y="126" class="office-member-label">Governador + vice</text>
+<text x="465" y="181" class="office-power-label">LEGISLATIVO</text>
+<text x="465" y="207" class="office-member-label">Deputados estaduais</text>
+</g>
+<g text-anchor="middle"><circle cx="155" cy="485" r="140" class="civic-role-circle"/>
+<text x="155" y="389" class="office-sphere-label">PAÍS</text>
+<text x="155" y="430" class="office-power-label">EXECUTIVO</text>
+<text x="155" y="456" class="office-member-label">Presidente + vice</text>
+<text x="155" y="511" class="office-power-label">LEGISLATIVO</text>
+<text x="155" y="537" class="office-member-label">Deputados federais</text>
+<text x="155" y="559" class="office-member-label">e senadores</text>
+</g>
+<g text-anchor="middle"><circle cx="465" cy="485" r="140" class="civic-role-circle"/>
+<text x="465" y="389" class="office-sphere-label">DISTRITO FEDERAL</text>
+<text x="465" y="430" class="office-power-label">EXECUTIVO</text>
+<text x="465" y="456" class="office-member-label">Governador + vice</text>
+<text x="465" y="478" class="office-member-label">do DF</text>
+<text x="465" y="511" class="office-power-label">LEGISLATIVO</text>
+<text x="465" y="537" class="office-member-label">Deputados distritais</text>
+</g>
+</svg>

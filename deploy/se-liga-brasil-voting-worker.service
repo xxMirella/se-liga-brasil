@@ -1,0 +1,19 @@
+[Unit]
+Description=Se Liga Brasil voting crawler worker (pg_cron queue)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=600
+StartLimitBurst=5
+
+[Service]
+Type=simple
+WorkingDirectory=/home/mirella/projetos/se-liga-brasil
+ExecStart=/home/mirella/projetos/se-liga-brasil/.venv/bin/se-liga-brasil voting-worker --env-file /home/mirella/projetos/mdqc-knowledge-center/.env --daemon --max-jobs 2 --poll-seconds 30 --limit 100 --max-identity-profiles 10
+Restart=on-failure
+RestartSec=60
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

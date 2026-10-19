@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 1230" role="img"
+aria-labelledby="proposal-title proposal-description" class="civic-circle-drawing">
+<title id="proposal-title">Quem propõe e vota em cada esfera</title>
+<desc id="proposal-description">Prefeito e vereadores; governador e deputados estaduais;
+governador do DF e deputados distritais; presidente, deputados federais e senadores.
+O Legislativo propõe e vota. O Executivo pode propor e sancionar ou vetar projetos de lei.
+Vices exercem essas competências quando assumem o cargo do titular.</desc>
+
+<g text-anchor="middle"><text x="290" y="30" class="civic-svg-label">Município</text>
+<circle cx="135" cy="150" r="100" class="civic-role-circle"/>
+<text x="135" y="115" class="proposal-role-label">Prefeito</text>
+<text x="135" y="175" class="proposal-action-label">Pode propor</text>
+<text x="135" y="198" class="proposal-action-label">Sanciona ou veta</text>
+<circle cx="445" cy="150" r="100" class="civic-role-circle"/>
+<text x="445" y="115" class="proposal-role-label">Vereadores</text>
+<text x="445" y="175" class="proposal-action-label">Podem propor</text>
+<text x="445" y="198" class="proposal-action-label">Votam o projeto</text>
+<text x="290" y="156" class="civic-svg-label">⇄</text>
+<text x="445" y="267" class="proposal-house-label">Câmara · Municipal</text></g>
+<g text-anchor="middle"><text x="290" y="330" class="civic-svg-label">Estado</text>
+<circle cx="135" cy="450" r="100" class="civic-role-circle"/>
+<text x="135" y="415" class="proposal-role-label">Governador</text>
+<text x="135" y="475" class="proposal-action-label">Pode propor</text>
+<text x="135" y="498" class="proposal-action-label">Sanciona ou veta</text>
+<circle cx="445" cy="450" r="100" class="civic-role-circle"/>
+<text x="445" y="415" class="proposal-role-label">Deputados</text>
+<text x="445" y="437" class="proposal-role-label">estaduais</text>
+<text x="445" y="475" class="proposal-action-label">Podem propor</text>
+<text x="445" y="498" class="proposal-action-label">Votam o projeto</text>
+<text x="290" y="456" class="civic-svg-label">⇄</text>
+<text x="445" y="567" class="proposal-house-label">Assembleia · Legislativa</text></g>
+<g text-anchor="middle"><text x="290" y="630" class="civic-svg-label">Distrito Federal</text>
+<circle cx="135" cy="750" r="100" class="civic-role-circle"/>
+<text x="135" y="715" class="proposal-role-label">Governador</text>
+<text x="135" y="737" class="proposal-role-label">do DF</text>
+<text x="135" y="775" class="proposal-action-label">Pode propor</text>
+<text x="135" y="798" class="proposal-action-label">Sanciona ou veta</text>
+<circle cx="445" cy="750" r="100" class="civic-role-circle"/>
+<text x="445" y="715" class="proposal-role-label">Deputados</text>
+<text x="445" y="737" class="proposal-role-label">distritais</text>
+<text x="445" y="775" class="proposal-action-label">Podem propor</text>
+<text x="445" y="798" class="proposal-action-label">Votam o projeto</text>
+<text x="290" y="756" class="civic-svg-label">⇄</text>
+<text x="445" y="867" class="proposal-house-label">Câmara · Legislativa</text></g>
+<g text-anchor="middle"><text x="290" y="930" class="civic-svg-label">Brasil</text>
+<circle cx="135" cy="1050" r="100" class="civic-role-circle"/>
+<text x="135" y="1015" class="proposal-role-label">Presidente</text>
+<text x="135" y="1075" class="proposal-action-label">Pode propor</text>
+<text x="135" y="1098" class="proposal-action-label">Sanciona ou veta</text>
+<circle cx="445" cy="1050" r="100" class="civic-role-circle"/>
+<text x="445" y="1015" class="proposal-role-label">Deputados federais</text>
+<text x="445" y="1037" class="proposal-role-label">e senadores</text>
+<text x="445" y="1075" class="proposal-action-label">Podem propor</text>
+<text x="445" y="1098" class="proposal-action-label">Votam o projeto</text>
+<text x="290" y="1056" class="civic-svg-label">⇄</text>
+<text x="445" y="1167" class="proposal-house-label">Câmara e Senado</text></g>
+<text x="290" y="1210" text-anchor="middle" class="proposal-house-label">Projetos de lei · regras gerais</text></svg>

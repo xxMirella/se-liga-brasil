@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+data/
+.env
+.env.*
+!.env.example
+.codex/review-state.json
+.idea/
+.build/
+.coverage
+.coverage.*
+reports/

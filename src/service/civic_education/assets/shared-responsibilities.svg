@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 330" role="img"
+ aria-labelledby="shared-title shared-description" class="civic-circle-drawing">
+ <title id="shared-title">Executivo e Legislativo trabalham juntos, com tarefas diferentes</title>
+ <desc id="shared-description">Dois círculos se cruzam para representar a cooperação
+ entre Executivo e Legislativo em leis e orçamento. A interseção não significa
+ que um poder assume as funções do outro.</desc>
+ <circle cx="165" cy="165" r="145" class="shared-government"/>
+ <circle cx="335" cy="165" r="145" class="shared-government"/>
+ <g text-anchor="middle" class="civic-svg-label office-reach-label">
+  <text x="123" y="155">Executivo</text>
+  <text x="377" y="155">Legislativo</text>
+ </g>
+ <rect x="198" y="188" width="104" height="60" rx="10" class="shared-example"/>
+ <g text-anchor="middle" class="civic-svg-small">
+  <text x="250" y="212">Leis e</text>
+  <text x="250" y="236">orçamento</text>
+ </g>
+</svg>

@@ -1,0 +1,5 @@
+---
+description: Organização obrigatória de serviços, crawlers e bibliotecas Python
+alwaysApply: true
+---
+Todo serviço da aplicação pertence a `src/service/<nome>/`. Todos os crawlers pertencem a `src/crawlers/<fonte>/`, como `src/crawlers/tse/`. Bibliotecas reutilizáveis, como normalização, ficam em módulos próprios fora dos crawlers. Não criar pacote agregador com o nome do projeto em `src/`. Respeitar as responsabilidades e convenções documentadas em `AGENTS.md`.

@@ -1,0 +1,5 @@
+---
+description: Python, baixa carga cognitiva e revisão obrigatória de system design
+alwaysApply: true
+---
+Siga `AGENTS.md`. Use Python para todo código executável. Revise responsabilidade única, clareza, complexidade cognitiva, complexidade algorítmica, limites de memória e consultas em lotes. Execute a revisão estrutural do projeto e corrija os achados antes de concluir; a inspeção semântica continua obrigatória.

@@ -1,0 +1,23 @@
+{
+  "years": [
+    2026
+  ],
+  "ufs": [],
+  "kinds": [
+    "candidate",
+    "complement",
+    "history",
+    "asset",
+    "government_proposal",
+    "criminal_certificate"
+  ],
+  "storage_directory": "data/tse",
+  "batch_size": 500,
+  "max_download_bytes": 1073741824,
+  "max_run_download_bytes": 10737418240,
+  "max_entry_bytes": 536870912,
+  "max_archive_expanded_bytes": 4294967296,
+  "request_timeout_seconds": 180,
+  "max_attempts": 3,
+  "force_recheck_after_hours": 24
+}

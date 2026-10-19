@@ -1,0 +1,90 @@
+{
+  "status": "reviewed_against_official_sources",
+  "birth_date_changes_allowed": false,
+  "scope": {
+    "uf": "SP",
+    "office_code": "7",
+    "election_year": 2022
+  },
+  "exceptions": [
+    {
+      "recipient_name": "CARLOS ALBERTO GIANNAZI",
+      "source_subject_id": "417",
+      "matricula": "300485",
+      "target_legal_name": "CARLOS ALBERTO GIANNASI",
+      "target_public_name": "CARLOS GIANNAZI",
+      "target_political_party_code": "50",
+      "target_birth_date": "1961-12-15",
+      "source_birthday": "15/12",
+      "reason": "documented_source_name_alias",
+      "evidence_urls": [
+        "https://www.al.sp.gov.br/alesp/telefones/?idUA=20380",
+        "https://www.al.sp.gov.br/noticia/?id=397450"
+      ]
+    },
+    {
+      "recipient_name": "ITAMAR FRANCISCO MACHADO BORGES",
+      "source_subject_id": "442",
+      "matricula": "300510",
+      "target_legal_name": "ITAMAR FRANCISCO MACHADO BORGES",
+      "target_public_name": "ITAMAR BORGES",
+      "target_political_party_code": "15",
+      "target_birth_date": "1966-03-21",
+      "source_birthday": "21/12",
+      "reason": "identity_corroborated_birth_facts_conflict_preserved",
+      "evidence_urls": [
+        "https://www.al.sp.gov.br/noticia/?id=397450"
+      ]
+    },
+    {
+      "recipient_name": "PAULA NUNES DOS SANTOS",
+      "source_subject_id": "1222",
+      "matricula": "300678",
+      "target_legal_name": "PAULA NUNES DOS SANTOS",
+      "target_public_name": "PAULA DA BANCADA FEMINISTA",
+      "target_political_party_code": "50",
+      "target_birth_date": "1993-09-15",
+      "source_birthday": "18/09",
+      "reason": "explicit_official_civil_parliamentary_name_link_birth_conflict_preserved",
+      "evidence_urls": [
+        "https://www.al.sp.gov.br/noticia/?id=497303",
+        "https://www.al.sp.gov.br/alesp/telefones/?idUA=20395"
+      ]
+    },
+    {
+      "recipient_name": "MARIA IZABEL AZEVEDO NORONHA",
+      "source_subject_id": "1150",
+      "matricula": "300640",
+      "target_legal_name": "MARIA IZABEL AZEVEDO NORONHA",
+      "target_public_name": "PROFESSORA BEBEL",
+      "target_political_party_code": "13",
+      "target_birth_date": "1960-05-02",
+      "source_birthday": "01/05",
+      "reason": "official_historical_birth_corroboration_current_source_conflict_preserved",
+      "evidence_urls": [
+        "https://www.al.sp.gov.br/noticia/?id=397450",
+        "https://www.al.sp.gov.br/alesp/telefones/?idUA=20422"
+      ]
+    },
+    {
+      "recipient_name": "JOSE B ORTIZ M JUNIOR",
+      "source_subject_id": "2061",
+      "matricula": "300699",
+      "target_legal_name": "JOSE BERNARDO ORTIZ MONTEIRO JUNIOR",
+      "target_public_name": "ORTIZ JUNIOR",
+      "target_political_party_code": "45",
+      "target_birth_date": "1974-03-22",
+      "source_birthday": null,
+      "reason": "historical_officeholder_abbreviated_payroll_name",
+      "evidence_urls": [
+        "https://legis-api-portal-prd.al.sp.gov.br/autores/1000001207",
+        "https://legis-api-portal-prd.al.sp.gov.br/parlamentar-portal/detalhes/300699",
+        "https://www.al.sp.gov.br/noticia/?id=488584"
+      ],
+      "limitation": "Taubate PDF indexed official text verified through web; direct retrieval unavailable"
+    }
+  ],
+  "reviewed_on": "2026-10-16",
+  "source_code": "alesp",
+  "target_source_code": "tse"
+}

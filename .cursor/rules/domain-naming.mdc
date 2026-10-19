@@ -1,0 +1,8 @@
+---
+description: Nomes explícitos e coerentes com o domínio do Se Liga Brasil
+alwaysApply: true
+---
+
+# Nomenclatura do domínio
+
+Siga as convenções de nomenclatura em `AGENTS.md` na raiz do projeto. Use nomes explícitos, consistentes e sem ambiguidade, que expliquem o conceito político ou administrativo representado. Exemplo: `political_party`, `political_party_affiliation` e `political_party_id`, em vez de `party` e `party_id`.

@@ -1,0 +1,30 @@
+{
+  "description": "Se Liga Brasil: revisão estrutural de Python e contexto obrigatório de system design",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash|Shell|exec_command|apply_patch|Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /home/mirella/projetos/se-liga-brasil/.codex/hooks/system_design_review.py",
+            "timeout": 30,
+            "statusMessage": "Revisando carga cognitiva e system design"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /home/mirella/projetos/se-liga-brasil/.codex/hooks/system_design_review.py",
+            "timeout": 30,
+            "statusMessage": "Verificando achados estruturais pendentes"
+          }
+        ]
+      }
+    ]
+  }
+}
