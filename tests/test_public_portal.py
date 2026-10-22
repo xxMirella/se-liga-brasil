@@ -61,7 +61,7 @@ def test_html_errors_remain_navigable_html():
         def fetch_people(self, parameters):
             raise PublicProfileError("PERSON_NOT_FOUND", 404)
 
-    response = dispatch_portal_request(MissingApplication(), "/pessoas")
+    response = dispatch_portal_request(MissingApplication(), "/pessoas?limit=6")
     assert response.status == 404
     assert response.content_type.startswith("text/html")
     assert b"PERSON_NOT_FOUND" not in response.body

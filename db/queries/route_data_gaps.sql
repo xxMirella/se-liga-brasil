@@ -39,3 +39,10 @@ WITH latest AS (
           (g.assigned_source IS DISTINCT FROM r.source
             OR (g.status='blocked' AND r.source IS NOT NULL
                 AND g.last_error_code='SOURCE_NOT_MAPPED'));
+
+
+-- The Senate nominal administrative API now supports salary collection.
+UPDATE se_liga_brasil.person_data_gap SET status='queued',last_error_code=NULL,
+  next_attempt_at=now(),claimed_by=NULL,lease_until=NULL
+WHERE assigned_source='senado' AND field_name='current_salary' AND status='blocked'
+  AND last_error_code='SOURCE_FIELD_NOT_SUPPORTED' AND NOT is_processed;

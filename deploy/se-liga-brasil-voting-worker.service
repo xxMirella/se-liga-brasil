@@ -1,5 +1,5 @@
 [Unit]
-Description=Se Liga Brasil voting crawler worker (pg_cron queue)
+Description=Se Liga, Brasil voting crawler worker (pg_cron queue)
 After=network-online.target
 Wants=network-online.target
 StartLimitIntervalSec=600

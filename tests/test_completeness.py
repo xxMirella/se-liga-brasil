@@ -113,3 +113,23 @@ def test_attendance_threshold_crosses_year_boundary_correctly():
     assert evaluate_person_completeness(row, date(2026, 1, 1))["fields"]["attendance"] == (
         "present"
     )
+
+
+def test_photo_is_required_and_not_satisfied_by_complete_textual_identity():
+    row = person_row()
+    assert evaluate_person_completeness(row)["fields"]["photo_url"] == "missing"
+    assert build_completeness_report([row])["missing_by_field"]["photo_url"] == 1
+    row["photo_url"] = "https://www.camara.leg.br/photo.jpg"
+    assert evaluate_person_completeness(row)["fields"]["photo_url"] == "present"
+
+
+def test_verified_current_office_still_requires_individual_exercise_start():
+    result = evaluate_person_completeness(person_row(current_office=True))
+    assert result['fields']['current_office_started_on'] == 'missing_or_unverified'
+    row = person_row(current_office=True, current_office_started_on=date(2023, 2, 1))
+    assert evaluate_person_completeness(row)['fields']['current_office_started_on'] == 'present'
+    row = person_row(current_office=False)
+    assert (
+        evaluate_person_completeness(row)['fields']['current_office_started_on']
+        == 'not_applicable'
+    )

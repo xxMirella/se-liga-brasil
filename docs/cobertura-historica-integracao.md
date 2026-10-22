@@ -31,3 +31,26 @@ A descoberta custa O(o + p log p) para o número de objetos listados e partiçõ
 - Empresas, parcerias e outras atuações: exigem fontes e vínculos próprios, sem inferência por nome isolado.
 
 Um recorte histórico só pode ser considerado concluído quando existir recibo do mesmo escopo com identidade, enumeração, período, artefato e parser comprovados. Listar arquivos, baixar dados ou encontrar um evento não substitui esses requisitos. Os testes locais cobrem uma partição antiga, paginação, cache, integridade, separação dos checkpoints e continuação de consulta limitada. A validação real desta entrega foi somente leitura; não houve execução de backfill ou alteração de fatos.
+
+## Avanço incremental em 22/10/2026
+
+Presenças da Câmara: `collect-attendance --years 2026 --limit 10` permite concentrar
+o lote no ano solicitado. Sem `--years`, permanece a busca histórica; `--years all`
+também seleciona esse comportamento. Checkpoints são separados pelo conjunto de anos.
+Perfis em cache com identidade canônica confirmada são priorizados antes de perfis
+sem correspondência. O filtro `--person-id` seleciona o perfil previamente confirmado,
+sem gastar o lote consultando perfis de outras pessoas. Lotes interrompidos preservam
+os sucessos, registram a falha e mantêm a espera da fonte; a publicação pode usar os
+fatos já gravados. Não confundir percentual mensal com cobertura histórica completa.
+
+A execução real ampliou presenças consolidadas de três para dez pessoas, totalizando
+226 fatos versionados. O snapshot publicado contém 86 partições mensais. HTTP 429
+interrompeu a ampliação; o cooldown da Câmara foi preservado. Esses números incluem
+o histórico já existente, não apenas o lote de 2026.
+
+No Senado, o reprocessamento de votos já arquivados ampliou o vínculo de uma para cinco
+pessoas e publicou dez registros em duas votações de 14/10/2026. Isso não comprova
+frequência em sessões, autoria de propostas, relatoria ou toda a atuação no cargo.
+O coletor de autoria do Senado e a frequência institucional de seus senadores seguem
+pendentes de implementação e validação; a API legislativa estava indisponível com
+HTTP 503. Nenhum pagamento do Senado foi coletado nessa frente.

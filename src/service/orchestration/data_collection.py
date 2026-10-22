@@ -33,7 +33,13 @@ def group_source_requests(tasks) -> dict:
     return requests
 
 
+def ordered_source_candidates(candidates, people):
+    indexed = {row["person_id"]: row for row in candidates}
+    return [indexed[person_id] for person_id in people if person_id in indexed]
+
+
 def collect_requested_source(connection, storage, source, people, rows, candidates):
+    candidates = ordered_source_candidates(candidates, people)
     if source == "tse":
         targets = [
             {
@@ -74,7 +80,11 @@ def collect_requested_source(connection, storage, source, people, rows, candidat
             collect_senado_enrichment,
             connection,
             storage,
-            [row for row in candidates if row["person_id"] in people],
+            [
+                row | {"requested_fields": sorted(people[row["person_id"]])}
+                for row in candidates
+                if row["person_id"] in people
+            ],
             set().union(*people.values()),
         )
     if source == "tse_filiation":
@@ -131,13 +141,14 @@ def orchestrate_collection(
     *,
     refresh_assessment=True,
     field_names=None,
+    source_codes=None,
     career_collectors=None,
 ) -> dict:
     before = initial_assessment(connection, storage, person_id, refresh_assessment)
     purge_processed_gaps(connection)
     route_data_gaps(connection)
     worker_id = str(uuid4())
-    tasks = claim_data_gaps(connection, worker_id, person_id, task_limit, field_names)
+    tasks = claim_data_gaps(connection, worker_id, person_id, task_limit, field_names, source_codes)
     requests = group_source_requests(tasks)
     if not tasks:
         result = {

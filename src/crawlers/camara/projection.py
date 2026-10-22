@@ -11,6 +11,7 @@ class CamaraProjectionWriter:
             return
         projections = {
             "camara_profile": "camara_profile",
+            "camara_exercise": "camara_exercise",
             "camara_propositions": "camara_propositions",
             "camara_payroll": "camara_payroll",
         }
@@ -19,5 +20,5 @@ class CamaraProjectionWriter:
             return
         self.writer.execute_statements("camara_common", parameters)
         self.writer.execute_statements(projections[resource_kind], parameters)
-        if resource_kind == "camara_profile":
+        if resource_kind in {"camara_profile", "camara_exercise"}:
             self.writer.execute_statements("person_current_public_office", parameters)

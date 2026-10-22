@@ -7,6 +7,7 @@ from datetime import UTC, datetime
 from html.parser import HTMLParser
 from urllib.parse import parse_qs, urlsplit
 
+from crawlers.alesp.photos import normalize_profile_photo
 from parsing.html import decode_html
 from service.acquisition.downloader import download_resource
 from service.ingestion.contracts import DownloadBudget, IngestionError, Resource
@@ -133,6 +134,7 @@ def parse_member_profile(payload: bytes, member: dict) -> dict:
     return {
         "parliamentary_names": sorted(name for name in names if name),
         "birthday": birthday or roster_birthday,
+        "photo_url": normalize_profile_photo(biography.get("txFotoGrande")),
         "political_party_abbreviation": nullable_text(profile.get("txPartido")),
         "political_party_code": current_party_code(profile),
         "is_in_office": profile.get("isEmExercicio")

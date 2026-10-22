@@ -14,17 +14,19 @@ class SenateAcquisition:
         self.configuration = configuration
         self.client = client
         self.budget = DownloadBudget()
+        self.payroll_snapshot = None
+        self.payroll_error = None
 
-    def json_document(self, path, kind):
-        url = API_BASE + path
-        resource = Resource(
-            "senado-" + hash_content(url),
-            kind,
-            url,
-            kind,
-            datetime.now(UTC).year,
-            "senado-enrichment",
-            file_suffix=".json",
-        )
+    def json_document(self, path, kind, *, resource_year=None):
+        resource = json_resource(path, kind, resource_year)
         artifact = download_resource(resource, self.configuration, self.client, self.budget)
         return json.loads(artifact.path.read_bytes()), artifact
+
+
+def json_resource(path, kind, resource_year=None):
+    url = path if path.startswith("https://") else API_BASE + path
+    return Resource(
+        "senado-" + hash_content(url), kind, url, kind,
+        resource_year if resource_year is not None else datetime.now(UTC).year,
+        "senado-enrichment", file_suffix=".json",
+    )

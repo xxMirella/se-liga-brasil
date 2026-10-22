@@ -32,6 +32,10 @@ def test_profile_composes_existing_projections_without_source_requests(monkeypat
     )
     monkeypatch.setattr("database.attendance.fetch_person_attendance_history", lambda *_: [])
     monkeypatch.setattr("database.office_legal_scopes.fetch_public_office_scopes", lambda *_: [])
+    monkeypatch.setattr(
+        "database.cabinet_payroll.fetch_cabinet_payroll_history",
+        lambda *_: {"months": [], "truncated": False},
+    )
     pages = []
     monkeypatch.setattr(
         "database.public_propositions.fetch_person_propositions",
@@ -41,6 +45,7 @@ def test_profile_composes_existing_projections_without_source_requests(monkeypat
     assert result["attendance"]["percentage"] == "80.0"
     assert result["propositions"] == {"items": []}
     assert pages == [2]
+    assert result["cabinet_payroll"]["latest"] is None
 
 
 def test_missing_person_stops_before_other_projection_queries(monkeypatch):

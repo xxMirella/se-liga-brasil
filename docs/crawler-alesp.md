@@ -104,6 +104,26 @@ Configuração: `config/alesp-crawler.json`. Logs e planos: `data/alesp`.
 
 ## Outras fontes catalogadas
 
+### Fotos oficiais dos perfis
+
+O enriquecimento de `photo_url` reutiliza os JSONs institucionais já baixados,
+após verificar os hashes dos arquivos e a resolução pessoal aprovada. O campo
+`biografia.txFotoGrande` contém o caminho da foto; caminhos relativos
+`/biografia/fotos/…` são convertidos para `https://www3.al.sp.gov.br/legis/…`,
+conforme a própria página pública da ALESP. Não se deduz a identidade pela foto.
+O identificador e a matrícula do perfil são conferidos contra a evidência
+institucional já vinculada ao `person_id`.
+
+O recurso derivado `alesp_photos` tem reconciliação idempotente separada do
+perfil. Preenche `person_fact` com `alesp_official_photo` e `person.photo_url`
+quando a pessoa ainda não tem foto. Os arquivos originais permanecem intactos;
+não há download das imagens ou nova consulta remota nessa etapa. A busca nos
+arquivos locais percorre as evidências em O(n), com gravação em lotes.
+
+Em 19/10/2026, foram ingeridas 89 fotos de pessoas já identificadas; a repetição
+não criou registros novos. Datas de início da legislatura continuam separadas
+do início individual de exercício e não são usadas para inventar tempo no cargo.
+
 O XML de deputados permite observar partido e situação no momento da coleta,
 mas não informa entrada/saída de filiação. Catálogos oficiais incluem despesas
 de gabinete, funcionários/cargos/lotações, proposições/autores/comissões,

@@ -269,3 +269,96 @@ def test_future_candidacy_does_not_hide_a_senate_discovery_hint(integration_data
         ).fetchone()["has_current_public_office"]
         is None
     )
+
+
+@pytest.mark.integration
+def test_priority_claim_prefers_confirmed_office_and_respects_source_filter(
+    integration_database, gap_person
+):
+    db = integration_database
+    second_person = str(uuid4())
+    db.execute(
+        "INSERT INTO se_liga_brasil.person(id,slug,civil_name,display_name,primary_record_id) "
+        "SELECT %s,%s,'Outra Pessoa','Outra Pessoa',primary_record_id "
+        "FROM se_liga_brasil.person WHERE id=%s",
+        (second_person, second_person, gap_person),
+    )
+    persist_data_gaps(db, report(gap_person))
+    persist_data_gaps(db, report(second_person))
+    db.execute("UPDATE se_liga_brasil.person_data_gap SET assigned_source='camara'")
+    db.execute(
+        "INSERT INTO se_liga_brasil.institution(code,name,level,uf,official_url) "
+        "VALUES('camara','Câmara','federal','DF','https://www.camara.leg.br') "
+        "ON CONFLICT DO NOTHING"
+    )
+    db.execute(
+        "UPDATE se_liga_brasil.person SET has_current_public_office=true,"
+        "current_public_office_kind='federal_deputy',"
+        "current_public_office_institution_id=(SELECT id FROM se_liga_brasil.institution "
+        "WHERE code='camara'), public_office_status_source_record_id=primary_record_id,"
+        "public_office_status_as_of=current_date WHERE id=%s",
+        (second_person,),
+    )
+    assert not claim_data_gaps(db, str(uuid4()), source_codes=["senado"])
+    rows = claim_data_gaps(db, str(uuid4()), limit=1, source_codes=["camara"])
+    assert rows[0]["person_id"] == second_person
+    assert rows[0]["field_name"] == "current_salary"
+
+    remaining = claim_data_gaps(db, str(uuid4()), limit=3, source_codes=["camara"])
+    assert [(row["person_id"], row["field_name"]) for row in remaining] == [
+        (second_person, "birth_date"),
+        (gap_person, "current_salary"),
+        (gap_person, "birth_date"),
+    ]
+
+
+@pytest.mark.integration
+def test_new_senate_salary_capability_requeues_only_previous_unsupported_gap(
+    integration_database,
+    gap_person,
+):
+    from database.data_gaps import route_data_gaps
+
+    db = integration_database
+    persist_data_gaps(db, report(gap_person))
+    db.execute(
+        "INSERT INTO se_liga_brasil.institution(code,name,level,uf,official_url) "
+        "VALUES('senado','Senado','federal','BR','https://www.senado.leg.br') "
+        "ON CONFLICT DO NOTHING"
+    )
+    db.execute(
+        "UPDATE se_liga_brasil.person SET has_current_public_office=true,"
+        "current_public_office_kind='senator',"
+        "current_public_office_institution_id=(SELECT id FROM se_liga_brasil.institution "
+        "WHERE code='senado'),public_office_status_source_record_id=primary_record_id,"
+        "public_office_status_as_of=current_date WHERE id=%s",
+        (gap_person,),
+    )
+    db.execute(
+        "UPDATE se_liga_brasil.person_data_gap SET assigned_source='senado',"
+        "status='blocked',last_error_code='SOURCE_FIELD_NOT_SUPPORTED' "
+        "WHERE field_name='current_salary'"
+    )
+    postpone_source(db, "senado", 3600, "HTTP_ERROR", 429)
+    db.execute(
+        "UPDATE se_liga_brasil.person_data_gap SET "
+        "last_error_code='SOURCE_FIELD_NOT_SUPPORTED' WHERE field_name='current_salary'"
+    )
+    route_data_gaps(db)
+    row = db.execute(
+        "SELECT status,last_error_code FROM se_liga_brasil.person_data_gap "
+        "WHERE field_name='current_salary'"
+    ).fetchone()
+    assert row == {"status": "queued", "last_error_code": None}
+    assert not claim_data_gaps(db, str(uuid4()), source_codes=["senado"])
+    db.execute(
+        "UPDATE se_liga_brasil.person_data_gap SET status='blocked',"
+        "last_error_code='SENADO_PAYROLL_NAME_AMBIGUOUS' WHERE field_name='current_salary'"
+    )
+    route_data_gaps(db)
+    assert (
+        db.execute(
+            "SELECT status FROM se_liga_brasil.person_data_gap WHERE field_name='current_salary'"
+        ).fetchone()["status"]
+        == "blocked"
+    )

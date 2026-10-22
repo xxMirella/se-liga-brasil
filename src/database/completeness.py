@@ -4,13 +4,17 @@
 def fetch_completeness_rows(connection, person_id=None) -> list:
     return connection.execute(
         """
-        SELECT p.id::text AS person_id,p.civil_name,p.birth_date,p.education_level,
+        SELECT p.id::text AS person_id,p.civil_name,p.birth_date,p.education_level,p.photo_url,
           EXISTS(SELECT 1 FROM se_liga_brasil.political_party_affiliation a
             WHERE a.person_id=p.id AND a.evidence_kind
               IN ('administrative','official_membership')
               AND a.observed_on>=current_date-30
               AND a.information_valid_until IS NULL) AS current_party,
           p.has_current_public_office AS current_office,
+          (SELECT min(e.starts_on) FROM se_liga_brasil.office_exercise e
+            WHERE e.term_id=p.current_public_office_term_id AND e.starts_on<=current_date
+              AND (e.ends_before IS NULL OR e.ends_before>current_date))
+            AS current_office_started_on,
           (SELECT max(pay.competence) FROM se_liga_brasil.person_payroll_payment pay
             WHERE pay.person_id=p.id AND pay.identity_status='verified') AS latest_payroll,
           (SELECT max(c.election_year) FROM se_liga_brasil.electoral_candidacy c

@@ -25,6 +25,7 @@ def execute_historical_command(arguments):
                 max_partitions=arguments.max_partitions,
                 max_votings=arguments.limit,
                 max_identity_profile_downloads=arguments.max_identity_profiles,
+                **({"local_only": True} if getattr(arguments, "local_only", False) else {}),
             )
         if arguments.source == "camara":
             people = [str(UUID(arguments.person_id))] if arguments.person_id else None

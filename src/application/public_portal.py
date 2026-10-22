@@ -11,8 +11,17 @@ from service.public_profile import PublicProfileError
 
 SEARCH_PARAMETERS = frozenset({"q", "uf", "office_kind", "political_party", "cursor", "limit"})
 PROFILE_PARAMETERS = frozenset(
-    {"tab", "scope", "start_date", "end_date", "office_kind", "exercise_id", "cursor", "limit",
-     "proposal_page"}
+    {
+        "tab",
+        "scope",
+        "start_date",
+        "end_date",
+        "office_kind",
+        "exercise_id",
+        "cursor",
+        "limit",
+        "proposal_page",
+    }
 )
 PERSON_ROUTE = re.compile(r"/(api/people|pessoas)/([0-9a-fA-F-]{36})(/votes)?")
 
@@ -54,7 +63,10 @@ def dispatch_portal_request(application, target):
 
 
 def encode_public_error(target, code, status):
-    if target.startswith(("/pessoas", "/como-funciona")) or target == "/":
+    if (
+        target.startswith(("/pessoas", "/como-funciona", "/sobre"))
+        or target.partition("?")[0] == "/"
+    ):
         from service.public_profile_web import render_error_page
 
         messages = {
@@ -73,14 +85,27 @@ def route_public_request(application, parsed):
     educational_response = route_education_request(parsed)
     if educational_response is not None:
         return educational_response
-    if parsed.path in {"/", "/pessoas", "/api/people"}:
+    if parsed.path in {"/pessoas", "/api/people"}:
         parameters = read_parameters(parsed.query, SEARCH_PARAMETERS)
+        if parsed.path == "/pessoas" and "limit" not in parameters:
+            from service.public_profile.people_contracts import PeopleQuery
+            from service.public_profile_web.search import render_search_shell
+
+            PeopleQuery(**parameters)
+            return encode_response(render_search_shell(parameters), content_type="text/html")
         result = application.fetch_people(parameters)
         if parsed.path == "/api/people":
             return encode_response(result)
         from service.public_profile_web import render_search_page
 
         return encode_response(render_search_page(parameters, result), content_type="text/html")
+    if parsed.path == "/assets/people-viewport.js" and not parsed.query:
+        from pathlib import Path
+
+        import service.public_profile_web.search as search_module
+
+        script = Path(search_module.__file__).parent / "assets" / "people-viewport.js"
+        return encode_response(script.read_text(encoding="utf-8"), content_type="text/javascript")
     if parsed.path == "/assets/public-profile.css" and not parsed.query:
         from service.public_profile_web import public_stylesheet
 
@@ -92,6 +117,11 @@ def route_public_request(application, parsed):
 
 
 def route_education_request(parsed):
+    if parsed.path in {"/", "/sobre", "/sobre/"}:
+        from service.project_information.page import render_project_information
+
+        read_parameters(parsed.query, set())
+        return encode_response(render_project_information(), content_type="text/html")
     if parsed.path == "/como-funciona":
         from service.civic_education.page import render_civic_education
 
@@ -127,7 +157,8 @@ def route_person_request(application, match, query):
     filters = application.profile_filters(parameters)
     profile = (
         application.fetch_person(person_id, proposal_page=int(parameters["proposal_page"]))
-        if "proposal_page" in parameters else application.fetch_person(person_id)
+        if "proposal_page" in parameters
+        else application.fetch_person(person_id)
     )
     votes = {"items": [], "coverage": {"state": "not_requested"}}
     if filters["tab"] == "activity":
@@ -140,6 +171,9 @@ def route_person_request(application, match, query):
 class PublicPortalApplication:
     def __init__(self, env_file, dataset_reader, *, today=None):
         self.env_file, self.dataset_reader = env_file, dataset_reader
+        from service.public_profile.search_cache import PublicSearchCache
+
+        self.people_cache = PublicSearchCache()
         self.today = today or (lambda: datetime.now(ZoneInfo("America/Belem")).date())
 
     def fetch_people(self, parameters):
@@ -154,21 +188,31 @@ class PublicPortalApplication:
             office_kind=parameters.get("office_kind"),
             political_party=parameters.get("political_party"),
             cursor=parameters.get("cursor"),
-            limit=int(parameters.get("limit", "30")),
+            limit=int(parameters.get("limit", "6")),
         )
-        with connect_database(self.env_file) as connection:
-            return search_people(PublicPeopleRepository(connection), query, self.today())
+        as_of = self.today()
+        from service.public_profile.people_contracts import decode_people_cursor
+
+        decode_people_cursor(query, as_of)
+
+        def load_public_people():
+            with connect_database(self.env_file) as connection:
+                return search_people(PublicPeopleRepository(connection), query, as_of)
+
+        return self.people_cache.get_or_load((query, as_of), load_public_people)
 
     def fetch_person(self, person_id, *, proposal_page=1):
         from database.attendance import (
             fetch_person_attendance,
             fetch_person_attendance_history,
         )
+        from database.cabinet_payroll import fetch_cabinet_payroll_history
         from database.office_legal_scopes import fetch_public_office_scopes
         from database.operations import connect_database
         from database.public_assets import PublicAssetsRepository
         from database.public_people import PublicPeopleRepository
         from database.public_propositions import fetch_person_propositions
+        from service.cabinet_payroll.public_projection import public_cabinet_payroll
         from service.public_profile.assets import get_public_assets
         from service.public_profile.people import get_public_person
 
@@ -188,6 +232,9 @@ class PublicPortalApplication:
                     connection, person_id, as_of
                 )
                 profile["legal_scopes"] = fetch_public_office_scopes(connection, person_id, as_of)
+                profile["cabinet_payroll"] = public_cabinet_payroll(
+                    fetch_cabinet_payroll_history(connection, person_id, as_of)
+                )
             return profile
 
     def fetch_votes(self, person_id, parameters):

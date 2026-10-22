@@ -1,6 +1,6 @@
 """Collect a personally verified federal deputy's missing institutional facts."""
 
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from datetime import date
 from urllib.parse import urlencode
 
@@ -110,6 +110,16 @@ def enrich_person(acquisition, repository, candidate, member) -> dict:
     result = {"person_id": candidate["person_id"]}
     result["profile"] = ingest_collected(repository, acquisition, artifact, [profile])
     requested = set(candidate.get("requested_fields") or {"current_salary", "political_activity"})
+    if "current_office_started_on" in requested and profile["exerciseStartsOn"]:
+        exercise_artifact = replace(
+            artifact, resource=replace(
+                artifact.resource, kind="camara_exercise",
+                resource_id=artifact.resource.resource_id + "-exercise",
+            )
+        )
+        result["exercise"] = ingest_collected(
+            repository, acquisition, exercise_artifact, [profile]
+        )
     if "current_salary" in requested:
         result["salary"] = collect_current_salary(acquisition, repository, member, profile)
     if "political_activity" in requested:

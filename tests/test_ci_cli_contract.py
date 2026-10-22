@@ -189,3 +189,15 @@ def test_static_build_does_not_receive_database_credentials(monkeypatch, tmp_pat
         "build-static-site", "--output-directory", str(tmp_path),
     )) == {"files": 9}
     run.assert_called_once_with(Path(tmp_path), backend_origin=None)
+def test_http_failure_keeps_command_status_without_duplicate_keyword(monkeypatch):
+    from service.ingestion.contracts import IngestionError
+
+    def unavailable(_):
+        raise IngestionError("HTTP_ERROR", {"status": 429})
+
+    monkeypatch.setattr(cli, "execute_command", unavailable)
+    emit = Mock()
+    monkeypatch.setattr(cli, "emit_event", emit)
+    assert cli.execute_reported_command(arguments("review")) == 1
+    assert emit.call_args.kwargs["http_status"] == 429
+    assert emit.call_args.kwargs["status"] == "failed"

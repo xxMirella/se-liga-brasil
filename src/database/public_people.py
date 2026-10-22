@@ -78,16 +78,33 @@ class PublicPeopleRepository(PublicProfileRepository):
 
     def fetch_current_exercises(self, person_id, as_of):
         return self.connection.execute(
-            """SELECT e.id AS exercise_id,t.id AS term_id,t.office_kind,t.represented_uf,
+            """SELECT DISTINCT ON (t.id) e.id AS exercise_id,t.id AS term_id,
+              t.office_kind,t.represented_uf,
               i.code AS institution_code,i.name AS institution_name,
               e.starts_on,e.ends_before,e.capacity
             FROM se_liga_brasil.office_term t
             JOIN se_liga_brasil.office_exercise e ON e.term_id=t.id
             JOIN se_liga_brasil.institution i ON i.id=t.institution_id
+            JOIN se_liga_brasil.source_record exercise_source
+              ON exercise_source.id=e.source_record_id
             WHERE t.person_id=%s::uuid AND e.starts_on<=%s
               AND (e.ends_before IS NULL OR e.ends_before>%s)
-            ORDER BY i.code,t.office_kind,e.starts_on,e.id LIMIT 101""",
-            (person_id, as_of, as_of),
+              AND (t.term_start IS NULL OR t.term_start<=%s)
+              AND (t.term_end IS NULL OR t.term_end>%s)
+              AND NOT EXISTS(
+                SELECT 1 FROM se_liga_brasil.person_fact f
+                JOIN se_liga_brasil.source_record observation_source
+                  ON observation_source.id=f.source_record_id
+                WHERE f.person_id=t.person_id AND f.field_name='current_public_office_observation'
+                  AND f.review_status='verified' AND f.evidence_kind='administrative'
+                  AND f.normalized_value->>'institutionCode'=i.code
+                  AND f.normalized_value->>'observedOn'<=%s::text
+                  AND f.normalized_value->>'observedOn'>=e.starts_on::text
+                  AND f.normalized_value->>'inExercise'='false'
+                  AND observation_source.fetched_at>=exercise_source.fetched_at
+              )
+            ORDER BY t.id,exercise_source.fetched_at DESC,e.starts_on,e.id DESC LIMIT 101""",
+            (person_id, as_of, as_of, as_of, as_of, as_of),
         ).fetchall()
 
     def fetch_public_affiliations(self, person_id, as_of):

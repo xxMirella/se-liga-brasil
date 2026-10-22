@@ -7,6 +7,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 from service.civic_education.page import SPHERES, civic_stylesheet, render_civic_education
+from service.project_information.page import render_project_information
 from service.public_profile_web.layout import public_stylesheet
 
 SPHERE_NAMES = (*SPHERES, "todos")
@@ -41,6 +42,10 @@ def write_representation(directory, relative, body):
 
 def render_static_page(sphere, asset_paths, backend_origin):
     document = render_civic_education(sphere)
+    return prepare_static_document(document, asset_paths, backend_origin)
+
+
+def prepare_static_document(document, asset_paths, backend_origin):
     for original, fingerprinted in asset_paths.items():
         document = document.replace(original, fingerprinted)
     for selected in SPHERE_NAMES:
@@ -48,6 +53,7 @@ def render_static_page(sphere, asset_paths, backend_origin):
             f'"?esfera={selected}#cargos"', f'"/como-funciona/{selected}/#cargos"'
         )
     document = document.replace('"/como-funciona"', '"/como-funciona/"')
+    document = document.replace('"/sobre"', '"/sobre/"')
     if backend_origin:
         document = document.replace('"/pessoas"', f'"{backend_origin}/pessoas"')
     return document.encode("utf-8")
@@ -66,6 +72,8 @@ def hosting_headers(backend_origin):
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 /como-funciona/*
+  Cache-Control: public, max-age=60, s-maxage=3600, stale-while-revalidate=86400
+/sobre/*
   Cache-Control: public, max-age=60, s-maxage=3600, stale-while-revalidate=86400
 """
 
@@ -89,10 +97,14 @@ def build_civic_site(output_directory, *, backend_origin=None):
         files[relative] = write_representation(
             directory, relative, render_static_page(sphere, asset_paths, origin)
         )
-    for relative in ("index.html", "como-funciona/index.html"):
-        files[relative] = write_representation(
-            directory, relative, render_static_page("municipal", asset_paths, origin)
-        )
+    files["como-funciona/index.html"] = write_representation(
+        directory, "como-funciona/index.html", render_static_page("municipal", asset_paths, origin)
+    )
+    institutional_document = prepare_static_document(
+        render_project_information(), asset_paths, origin
+    )
+    for relative in ("index.html", "sobre/index.html"):
+        files[relative] = write_representation(directory, relative, institutional_document)
     (directory / "_headers").write_text(hosting_headers(origin), encoding="utf-8")
     manifest = {"version": 1, "backend_origin": origin or None, "files": files}
     (directory / "manifest.json").write_text(

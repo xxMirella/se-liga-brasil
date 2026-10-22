@@ -22,7 +22,15 @@ from service.ingestion.repository import IngestionRepository
 from service.ingestion.sql_batches import SqlBatchWriter
 from service.observability.reporting import describe_error
 
-SUPPORTED_FIELDS = frozenset({"current_public_office", "current_political_party"})
+SUPPORTED_FIELDS = frozenset(
+    {
+        "current_public_office",
+        "current_political_party",
+        "photo_url",
+        "current_office_started_on",
+        "current_salary",
+    }
+)
 
 
 def index_members(members):
@@ -90,12 +98,17 @@ def collect_profile(repository, acquisition, candidate, member, roster_artifact)
         {"url": item.resource.url, "sha256": item.sha256} for item in (roster_artifact, artifact)
     ]
     validated = stage_records(artifact, acquisition.configuration, [data])
-    return {
+    result = {
         "person_id": candidate["person_id"],
         **asdict(
             repository.ingest_validated_artifact(validated, acquisition.configuration.batch_size)
         ),
     }
+    if "current_salary" in candidate.get("requested_fields", []):
+        from crawlers.senado.payroll_pipeline import collect_verified_salary
+
+        result["salary"] = collect_verified_salary(repository, acquisition, data)
+    return result
 
 
 def collect_senado_enrichment(connection, storage, people, fields=None):
@@ -116,7 +129,15 @@ def collect_senado_enrichment(connection, storage, people, fields=None):
             acquisition = SenateAcquisition(
                 configuration, OfficialHttpClient(configuration, client, OFFICIAL_HOSTS)
             )
-            result = collect_profiles(repository, acquisition, people)
+            targets = [
+                person | {"requested_fields": person.get("requested_fields", requested)}
+                for person in people
+            ]
+            from crawlers.senado.payroll_routing import collect_with_verified_salary_profiles
+
+            result = collect_with_verified_salary_profiles(
+                repository, acquisition, targets, collect_profiles
+            )
         result["unsupported_fields"] = unsupported
         repository.finish_run(
             "partial" if result["failures"] or unsupported else "completed", result

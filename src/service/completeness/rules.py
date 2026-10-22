@@ -9,6 +9,7 @@ SATISFIED_STATES = frozenset(
 
 REQUIRED_FIELDS = (
     "full_name",
+    "photo_url",
     "birth_date",
     "education_level",
     "current_political_party",
@@ -16,6 +17,7 @@ REQUIRED_FIELDS = (
     "declared_assets",
     "declared_wealth",
     "current_public_office",
+    "current_office_started_on",
     "political_activity",
     "attendance",
 )
@@ -54,6 +56,7 @@ def evaluate_person_completeness(row, today=None) -> dict:
     )
     fields = {
         "full_name": "present" if row["civil_name"] else "missing",
+        "photo_url": "present" if row.get("photo_url") else "missing",
         "birth_date": "present" if row["birth_date"] else "missing",
         "education_level": "present" if row["education_level"] else "missing",
         "current_political_party": "present" if row["current_party"] else "missing_or_unverified",
@@ -61,6 +64,10 @@ def evaluate_person_completeness(row, today=None) -> dict:
         "declared_assets": assets,
         "declared_wealth": assets,
         "current_public_office": office,
+        "current_office_started_on": (
+            "not_applicable" if row["current_office"] is False else
+            "present" if row.get("current_office_started_on") else "missing_or_unverified"
+        ),
         "political_activity": "partial" if row["has_propositions"] else "missing_or_unverified",
         "attendance": attendance_completeness(row, payroll_threshold),
     }

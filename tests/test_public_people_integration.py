@@ -55,3 +55,44 @@ def test_public_people_sql_filters_aliases_temporal_facts_and_stable_page(integr
     )
     assert repository.fetch_public_person(other_id) is None
     assert len(repository.search_people(PeopleQuery(), as_of, None)) == 1
+
+
+@pytest.mark.integration
+def test_current_exercise_respects_term_end_and_explicit_end_observation(integration_database):
+    from psycopg.types.json import Jsonb
+
+    connection = integration_database
+    person_id, _, record_id, _, _ = create_public_read_fixture(connection)
+    repository = PublicPeopleRepository(connection)
+    day = date(2026, 10, 14)
+    exercise = repository.fetch_current_exercises(person_id, day)[0]
+    connection.execute(
+        "UPDATE se_liga_brasil.office_term SET term_end=%s WHERE id=%s",
+        (day, exercise['term_id']),
+    )
+    assert repository.fetch_current_exercises(person_id, day) == []
+    connection.execute(
+        "UPDATE se_liga_brasil.office_term SET term_end=NULL WHERE id=%s",
+        (exercise['term_id'],),
+    )
+    connection.execute(
+        "INSERT INTO se_liga_brasil.person_fact(person_id,field_name,original_value,"
+        "normalized_value,evidence_kind,review_status,source_record_id) "
+        "VALUES(%s,'current_public_office_observation',%s,%s,'administrative','verified',%s)",
+        (person_id, Jsonb({}), Jsonb({'institutionCode': exercise['institution_code'],
+         'observedOn': day.isoformat(), 'inExercise': False}), record_id),
+    )
+    assert repository.fetch_current_exercises(person_id, day) == []
+    backfill = connection.execute(
+        "INSERT INTO se_liga_brasil.source_record(source_id,external_key,source_url,"
+        "content_sha256,fetched_at,payload) SELECT source_id,'older-reparse',source_url,"
+        "repeat('b',64),fetched_at-interval '1 day',payload "
+        "FROM se_liga_brasil.source_record WHERE id=%s RETURNING id",
+        (record_id,),
+    ).fetchone()['id']
+    connection.execute(
+        "UPDATE se_liga_brasil.office_exercise SET source_record_id=%s WHERE id=%s",
+        (backfill, exercise['exercise_id']),
+    )
+    assert backfill > record_id
+    assert repository.fetch_current_exercises(person_id, day) == []

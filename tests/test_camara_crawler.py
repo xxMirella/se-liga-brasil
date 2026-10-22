@@ -96,6 +96,7 @@ def test_verified_enrichment_preserves_person_and_links_payroll_and_authorship(
         )
         config = CrawlerConfiguration(tmp_path)
         assert ingest_rows(camara, config, "camara_profile", [profile]).rejected == 0
+        verify_derived_exercise(camara, config, profile, integration_database)
         assert (
             ingest_rows(
                 camara,
@@ -106,8 +107,7 @@ def test_verified_enrichment_preserves_person_and_links_payroll_and_authorship(
             == 0
         )
         proposal = example_proposition(person_id)
-        proposal["number"] = None
-        proposal["year"] = None
+        proposal.update(number=None, year=None)
         assert ingest_rows(camara, config, "camara_propositions", [proposal]).rejected == 0
         assert (
             integration_database.execute(
@@ -186,3 +186,28 @@ def test_unnumbered_report_preserves_null_without_discarding_authorship():
     assert data["number"] is None and data["year"] is None
     assert data["title"] == "PRL"
     assert data["role"] == "author"
+
+
+def verify_derived_exercise(repository, configuration, profile, connection):
+    assert ingest_rows(repository, configuration, "camara_exercise", [profile]).rejected == 0
+    exercise = connection.execute("SELECT starts_on FROM se_liga_brasil.office_exercise").fetchall()
+    assert len(exercise) == 1
+    assert exercise[0]["starts_on"].isoformat() == "2023-02-01"
+    connection.execute(
+        "INSERT INTO se_liga_brasil.political_party_affiliation(person_id,political_party_id,"
+        "observed_on,source_record_id,information_valid_from,information_scope,evidence_kind) "
+        "SELECT a.person_id,a.political_party_id,a.observed_on,e.source_record_id,"
+        "a.information_valid_from,a.information_scope,a.evidence_kind "
+        "FROM se_liga_brasil.political_party_affiliation a "
+        "CROSS JOIN se_liga_brasil.office_exercise e "
+        "WHERE a.information_scope='institution:camara'"
+    )
+    duplicate = dict(profile, photoUrl="https://www.camara.leg.br/another-photo.jpg")
+    assert ingest_rows(repository, configuration, "camara_profile", [duplicate]).rejected == 0
+    periods = connection.execute(
+        "SELECT information_valid_from,information_valid_until "
+        "FROM se_liga_brasil.political_party_affiliation "
+        "WHERE information_scope='institution:camara'"
+    ).fetchall()
+    assert all(row['information_valid_until'] is None or
+               row['information_valid_until'] > row['information_valid_from'] for row in periods)

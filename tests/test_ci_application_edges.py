@@ -303,7 +303,7 @@ def test_attendance_batch_persists_verified_results_and_preserves_failed_coverag
     monkeypatch.setattr(collection, "save_json", lambda path, payload: saves.append(dict(payload)))
     monkeypatch.setattr(collection, "discover_attendance_members", lambda _: members)
     monkeypatch.setattr(
-        collection, "prepare_attendance_profiles", lambda *args: dict.fromkeys(members)
+        collection, "prepare_attendance_profiles", lambda *args, **kwargs: dict.fromkeys(members)
     )
     monkeypatch.setattr(
         collection,
@@ -316,7 +316,7 @@ def test_attendance_batch_persists_verified_results_and_preserves_failed_coverag
     monkeypatch.setattr(
         collection,
         "collect_attendance_history",
-        lambda *args: {"months": 12, "failures": ["source-year-unavailable"]},
+        lambda *args, **kwargs: {"months": 12, "failures": ["source-year-unavailable"]},
     )
     acquisition = SimpleNamespace(configuration=SimpleNamespace(storage_directory=tmp_path))
     result = collection.collect_attendance_batch(

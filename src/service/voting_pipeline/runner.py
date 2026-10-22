@@ -17,6 +17,7 @@ def collect_source_input(
     limit=25,
     max_identity_profiles=10,
     proposition_ids=(),
+    cached_only=False,
 ):
     if source == "senado":
         from service.voting_pipeline.source_senado import collect_senate_source_files
@@ -31,8 +32,11 @@ def collect_source_input(
             max_votings=limit,
             max_processes=min(limit, 100),
             max_identity_profile_downloads=max_identity_profiles,
+            **({"cached_only": True} if cached_only else {}),
         )
     if source == "camara":
+        if cached_only:
+            raise ValueError("Cached source replay currently supports Senate voting")
         from crawlers.camara.voting_pipeline import collect_camara_source_files
 
         return collect_camara_source_files(
@@ -62,6 +66,7 @@ def run_source_refresh(
     limit=25,
     max_identity_profiles=10,
     proposition_ids=(),
+    cached_only=False,
 ):
     if source not in {"camara", "senado"} or start > end or (end - start).days > 62:
         raise ValueError("Select a supported source and bounded voting interval")
@@ -86,6 +91,7 @@ def run_source_refresh(
                 limit=limit,
                 max_identity_profiles=max_identity_profiles,
                 **({"proposition_ids": proposition_ids} if proposition_ids else {}),
+                **({"cached_only": True} if cached_only else {}),
             )
             daily = consolidate_acquisition(
                 result, source, start, end, repository, temporary, publisher

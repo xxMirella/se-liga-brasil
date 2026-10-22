@@ -1,4 +1,4 @@
-# Fontes oficiais para perfis parlamentares — Se Liga Brasil
+# Fontes oficiais para perfis parlamentares — Se Liga, Brasil
 
 Data do levantamento: **6 de outubro de 2026**. Escopo: deputados federais, senadores, deputados estaduais das 26 assembleias e deputados distritais da Câmara Legislativa do Distrito Federal.
 
@@ -192,3 +192,15 @@ Não substituir informações divergentes silenciosamente. Preservar as duas evi
 ## 8. Critério de conclusão da próxima etapa
 
 A coleta só poderá ser declarada validada por instituição quando houver: lista recuperada com período/situação definidos; perfil individual inspecionado; campos realmente disponíveis documentados; método de aquisição testado; exemplos de posse/afastamento quando necessários; identificadores reconciliados; lacunas registradas. Este levantamento conclui o **catálogo inicial de fontes**, não essa validação operacional.
+
+
+### Remuneração nominal do Senado — fonte validada em 22/10/2026
+
+O serviço administrativo oficial publica a folha nominal em
+`https://adm.senado.gov.br/adm-dadosabertos/api/v1/servidores/remuneracoes/{ano}/{mes}`.
+A resposta JSON inclui nomes, competência, tipo de folha e componentes financeiros,
+sem CAPTCHA nas consultas verificadas. Identidade exige cruzamento com evidência
+pessoal oficial; `sequencial` não é intercambiável entre cadastro e folha.
+
+Contrato, exemplos, regras de associação e cálculo:
+[API nominal de remunerações do Senado](fonte-api-remuneracao-senado.md).

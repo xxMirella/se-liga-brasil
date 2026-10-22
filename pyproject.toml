@@ -7,7 +7,10 @@ name = "se-liga-brasil"
 version = "0.1.0"
 description = "Ingestão auditável de dados oficiais de candidaturas brasileiras"
 requires-python = ">=3.12"
-dependencies = ["httpx>=0.28,<1", "psycopg[binary]>=3.2,<4", "python-dotenv>=1,<2"]
+dependencies = ["httpx>=0.28,<1", "psycopg[binary]>=3.2,<4", "python-dotenv>=1,<2", "duckdb>=1.4,<2"]
+
+[tool.vercel]
+entrypoint = "app:app"
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10", "ruff>=0.14,<1", "coverage[toml]>=7.10,<8"]
@@ -35,7 +38,8 @@ select = ["E", "F", "I", "B", "UP", "C90", "SIM"]
 max-complexity = 10
 
 [tool.setuptools.package-data]
-"service.public_profile_web" = ["assets/*.css"]
+"service.project_information" = ["*.html"]
+"service.public_profile_web" = ["assets/*.css", "assets/people-viewport.js"]
 "service.civic_education" = ["assets/*.css", "assets/*.svg"]
 
 [tool.coverage.run]

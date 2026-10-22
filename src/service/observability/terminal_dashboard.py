@@ -62,7 +62,7 @@ class TerminalDashboard:
         bar = "#" * filled + "-" * (20 - filled)
         percent = f"{ratio:.0%}" if ratio is not None else "tamanho desconhecido"
         return [
-            "SE LIGA BRASIL — CRAWLER TSE",
+            "SE LIGA, BRASIL — CRAWLER TSE",
             f"Etapa: {state.get('stage', 'Preparando')} | {state.get('resource_name', '')}"
             f" | {state.get('status', '')}",
             f"Encontrados: {state.get('total_files', 0)} | Concluídos: {state.get('completed', 0)}"

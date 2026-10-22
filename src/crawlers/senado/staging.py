@@ -6,8 +6,11 @@ from storage.files import create_private_directory, hash_content, hash_file, wri
 
 
 def stage_records(artifact, configuration, data_rows) -> ValidatedArtifact:
+    scope = staging_scope(artifact.resource.kind, data_rows)
     directory = (
-        configuration.storage_directory / "validated" / (artifact.sha256 + "-" + PARSER_VERSION)
+        configuration.storage_directory
+        / "validated"
+        / (artifact.sha256 + "-" + PARSER_VERSION + "-" + hash_content(scope))
     )
     create_private_directory(directory)
     records, rejected = directory / "records.ndjson", directory / "rejected.ndjson"
@@ -35,14 +38,22 @@ def stage_records(artifact, configuration, data_rows) -> ValidatedArtifact:
         rejected,
         hash_file(records),
         hash_file(rejected),
-        "senado:personal-enrichment",
+        scope,
         {"valid": len(data_rows), "rejected": 0},
         PARSER_VERSION,
     )
 
 
 def record_key(kind, data) -> str:
+    if kind == "senado_payroll":
+        return data["recipientKey"] + ":" + data["competence"]
     return data["personId"]
+
+
+def staging_scope(kind, rows):
+    if kind == "senado_payroll":
+        return "senado:payroll:" + hash_content(sorted(row["personId"] for row in rows))
+    return "senado:personal-enrichment"
 
 
 def bundle_artifacts(configuration, profile, roster):

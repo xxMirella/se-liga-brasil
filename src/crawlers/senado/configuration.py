@@ -6,9 +6,9 @@ from pathlib import Path
 from service.ingestion.contracts import SourceDescriptor
 
 API_BASE = "https://legis.senado.leg.br/dadosabertos/"
-OFFICIAL_HOSTS = frozenset({"legis.senado.leg.br"})
+OFFICIAL_HOSTS = frozenset({"legis.senado.leg.br", "adm.senado.gov.br"})
 SOURCE = SourceDescriptor("senado", "Senado Federal", "https://www.senado.leg.br")
-PARSER_VERSION = "senado-personal-python-v3"
+PARSER_VERSION = "senado-personal-python-v4"
 
 
 @dataclass(frozen=True)

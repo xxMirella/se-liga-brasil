@@ -48,3 +48,19 @@ def apply_collection_cooldown(connection, source_code, error):
             failure["code"],
             failure["status"],
         )
+
+
+@contextmanager
+def cached_source_acquisition(connection, configuration, source, acquisition_factory):
+    """Local archive replay retains source locks without making or postponing requests."""
+    lock_key = f"se_liga_brasil:ingestion:{source.code}"
+    acquired = connection.execute(
+        "SELECT pg_try_advisory_lock(hashtext(%s)) AS acquired", (lock_key,)
+    ).fetchone()["acquired"]
+    if not acquired:
+        raise IngestionError("CRAWLER_ALREADY_RUNNING_IN_DATABASE")
+    try:
+        with local_run_lock(configuration.storage_directory / "source-locks" / source.code):
+            yield acquisition_factory(configuration)
+    finally:
+        connection.execute("SELECT pg_advisory_unlock(hashtext(%s))", (lock_key,))

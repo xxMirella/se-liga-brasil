@@ -28,6 +28,7 @@ O bucket é privado. A chave de servidor fica em `.env.storage`, ignorada pelo v
 - `se-liga-brasil configure-voting-schedule --env-file CAMINHO_ENV`: aplica a fila privada e registra os dois jobs pg_cron de coleta e expurgo.
 - `se-liga-brasil run-voting-pipeline --source senado --start-date YYYY-MM-DD --end-date YYYY-MM-DD --env-file CAMINHO_ENV`: coleta delimitada e publicação. Câmara usa `--source camara`.
 - `--local-only`: executa validação/consolidação local, sem upload. Não conclui tarefas duráveis de publicação.
+- `--cached-only`: no Senado, usa apenas originais já arquivados e perfis locais, sem chamadas à fonte. Requer `--max-identity-profiles 0`; pode publicar no Storage. Não consulta detalhes novos de matérias. Sem o arquivo exato do intervalo, falha explicitamente.
 - `se-liga-brasil voting-worker --env-file CAMINHO_ENV --daemon --limit 100 --max-identity-profiles 10`: consome a fila continuamente, com cache, limites e cooldown.
 
 A unidade `deploy/se-liga-brasil-voting-worker.service` mantém o trabalhador no systemd do usuário, com reinício em falhas e arquivos privados. O serviço foi habilitado com linger para continuar após logout. A máquina precisa estar ligada e ter rede; o pg_cron continuará enfileirando no Supabase se o trabalhador estiver offline, e a fila será retomada ao voltar. Não há um executor Python hospedado dentro do PostgreSQL. Hospedar esse trabalhador num servidor sempre disponível é uma implantação separada.

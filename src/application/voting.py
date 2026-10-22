@@ -58,6 +58,7 @@ def run_requested_refresh(connection, arguments, publisher, source, start, end):
         proposition_ids=tuple(
             filter(None, (getattr(arguments, "proposition_ids", None) or "").split(","))
         ),
+        **({"cached_only": True} if getattr(arguments, "cached_only", False) else {}),
     )
 
 

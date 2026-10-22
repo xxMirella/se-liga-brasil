@@ -16,7 +16,7 @@ def render_search_result(person):
     office = person.get("current_office") or {}
     label = office.get("label") if isinstance(office, dict) else office
     office_label = f"<p>{text(label)}</p>" if label else ""
-    return f'''<li class="search-result"><h2><a href="{path}">{name}</a></h2>
+    return f'''<li class="search-result"><h2><a href="{path}" title="{name}">{name}</a></h2>
 {office_label}<a href="{path}">Consultar perfil →</a></li>'''
 
 
@@ -26,24 +26,32 @@ def render_search_filters(parameters):
     office_control = render_select(
         "office_kind", "Cargo atual", OFFICE_LABELS.items(), parameters.get("office_kind")
     )
+    selected_limit = parameters.get("limit", "6")
+    page_sizes = sorted({6, 12, 24, int(selected_limit)})
+    page_size_control = render_select(
+        "limit", "Pessoas por página", ((str(size), str(size)) for size in page_sizes),
+        selected_limit,
+    )
     query = text(parameters.get("q"), "")
     political_party = text(parameters.get("political_party"), "")
-    return f'''<form action="/pessoas" method="get" class="activity-controls">
+    active_filters = sum(bool(parameters.get(key)) for key in
+                         ("q", "uf", "office_kind", "political_party"))
+    summary = "Filtrar pessoas" + (f" · {active_filters} filtros ativos" if active_filters else "")
+    return f'''<details class="people-filters"><summary>{summary}</summary>
+<form action="/pessoas" method="get" class="activity-controls">
 <label>Nome<input name="q" value="{query}" type="search" maxlength="120"></label>
 {uf_control}{office_control}
 <label>Partido (sigla)<input name="political_party" value="{political_party}"
-maxlength="40"></label><button type="submit">Filtrar pessoas</button></form>
+maxlength="40"></label>{page_size_control}<button type="submit">Filtrar pessoas</button></form>
 <p class="explanation">Filtros de cargo e UF usam exercício atual documentado.
-O partido pode ser uma observação histórica; consulte a referência no perfil.</p>'''
+O partido pode ser uma observação histórica; consulte a referência no perfil.</p></details>'''
 
 
 def render_search_page(query, results):
     parameters = dict(query) if isinstance(query, Mapping) else {"q": query}
     search_text = parameters.get("q") or ""
     people = list(islice(results.get("items", []), 100))
-    heading = (
-        "Resultados da busca" if any(parameters.values()) else "Conheça as trajetórias públicas"
-    )
+    heading = search_heading(parameters)
     records = "".join(render_search_result(person) for person in people)
     if not records:
         message = (
@@ -63,3 +71,23 @@ def render_search_page(query, results):
 <p class="explanation">Identidade, vínculos e atuação disponíveis nas fontes consultadas.</p>
 {render_search_filters(parameters)}<ul class="search-results">{records}</ul>{next_link}"""
     return render_layout(heading, content, search_text)
+
+
+def render_search_shell(parameters):
+    """No database query until the browser supplies its bounded visible page size."""
+    heading = search_heading(parameters)
+    fallback = query_link("/pessoas", {**parameters, "limit": "6"})
+    content = f'''<p class="eyebrow">CONSULTA PÚBLICA</p><h1>{heading}</h1>
+<p class="explanation">Identidade, vínculos e atuação disponíveis nas fontes consultadas.</p>
+{render_search_filters(parameters)}
+<ul class="search-results" data-viewport-page aria-label="Preparando resultados">
+<li class="search-result" aria-hidden="true"><h2>Carregando pessoas…</h2>
+<span>Consultar perfil →</span></li></ul>
+<p><a href="{fallback}">Carregar 6 pessoas por página</a></p>
+<script src="/assets/people-viewport.js" defer></script>'''
+    return render_layout("Consulta de pessoas", content, parameters.get("q", ""))
+
+
+def search_heading(parameters):
+    filtered = any(parameters.get(key) for key in ("q", "uf", "office_kind", "political_party"))
+    return "Resultados da busca" if filtered else "Conheça as trajetórias públicas"

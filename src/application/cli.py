@@ -51,6 +51,8 @@ def create_argument_parser() -> argparse.ArgumentParser:
             "purge-gaps",
             "collect-history",
             "collect-attendance",
+            "collect-cabinet-payroll",
+            "collect-senado-payroll",
             "collect-session-presence",
             "collect-votes",
             "build-dataset",
@@ -68,10 +70,27 @@ def create_argument_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def parse_task_limit(value):
+    try:
+        limit = int(value)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError("Use um inteiro entre 1 e 1000.") from error
+    if not 1 <= limit <= 1000:
+        raise argparse.ArgumentTypeError("Use um inteiro entre 1 e 1000.")
+    return limit
+
+
 def add_execution_arguments(parser):
     parser.add_argument("--config", type=Path, default=None)
     parser.add_argument("--env-file", type=Path)
+    parser.add_argument(
+        "--task-limit",
+        type=parse_task_limit,
+        default=1000,
+        help="Máximo de pendências por despacho (1 a 1000)",
+    )
     parser.add_argument("--fields", help="Campos de completude separados por vírgula")
+    parser.add_argument("--sources", help="Fontes de completude separadas por vírgula")
     parser.add_argument("--person-id", help="UUID interno para auditar ou enriquecer uma pessoa")
     parser.add_argument(
         "--years", help="Anos separados por vírgula; 'all' varre o catálogo histórico"
@@ -105,6 +124,7 @@ def add_historical_arguments(parser):
     parser.add_argument("--output-directory", type=Path, default=Path("dist/public"))
     parser.add_argument("--backend-origin", help="Origem HTTPS pública da pesquisa e dos perfis")
     parser.add_argument("--local-only", action="store_true")
+    parser.add_argument("--cached-only", action="store_true")
     parser.add_argument("--daemon", action="store_true")
     parser.add_argument("--max-jobs", type=int, default=4)
     parser.add_argument("--poll-seconds", type=int, default=30)
@@ -235,7 +255,10 @@ def execute_reported_command(arguments, reporter=None) -> int:
     try:
         result = execute_command(arguments)
     except Exception as error:
-        emit_event("failed", command=arguments.command, status="failed", **describe_error(error))
+        failure = describe_error(error)
+        if "status" in failure:
+            failure["http_status"] = failure.pop("status")
+        emit_event("failed", command=arguments.command, status="failed", **failure)
         return 1
     except KeyboardInterrupt:
         emit_event(
@@ -269,6 +292,14 @@ def execute_reported_command(arguments, reporter=None) -> int:
 
 
 def execute_data_service_command(arguments):
+    if arguments.command == "collect-senado-payroll":
+        from application.senado_payroll import execute_senado_payroll_command
+
+        return execute_senado_payroll_command(arguments)
+    if arguments.command == "collect-cabinet-payroll":
+        from application.cabinet_payroll import execute_cabinet_payroll_command
+
+        return execute_cabinet_payroll_command(arguments)
     if arguments.command == "collect-session-presence":
         from application.session_presence import execute_session_presence_command
 

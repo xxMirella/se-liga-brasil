@@ -5,13 +5,19 @@ SELECT (b.normalized_data->>'personId')::uuid,p.id,b.source_generated_at::date,
 FROM ingestion_batch b JOIN se_liga_brasil.political_party p
  ON p.abbreviation=b.normalized_data->>'politicalPartyAbbreviation'
 ON CONFLICT DO NOTHING;
-WITH periods AS (
- SELECT id,lead(information_valid_from) OVER(PARTITION BY person_id,information_scope
- ORDER BY information_valid_from,id) AS next_observation
+WITH observation_times AS (
+ SELECT DISTINCT person_id,information_scope,information_valid_from
  FROM se_liga_brasil.political_party_affiliation WHERE information_scope='institution:camara'
+), periods AS (
+ SELECT person_id,information_scope,information_valid_from,
+  lead(information_valid_from) OVER(PARTITION BY person_id,information_scope
+    ORDER BY information_valid_from) AS next_observation
+ FROM observation_times
 )
 UPDATE se_liga_brasil.political_party_affiliation a SET information_valid_until=p.next_observation
-FROM periods p WHERE a.id=p.id AND a.information_valid_until IS DISTINCT FROM p.next_observation;
+FROM periods p WHERE a.person_id=p.person_id AND a.information_scope=p.information_scope
+ AND a.information_valid_from=p.information_valid_from
+ AND a.information_valid_until IS DISTINCT FROM p.next_observation;
 INSERT INTO se_liga_brasil.office_term(person_id,institution_id,office_kind,represented_uf,
  legislature_key,official_term_key,term_start,term_end,source_record_id)
 SELECT (b.normalized_data->>'personId')::uuid,i.id,'federal_deputy',b.normalized_data->>'representedUf',

@@ -53,13 +53,15 @@ def run_official_collection(connection, configuration, definition, pipeline):
         ):
             transport = OfficialHttpClient(configuration, client, definition.allowed_hosts)
             acquisition = definition.acquisition_factory(configuration, transport)
-            return execute_ingestion_run(
+            result = execute_ingestion_run(
                 "history",
                 configuration,
                 acquisition,
                 repository,
                 pipeline=pipeline,
             )
+            postpone_failed_collection_results(connection, definition.source.code, result)
+            return result
     except Exception as error:
         failure = describe_error(error)
         if failure.get("status") in {403, 429, 500, 502, 503, 504}:
@@ -71,3 +73,27 @@ def run_official_collection(connection, configuration, definition, pipeline):
                 failure["status"],
             )
         raise
+
+
+def postpone_failed_collection_results(connection, source_code, result):
+    for failure in result.get("failures", []):
+        if failure.get("status") in {403, 429, 500, 502, 503, 504}:
+            postpone_source(
+                connection, source_code, max(3600, failure.get("retry_after_seconds", 0)),
+                failure["code"], failure["status"],
+            )
+            break
+
+
+def run_cached_collection(connection, configuration, definition, pipeline, acquisition):
+    """Replay existing evidence under source locks, without remote requests or policy resets."""
+    repository = IngestionRepository(
+        connection, definition.source,
+        definition.projector_factory(SqlBatchWriter(connection)),
+        parser_version=definition.parser_version,
+    )
+    lock_directory = configuration.storage_directory / "source-locks" / definition.source.code
+    with local_run_lock(lock_directory):
+        return execute_ingestion_run(
+            "local-history", configuration, acquisition, repository, pipeline=pipeline
+        )

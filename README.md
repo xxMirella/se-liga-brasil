@@ -1,4 +1,4 @@
-# Se Liga Brasil
+# Se Liga, Brasil
 
 Serviços Python para coletar, validar e ingerir dados oficiais de transparência política, com histórico e proveniência. PostgreSQL 17+; código Python 3.12+.
 
@@ -156,3 +156,7 @@ Cobertura de propostas, resultados legislativos e trajetória histórica: [audit
 Desenvolvimento por entregáveis, limites de integração e cartões Trello: [coletores da trajetória](docs/implementacao-coletores-trajetoria.md).
 
 Votos nominais e análise gratuita dos arquivos: [fontes e arquitetura analítica](docs/votacoes-senado-e-arquitetura-analitica.md).
+
+Gastos com equipe de gabinete: [coleta, cálculo por cargo e histórico público](docs/gastos-equipe-gabinete.md).
+
+Fonte de salário individual do Senado: [API nominal oficial e regras de associação](docs/fonte-api-remuneracao-senado.md).

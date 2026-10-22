@@ -12,7 +12,7 @@ OFFICIAL_HOSTS = frozenset(
     {"www.alerj.rj.gov.br", "www2.alerj.rj.gov.br", "transparencia.alerj.rj.gov.br"}
 )
 SOURCE = SourceDescriptor("alerj", "Assembleia Legislativa do Rio de Janeiro", PORTAL_BASE)
-PARSER_VERSION = "alerj-enrichment-python-v1"
+PARSER_VERSION = "alerj-enrichment-python-v3"
 
 
 @dataclass(frozen=True)

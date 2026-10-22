@@ -18,7 +18,7 @@ from crawlers.senado.voting_profile_acquisition import (
     validate_identity_profile_budget,
 )
 from service.ingestion.contracts import IngestionError
-from service.voting_pipeline.runtime import official_source_acquisition
+from service.voting_pipeline.runtime import cached_source_acquisition, official_source_acquisition
 from storage.files import (
     create_private_directory,
     hash_content,
@@ -44,9 +44,12 @@ def collect_senate_source_files(
     max_votings=1000,
     max_processes=25,
     max_identity_profile_downloads=0,
+    cached_only=False,
 ):
     partitions = monthly_partitions(start, end, max_partitions)
     validate_identity_profile_budget(max_identity_profile_downloads)
+    if cached_only and max_identity_profile_downloads:
+        raise IngestionError("OFFLINE_VOTING_CANNOT_DOWNLOAD_IDENTITY_PROFILES")
     if not 1 <= max_votings <= 10000 or not 0 <= max_processes <= 100:
         raise IngestionError("INVALID_SENATE_ANALYTICAL_BUDGET")
     configuration = SenateConfiguration(Path(storage).resolve())
@@ -54,9 +57,8 @@ def collect_senate_source_files(
     identities = resolve_profile_identities(connection, profiles)
     profile_acquisition = IdentityProfileAcquisition(max_identity_profile_downloads)
     profile_acquisition.mark_cached_profiles(profiles, configuration)
-    with official_source_acquisition(
-        connection, configuration, SOURCE, OFFICIAL_HOSTS, SenateAcquisition
-    ) as acquisition:
+    context = senate_acquisition_context(connection, configuration, cached_only)
+    with context as acquisition:
         return normalize_senate_source_files(
             connection,
             acquisition,
@@ -65,9 +67,19 @@ def collect_senate_source_files(
             identities,
             profile_acquisition,
             max_votings=max_votings,
-            max_processes=max_processes,
+            max_processes=0 if cached_only else max_processes,
             identity_observations={item.sha256: item.fetched_at for item in profiles},
         )
+
+
+def senate_acquisition_context(connection, configuration, cached_only):
+    if cached_only:
+        from crawlers.senado.cached_acquisition import CachedSenateAcquisition
+
+        return cached_source_acquisition(connection, configuration, SOURCE, CachedSenateAcquisition)
+    return official_source_acquisition(
+        connection, configuration, SOURCE, OFFICIAL_HOSTS, SenateAcquisition
+    )
 
 
 def normalize_senate_source_files(

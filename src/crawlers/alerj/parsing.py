@@ -77,27 +77,51 @@ def parse_roster(payload):
 def parse_profile(payload, expected_name):
     page = parse_page(payload)
     text = "\n".join(line.strip() for line in "".join(page.text).splitlines() if line.strip())
-    birth = re.search(r"NASCIMENTO\s+(\d{1,2}) de (\w+) de (\d{4})", text)
     current = re.search(r"(\d+)[ºª] Legislatura \((\d{4}) [–-] (\d{4})\) - Atual", text)
     events = parse_affiliation_events(text)
-    if not birth or not current or not events:
-        raise IngestionError("ALERJ_PROFILE_LAYOUT_CHANGED")
+    if not current:
+        raise IngestionError("ALERJ_CURRENT_LEGISLATURE_MISSING")
     name = re.search(r"DEPUTAD[OA]\s+([^\n]+)", text)
     if name is None or name.group(1).casefold() != expected_name.casefold():
         raise IngestionError("ALERJ_PROFILE_NAME_MISMATCH")
     party = re.search(r'<div class="partido"><span>([^<]+)</span>', decode_html(payload))
     if party is None:
         raise IngestionError("ALERJ_CURRENT_PARTY_MISSING")
-    day, month, year = birth.groups()
+    birth_date = parse_profile_birth_date(text)
     return {
         "displayName": name.group(1),
         "politicalPartyAbbreviation": unescape(party.group(1)).strip(),
-        "birthDate": date(int(year), MONTHS[month.lower()], int(day)).isoformat(),
+        "birthDate": birth_date,
         "legislatureKey": current.group(1),
         "legislatureStartsYear": int(current.group(2)),
         "legislatureEndsYear": int(current.group(3)),
         "affiliationEvents": events,
+        "affiliationHistoryStatus": "available" if events else "not_published",
     }
+
+
+def parse_profile_birth_date(text):
+    """Read only an explicitly labelled birth date, never dates from the biography."""
+    labels = list(re.finditer(r"(?im)^NASCIMENTO\b", text))
+    if not labels:
+        raise IngestionError("ALERJ_BIRTH_DATE_MISSING")
+    if len(labels) != 1:
+        raise IngestionError("ALERJ_BIRTH_DATE_AMBIGUOUS")
+    remaining = text[labels[0].end() :].lstrip(" :\t\n")
+    value = remaining.split("\n", 1)[0].strip()
+    written = re.fullmatch(r"(\d{1,2})\s+de\s+(\w+)\s+de\s+(\d{4})", value, re.I)
+    numeric = re.fullmatch(r"(\d{1,2})/(\d{1,2})/(\d{4})", value)
+    try:
+        if written:
+            day, month_name, year = written.groups()
+            month = MONTHS[month_name.casefold()]
+        elif numeric:
+            day, month, year = numeric.groups()
+        else:
+            raise IngestionError("ALERJ_BIRTH_DATE_INVALID")
+        return date(int(year), int(month), int(day)).isoformat()
+    except (KeyError, ValueError) as error:
+        raise IngestionError("ALERJ_BIRTH_DATE_INVALID") from error
 
 
 def parse_affiliation_events(text):
@@ -109,10 +133,17 @@ def parse_affiliation_events(text):
             {
                 "eventKind": "appointment" if kind.startswith("Posse") else "entry",
                 "politicalPartyAbbreviation": abbreviation.strip(),
-                "startsOn": date(year, month, day).isoformat(),
+                "startsOn": parse_affiliation_date(year, month, day),
             }
         )
     return events
+
+
+def parse_affiliation_date(year, month, day):
+    try:
+        return date(year, month, day).isoformat()
+    except ValueError as error:
+        raise IngestionError("ALERJ_AFFILIATION_DATE_INVALID") from error
 
 
 class PayrollCatalog(PageObservations):

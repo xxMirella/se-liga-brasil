@@ -1,4 +1,4 @@
-# Modelo de dados — Se Liga Brasil
+# Modelo de dados — Se Liga, Brasil
 
 ## Situação
 

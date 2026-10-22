@@ -130,4 +130,4 @@ def test_attendance_pipeline_forwards_person_scope_without_crawling_other_people
     assert attendance.attendance_pipeline(
         None, None, "source", "repository", limit=1, person_id="person"
     ) == {"people": 1}
-    collect.assert_called_once_with("repository", "source", limit=1, person_id="person")
+    collect.assert_called_once_with("repository", "source", limit=1, person_id="person", years=None)

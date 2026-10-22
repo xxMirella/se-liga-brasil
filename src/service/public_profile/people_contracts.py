@@ -50,7 +50,7 @@ class PeopleQuery:
     office_kind: str | None = None
     political_party: str | None = None
     cursor: str | None = None
-    limit: int = 30
+    limit: int = 6
 
     def __post_init__(self):
         if not isinstance(self.q, str) or len(self.q) > 120:

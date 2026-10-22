@@ -9,7 +9,7 @@ class AlespProjectionWriter:
         if resource_kind == "deputy_payroll":
             self.writer.execute_statements("payroll_payments", parameters)
             return
-        if resource_kind not in {"alesp_profile", "alesp_propositions"}:
+        if resource_kind not in {"alesp_profile", "alesp_propositions", "alesp_photos"}:
             raise ValueError("Unsupported ALESP resource kind")
         self.writer.execute_statements("alesp_common", parameters)
         self.writer.execute_statements(resource_kind, parameters)

@@ -75,7 +75,7 @@ class PublicHandler(BaseHTTPRequestHandler):
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header(
             "Content-Security-Policy",
-            "default-src 'none'; style-src 'self'; img-src 'self' https:; "
+            "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https:; "
             "form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
         )
         self.end_headers()

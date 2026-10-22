@@ -44,7 +44,7 @@ def stage_records(artifact, configuration, data_rows) -> ValidatedArtifact:
 def record_key(kind, data) -> str:
     if kind.startswith("camara_legislative_") or kind == "camara_attendance":
         return data["recordKey"]
-    if kind == "camara_profile":
+    if kind in {"camara_profile", "camara_exercise"}:
         return data["personId"]
     if kind == "camara_payroll":
         return data["personId"] + ":" + data["competence"]

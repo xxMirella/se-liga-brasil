@@ -65,3 +65,48 @@ A pesquisa adicional de conexões entre portais está em `portais-conexao-dados.
 
 
 Execução seletiva: `dispatch --fields political_activity` permite materializar atividade local sem consultar folha. Reprocessamento local respeita identidade, escopo, checksums e deduplicação de coautorias. Pendências de salário não atravessam o cooldown remoto.
+
+## Prioridade de fotos, cargos e remuneração
+
+A auditoria inclui `photo_url`: uma foto ausente permanece pendente, mesmo com nome e nascimento preenchidos. Câmara e Senado obtêm imagens oficiais somente após confirmação da identidade. A coleção do Senado ainda não fornece pagamentos; solicitações de remuneração permanecem bloqueadas explicitamente, sem usar o subsídio legal como se fosse pagamento recebido.
+
+A fila prioriza exercício atual confirmado, depois eleição cujo mandato esperado está em curso, seguida das demais pessoas. Resultado eleitoral é somente uma prioridade de pesquisa e não comprova posse ou exercício. Dentro dessa ordem, foto, cargo e salário têm precedência. Leases e cooldowns continuam obrigatórios.
+
+Para processar as pendências dessas áreas com fontes específicas, reutilizando o diagnóstico persistido:
+
+```sh
+se-liga-brasil dispatch --fields photo_url,current_public_office,current_salary --sources camara,senado --env-file /caminho/privado/.env
+```
+
+O lote tem no máximo 1.000 pendências e cada coletor mantém seu orçamento de pessoas/requisições. O parâmetro `--sources` permite separar fontes indisponíveis sem perder suas pendências. A leitura e o planejamento são proporcionais ao número de registros; o agrupamento evita repetir a mesma coleta para campos da mesma pessoa.
+
+O campo `current_office_started_on` acompanha a data individual de início do exercício atual. Cargo confirmado sem essa data permanece incompleto: o início da legislatura não supre a lacuna. No histórico da Câmara, alterações de partido/nome durante exercício contínuo não reiniciam essa data; licença e retorno explícitos delimitam um novo período. Históricos contraditórios não produzem uma data presumida.
+
+A correção de início de exercício da Câmara pode ser reprocessada a partir de originais em cache, com transporte remoto desativado. O fato derivado `camara_exercise` possui recurso e rastreabilidade próprios; não substitui silenciosamente um perfil com timestamp conflitante. As versões antigas permanecem no histórico, enquanto a leitura usa a data de coleta da evidência original, e não o número sequencial do registro, para ordenar correções e afastamentos.
+
+Observações simultâneas de filiação na Câmara são agrupadas por instante antes de calcular o próximo limite SCD. Isso mantém várias evidências do mesmo acontecimento sem criar intervalo de duração zero, recusado por `affiliation_information_period_check`. O processamento não desativa a constraint nem transforma ausência de informação em mudança de partido.
+
+## Retomada de pagamentos em lotes pequenos
+
+`dispatch --fields current_salary --sources camara --task-limit 10` assume até dez
+pendências vencidas da fonte. O intervalo aceito de `--task-limit` é de 1 a 1.000;
+o padrão continua 1.000. O limite conta pendências, não chamadas HTTP ou pagamentos
+novos. Cada fonte mantém também seus limites próprios de pessoas e bytes.
+
+A prioridade acompanha o lote até o coletor: exercício confirmado, pista eleitoral
+vigente, demais pessoas; depois prioridade do campo, próxima tentativa e ID da tarefa.
+A seleção com lease e `SKIP LOCKED` retorna explicitamente nessa ordem, e o serviço
+reordena os candidatos pela primeira tarefa da pessoa. Ordenar o lote no banco e
+reenviar candidatos por UUID descartava a prioridade antes da coleta. O índice em
+memória para reordenar custa O(n+k) em tempo e O(n) em memória, com n candidatos e k
+pessoas solicitadas; não adiciona chamadas remotas por pessoa.
+
+HTTP 429 interrompe a fonte, conserva o cooldown persistido e mantém as pendências
+sem fato correspondente. Um lote parcial pode ter gravado pagamentos válidos antes
+do bloqueio; verificar o relatório e o banco antes de repetir. O comando é finito e
+não instala um agendamento.
+
+Verificação em 22/10/2026: a folha ALESP publicada mais recente no índice oficial
+continua sendo agosto/2026. Os pagamentos existentes continuam visíveis no perfil,
+mas não satisfazem a regra de competência atual de setembro/2026. Não confundir
+pagamento desatualizado com ausência de qualquer pagamento.

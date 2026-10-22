@@ -3,8 +3,8 @@ from crawlers.senado.pipeline import collect_senado_enrichment, index_members, s
 
 
 def test_unsupported_fields_do_not_access_database_or_network(tmp_path):
-    result = collect_senado_enrichment(None, tmp_path, [], {"current_salary"})
-    assert result["unsupported_fields"] == ["current_salary"]
+    result = collect_senado_enrichment(None, tmp_path, [], {"political_activity"})
+    assert result["unsupported_fields"] == ["political_activity"]
 
 
 def test_name_only_selects_source_candidate_not_identity():

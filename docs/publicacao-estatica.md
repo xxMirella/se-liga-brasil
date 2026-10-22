@@ -1,6 +1,6 @@
 # Publicação estática do guia de cargos
 
-O guia é exportado sem banco, credenciais ou JavaScript. A pesquisa e os perfis
+O guia e a página institucional são exportados sem banco, credenciais ou JavaScript. A pesquisa e os perfis
 continuam no backend Python. Esta entrega prepara a publicação; não cria conta,
 não publica o site e não comprova capacidade para milhões de acessos.
 
@@ -25,7 +25,8 @@ indisponível. Não publicar diretórios de dados, arquivos de ambiente ou o pro
 
 ## Conteúdo de dist/public
 
-- `index.html` e `como-funciona/index.html`: entrada municipal.
+- `index.html` e `sobre/index.html`: página inicial Sobre, com finalidade, fontes oficiais e limites do uso dos dados.
+- `como-funciona/index.html`: entrada municipal do guia de cargos.
 - `como-funciona/{municipal,estadual,federal,distrital,todos}/index.html`:
   cinco páginas prontas; filtros são links entre arquivos, sem execução Python.
 - `assets/*.HASH.css`: estilos com hash do conteúdo; cache imutável por um ano.
@@ -51,14 +52,14 @@ Netlify/Cloudflare podem comprimir os arquivos originais automaticamente; em
 outros hosts configurar o equivalente. Verificar cabeçalhos após publicação.
 `_headers` não é uma configuração universal e deve ser adaptado a outros hosts.
 
-A prévia Python também responde com gzip, ETag, `304` e regras de cache no guia
+A prévia Python também responde com gzip, ETag, `304` e regras de cache no guia, na página institucional
  e nos estilos. Pesquisa, perfis, APIs e erros continuam com `no-store`.
 O cache gzip local tem no máximo 32 representações. Essa prévia usa servidor
 local; não é o servidor de produção nem substitui CDN.
 
 ## Verificação após publicar
 
-Confirmar as cinco esferas, estilos, navegação e formulário da pesquisa.
+Confirmar as cinco esferas, `/sobre/`, estilos, navegação e formulário da pesquisa.
 Inspecionar `Cache-Control`, `Content-Encoding`, `Vary`, ETag quando fornecido
 pelo host, e resposta condicional. Verificar que não há fallback do tipo SPA
 respondendo HTML de sucesso para rotas inexistentes. Não carregar Parquets ou

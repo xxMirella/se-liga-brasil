@@ -44,8 +44,7 @@ certificado.</p></aside>"""
 def render_profile_overview(profile):
     return f"""<section aria-labelledby="profile-overview"><h2
 id="profile-overview">Informações do perfil</h2>
-<p>Referência da consulta: {text(profile.get("as_of"))}.</p>
-<p>Escolaridade: {text(profile.get("education_level"))}.</p>
+<p class="profile-reference">Referência da consulta: {text(profile.get("as_of"))}.</p>
 <p class="explanation">O cabeçalho apresenta os vínculos e pagamentos disponíveis.
 Remuneração publicada é identificada pela competência; não equivale automaticamente ao salário
 vigente.</p>

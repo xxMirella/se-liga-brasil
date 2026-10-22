@@ -18,8 +18,12 @@ def execute_enrichment_command(arguments) -> dict:
             connection,
             storage.resolve(),
             arguments.person_id,
+            task_limit=getattr(arguments, "task_limit", 1000),
             refresh_assessment=arguments.command != "dispatch",
             field_names=arguments.fields.split(",") if getattr(arguments, "fields", None) else None,
+            source_codes=(
+                arguments.sources.split(",") if getattr(arguments, "sources", None) else None
+            ),
             career_collectors=career_collectors(connection, storage.resolve())
             if getattr(arguments, "include_career", False)
             else None,

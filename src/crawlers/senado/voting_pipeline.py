@@ -21,7 +21,11 @@ from crawlers.senado.voting_staging import (
 )
 from normalization.periods import month_intervals
 from service.ingestion.contracts import IngestionError
-from service.legislative_collection.runtime import CollectionDefinition, run_official_collection
+from service.legislative_collection.runtime import (
+    CollectionDefinition,
+    run_cached_collection,
+    run_official_collection,
+)
 from storage.files import hash_content, load_json
 
 
@@ -115,8 +119,11 @@ def collect_senate_voting_partitions(
     max_partitions=1,
     max_votings=1000,
     max_identity_profile_downloads=0,
+    local_only=False,
 ):
     validate_identity_profile_budget(max_identity_profile_downloads)
+    if local_only and max_identity_profile_downloads:
+        raise IngestionError("OFFLINE_VOTING_CANNOT_DOWNLOAD_IDENTITY_PROFILES")
     partitions = monthly_partitions(start, end, max_partitions)
     if not 1 <= max_votings <= 10000:
         raise IngestionError("SENATE_VOTING_RECORD_LIMIT_EXCEEDED")
@@ -141,4 +148,10 @@ def collect_senate_voting_partitions(
         maximum=max_votings,
         profile_acquisition=profile_acquisition,
     )
+    if local_only:
+        from crawlers.senado.cached_acquisition import CachedSenateAcquisition
+
+        return run_cached_collection(
+            connection, configuration, definition, pipeline, CachedSenateAcquisition(configuration)
+        )
     return run_official_collection(connection, configuration, definition, pipeline)

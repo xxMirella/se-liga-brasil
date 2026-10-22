@@ -14,7 +14,7 @@ def normalize_profile(profile, history, legislature, person_id, method) -> dict:
     events = [
         row for row in history if row.get("idLegislatura") == legislature_id and row.get("situacao")
     ]
-    latest = max(events, key=lambda row: row["dataHora"], default={})
+    exercise_start = continuous_exercise_start(events)
     return {
         "personId": person_id,
         "civilName": normalize_text(profile["nomeCivil"], required=True),
@@ -28,11 +28,8 @@ def normalize_profile(profile, history, legislature, person_id, method) -> dict:
         "termEndExclusive": (
             date.fromisoformat(legislature["dataFim"]) + timedelta(days=1)
         ).isoformat(),
-        "exerciseStartsOn": (latest.get("dataHora", "")[:10] or None)
-        if latest.get("situacao") == "Exercício"
-        else None,
-        "inExercise": status.get("situacao") == "Exercício"
-        and latest.get("situacao") == "Exercício",
+        "exerciseStartsOn": exercise_start if status.get("situacao") == "Exercício" else None,
+        "inExercise": status.get("situacao") == "Exercício" and exercise_start is not None,
         "capacity": "holder" if status.get("condicaoEleitoral") == "Titular" else "substitute",
         "identityMethod": method,
         "institutionCode": "camara",
@@ -75,3 +72,20 @@ def normalize_proposition(row, person_id) -> dict:
         "role": "author",
         "roleScope": "listed_by_official_author_filter_not_exclusive_authorship",
     }
+
+
+def continuous_exercise_start(events):
+    """Party/name updates do not restart exercise; explicit leave does."""
+    by_timestamp = {}
+    for event in events:
+        timestamp = event["dataHora"]
+        by_timestamp.setdefault(timestamp, set()).add(event["situacao"])
+    start = None
+    for timestamp in sorted(by_timestamp, reverse=True):
+        states = by_timestamp[timestamp]
+        if len(states) != 1:
+            return None
+        if states != {"Exercício"}:
+            break
+        start = timestamp[:10]
+    return start

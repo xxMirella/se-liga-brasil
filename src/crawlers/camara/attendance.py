@@ -60,20 +60,34 @@ def collect_person_attendance(
             **ingest_collected(repository, acquisition, artifact, rows)}
 
 
-def collect_attendance_history(acquisition, repository, member, person_id):
+def collect_attendance_history(acquisition, repository, member, person_id, years=None):
     as_of = datetime.now(ZoneInfo("America/Belem")).date()
     # Earlier terms may not yet have been projected. Ask the source for all years.
     starts_on = date(max(2000, member.get("attendance_start_year", 2000)), 1, 1)
-    years = []
+    requested = validate_attendance_years(years, starts_on.year, as_of.year)
+    collected = []
     failures = []
-    for year in range(as_of.year, starts_on.year - 1, -1):
+    for year in requested:
         try:
             result = collect_person_attendance(
                 acquisition, repository, member, person_id, year, as_of, starts_on,
             )
-            years.append({"year": year, **result})
+            collected.append({"year": year, **result})
         except IngestionError as error:
-            if error.code == "SOURCE_COOLDOWN_ACTIVE" or error.details.get("status") in {403, 429}:
+            if error.code == "SOURCE_COOLDOWN_ACTIVE" or error.details.get("status") in {
+                403, 429, 500, 502, 503, 504,
+            }:
                 raise
             failures.append({"year": year, "code": error.code})
-    return {"search_starts_on": starts_on.isoformat(), "years": years, "failures": failures}
+    return {"search_starts_on": starts_on.isoformat(), "years": collected, "failures": failures}
+
+
+def validate_attendance_years(years, first_year, current_year):
+    if years is None:
+        return list(range(current_year, first_year - 1, -1))
+    selected = sorted(set(years), reverse=True)
+    if not selected or len(selected) > current_year - 1999 or any(
+        type(year) is not int or not 2000 <= year <= current_year for year in selected
+    ):
+        raise IngestionError("INVALID_ATTENDANCE_YEARS")
+    return [year for year in selected if year >= first_year]

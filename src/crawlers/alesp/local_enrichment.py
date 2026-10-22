@@ -6,6 +6,7 @@ from pathlib import Path
 from crawlers.alesp.configuration import ALESP_PARSER_VERSION
 from crawlers.alesp.institutional_records import institutional_profiles
 from crawlers.alesp.local_records import authored_propositions
+from crawlers.alesp.photos import cached_photo_records
 from service.ingestion.contracts import (
     DownloadedArtifact,
     IngestionError,
@@ -24,9 +25,13 @@ from storage.files import (
 
 def verified_evidence_references(resolutions):
     references = {}
+    checked = set()
     for source in resolution_sources(resolutions):
-        if hash_file(Path(source["path"])) != source["sha256"]:
-            raise IngestionError("ALESP_LOCAL_EVIDENCE_CHECKSUM_MISMATCH")
+        key = (source["path"], source["sha256"])
+        if key not in checked:
+            if hash_file(Path(source["path"])) != source["sha256"]:
+                raise IngestionError("ALESP_LOCAL_EVIDENCE_CHECKSUM_MISMATCH")
+            checked.add(key)
         references[source["sha256"]] = source
     return list(references.values())
 
@@ -127,6 +132,10 @@ def collect_alesp_local_enrichment(repository, storage_directory, person_ids=Non
     if not evidence:
         return {"status": "unavailable", "reason": "no_verified_local_identity_evidence"}
     result = {}
+    if "photo_url" in fields:
+        rows = cached_photo_records(resolutions, person_ids)
+        staged = stage_local_records(storage_directory, "alesp_photos", rows, evidence, person_ids)
+        result["photos"] = asdict(repository.ingest_validated_artifact(staged, 500))
     if fields & {"current_political_party", "current_public_office"}:
         rows = institutional_profiles(resolutions, person_ids)
         staged = stage_local_records(storage_directory, "alesp_profile", rows, evidence, person_ids)

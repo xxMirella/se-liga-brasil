@@ -66,7 +66,7 @@ def test_profile_keeps_explicit_history_without_claiming_exercise():
 def test_profile_rejects_wrong_subject_and_missing_birth():
     with pytest.raises(IngestionError, match="NAME_MISMATCH"):
         parse_profile(profile_html(), "Outra Pessoa")
-    with pytest.raises(IngestionError, match="LAYOUT_CHANGED"):
+    with pytest.raises(IngestionError, match="BIRTH_DATE_MISSING"):
         parse_profile(profile_html().replace(b"NASCIMENTO", b"CONTATO"), "Maria Exemplo")
 
 

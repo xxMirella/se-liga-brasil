@@ -7,5 +7,8 @@ class SenateProjectionWriter:
 
     def project_batch(self, parameters, resource_kind):
         self.writer.execute_statements("senado_common", parameters)
+        if resource_kind == "senado_payroll":
+            self.writer.execute_statements("senado_payroll", parameters)
+            return
         self.writer.execute_statements("senado_profile", parameters)
         self.writer.execute_statements("person_current_public_office", parameters)

@@ -7,6 +7,7 @@ from psycopg.types.json import Jsonb
 
 from database.operations import read_sql_file
 from service.completeness.rules import SATISFIED_STATES
+from service.ingestion.contracts import IngestionError
 
 
 def persist_data_gaps(connection, report) -> dict:
@@ -55,29 +56,24 @@ def route_data_gaps(connection) -> None:
     connection.execute(read_sql_file("queries/route_data_gaps.sql"))
 
 
-def claim_data_gaps(connection, worker_id, person_id=None, limit=1000, field_names=None) -> list:
+def claim_data_gaps(
+    connection, worker_id, person_id=None, limit=1000, field_names=None, source_codes=None
+) -> list:
+    if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 1000:
+        raise IngestionError("INVALID_DATA_GAP_LIMIT")
     with connection.transaction():
         return connection.execute(
-            """
-            WITH due AS (
-              SELECT g.id FROM se_liga_brasil.person_data_gap g
-              LEFT JOIN se_liga_brasil.source_request_policy policy
-                ON policy.source_code=g.assigned_source
-              WHERE (policy.cooldown_until IS NULL OR policy.cooldown_until<=now()
-                OR (g.assigned_source='alesp' AND g.field_name IN
-                  ('current_public_office','current_political_party','political_activity')))
-                AND (status='queued' OR (status='running' AND lease_until<now()))
-                AND assigned_source IS NOT NULL AND next_attempt_at<=now()
-                AND (%s::uuid IS NULL OR person_id=%s::uuid)
-                AND (%s::text[] IS NULL OR field_name=ANY(%s::text[]))
-              ORDER BY next_attempt_at,g.id FOR UPDATE OF g SKIP LOCKED LIMIT %s
-            )
-            UPDATE se_liga_brasil.person_data_gap g SET status='running',claimed_by=%s::uuid,
-              lease_until=now()+interval '30 minutes',attempts=attempts+1
-            FROM due WHERE due.id=g.id
-            RETURNING g.id,g.person_id::text,g.field_name,g.assigned_source
-        """,
-            (person_id, person_id, field_names, field_names, limit, worker_id),
+            read_sql_file("queries/claim_data_gaps.sql"),
+            (
+                person_id,
+                person_id,
+                field_names,
+                field_names,
+                source_codes,
+                source_codes,
+                limit,
+                worker_id,
+            ),
         ).fetchall()
 
 

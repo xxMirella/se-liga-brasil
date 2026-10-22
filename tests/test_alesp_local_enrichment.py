@@ -166,6 +166,7 @@ def test_local_profile_and_authorship_project_idempotently(
         assert first.rejected == 0
         assert repository.ingest_validated_artifact(profiles, 500).skipped_artifact
         assert_institutional_projection(integration_database)
+        assert_photo_projection(repository, integration_database, tmp_path, references, person_id)
         assert_authorship_projection(
             repository, integration_database, tmp_path, references, person_id
         )
@@ -354,3 +355,23 @@ def test_remote_payroll_failure_preserves_local_enrichment(monkeypatch):
     assert result["local_enrichment"]["authorships"]["new"] == 1
     assert result["failures"][0]["code"] == "NO_PUBLISHED_PAYROLL_RESOURCES"
     assert result["status"] == "partial" and finished == ["partial"]
+
+
+def assert_photo_projection(repository, integration_database, tmp_path, references, person_id):
+    photo_rows = [
+        {
+            "personId": person_id,
+            "photoUrl": "https://www3.al.sp.gov.br/legis/biografia/fotos/example.png",
+        }
+    ]
+    photos = stage_local_records(
+        tmp_path, "alesp_photos", iter(photo_rows), references, {person_id}
+    )
+    assert repository.ingest_validated_artifact(photos, 500).new == 1
+    assert repository.ingest_validated_artifact(photos, 500).skipped_artifact
+    assert (
+        integration_database.execute(
+            "SELECT photo_url FROM se_liga_brasil.person WHERE id=%s", (person_id,)
+        ).fetchone()["photo_url"]
+        == photo_rows[0]["photoUrl"]
+    )

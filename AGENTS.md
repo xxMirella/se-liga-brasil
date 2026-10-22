@@ -1,4 +1,4 @@
-# Convenções do Se Liga Brasil
+# Convenções do Se Liga, Brasil
 
 ## Nomenclatura explícita
 
@@ -11,7 +11,7 @@
 
 ## Python e revisão obrigatória
 
-- Todo código executável deste projeto deve ser Python 3.12+; não criar arquivos JavaScript/TypeScript, manifests Node ou `node_modules`.
+- Todo código executável deste projeto deve ser Python 3.12+; não criar arquivos JavaScript/TypeScript, manifests Node ou `node_modules`. Exceção autorizada pela usuária: `src/service/public_profile_web/assets/people-viewport.js`, script mínimo sem dependências para medir a tela antes de carregar a página de pessoas; não ampliar essa exceção para outras funcionalidades.
 - Cada função deve ter uma responsabilidade, nomes explícitos e uma leitura simples. Validação do domínio não acessa rede ou banco.
 - Executar a revisão de system design após alterações e antes de concluir. Corrigir os achados estruturais e revisar também a semântica, que o hook não consegue provar.
 - Limites iniciais por função: 60 linhas, complexidade cognitiva estrutural até 15 e profundidade de controle até 3. Extrair responsabilidades quando exceder; não esconder complexidade em funções genéricas.

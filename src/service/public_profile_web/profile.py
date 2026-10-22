@@ -2,6 +2,7 @@
 
 from itertools import islice
 
+from service.public_profile_web.cabinet_payroll import render_cabinet_cost
 from service.public_profile_web.security import official_url, text
 
 OFFICE_LABELS = {
@@ -17,6 +18,8 @@ OFFICE_LABELS = {
     "senator_substitute": "Suplente de senador(a)",
     "other": "Outro cargo público",
 }
+
+
 def render_portrait(profile):
     photo = profile.get("photo") or {}
     url = official_url(photo.get("url"))
@@ -75,7 +78,7 @@ def render_metric(label, value, reference, action=""):
     return (
         f"<div "
         f'class="metric"><span>{label}</span><strong>{value}</strong>{action}'
-        f'<small>{reference}</small></div>'
+        f"<small>{reference}</small></div>"
     )
 
 
@@ -121,6 +124,7 @@ def render_profile_header(profile):
         "Escolaridade", text(profile.get("education_level")), "Declarada na fonte"
     )
     metrics += render_tenures(profile) + render_attendance(profile) + render_payments(profile)
+    metrics += render_cabinet_cost(profile)
     return f"""<section class="profile" aria-label="Identificação pública">
 {render_portrait(profile)}<div class="profile-info"><p class="eyebrow">PERFIL PÚBLICO</p>
 <h1>{text(profile.get("display_name"))}</h1>{render_offices(profile)}
@@ -132,23 +136,23 @@ def render_attendance(profile):
     months = profile.get("attendance_history", [])
     action = (
         '<button class="attendance-history-button" commandfor="attendance-history" '
-        'command="show-modal">Ver histórico</button>' if months else ""
+        'command="show-modal">Ver histórico</button>'
+        if months
+        else ""
     )
     percentage = attendance.get("percentage")
     if percentage is None:
-        return (
-            render_metric("Presença", "Não disponível", "Sem frequência atual consolidada", action)
-            + render_attendance_history(months)
-        )
+        return render_metric(
+            "Presença", "Não disponível", "Sem frequência atual consolidada", action
+        ) + render_attendance_history(months)
     value = text(str(percentage).replace(".", ",")) + "%"
     reference = (
         f"{text(attendance.get('period'))} · {text(attendance.get('present'))} de "
         f"{text(attendance.get('required'))} dias com sessões deliberativas"
     )
-    return (
-        render_metric("Presença em plenário", value, reference, action)
-        + render_attendance_history(months)
-    )
+    return render_metric(
+        "Presença em plenário", value, reference, action
+    ) + render_attendance_history(months)
 
 
 def render_attendance_history(months):
@@ -172,8 +176,9 @@ def render_attendance_history(months):
         '<header><h2 id="attendance-history-title">Histórico mensal de presença</h2>'
         '<form method="dialog"><button autofocus aria-label="Fechar histórico">'
         'Fechar</button></form></header><div class="attendance-dialog-content">'
-        '<p>Presença em dias com sessões deliberativas da Câmara dos Deputados. '
-        'Meses sem dados não '
-        'significam falta nem frequência completa.</p><ul>'
-        + "".join(items) + "</ul></div></dialog>"
+        "<p>Presença em dias com sessões deliberativas da Câmara dos Deputados. "
+        "Meses sem dados não "
+        "significam falta nem frequência completa.</p><ul>"
+        + "".join(items)
+        + "</ul></div></dialog>"
     )

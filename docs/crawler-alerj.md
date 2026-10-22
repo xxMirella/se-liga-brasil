@@ -32,3 +32,27 @@ Atividade legislativa usa a plataforma institucional Lotus Notes, cuja chave, pa
 Uma execução baixa/cacheia uma lista, um índice e a folha mais recente para atender todas as pessoas solicitadas; perfis são limitados a 25 pessoas por execução. Aquisição compartilha allowlist HTTPS, cache, orçamento de bytes, pacing, cooldown e retries existentes. PDFs requerem `pdftotext` instalado (Poppler); ausência gera erro explícito, sem ingestão parcial de números. Originais nunca são reescritos; bundles registram os hashes das três evidências usadas na identidade. Staging inclui escopo de pessoas e checksum, e o repositório compartilhado mantém idempotência.
 
 Índice de aliases e seleção são O(p+a+r), sendo p pessoas, a aliases e r parlamentares; lookup em dicionário é O(1) médio. Leitura do PDF é O(n) nas linhas. A confirmação pessoal executa até 25 consultas pontuais por lote; não é uma promessa de O(1) global. Nenhuma busca é feita candidato por candidato nos milhares de nomes que não constam da lista institucional.
+
+## Diagnóstico de evidência incompleta
+
+O parser v3 distingue nascimento não publicado (`ALERJ_BIRTH_DATE_MISSING`), nascimento inválido ou duplicado (`ALERJ_BIRTH_DATE_INVALID`, `ALERJ_BIRTH_DATE_AMBIGUOUS`), legislatura atual ausente (`ALERJ_CURRENT_LEGISLATURE_MISSING`) e eventos de filiação com data inválida (`ALERJ_AFFILIATION_DATE_INVALID`). Cada código chega individualmente a `identity_unresolved`, sem transformar uma falha em atualização concluída. Um histórico partidário não publicado é representado por eventos vazios e `affiliationHistoryStatus=not_published`; isso não impede a confirmação do pagamento quando nome civil e nascimento comprovam a identidade. Nenhuma data de filiação é inferida.
+
+Nascimento só é extraído da seção explicitamente identificada, em data por extenso ou `dia/mês/ano`. Datas da biografia, posse e troca partidária não comprovam nascimento. A ausência dessa informação impede a confirmação independente necessária ao pagamento, mesmo quando a base já conhece uma data eleitoral. É preciso obter outra evidência oficial suficiente para desbloquear esse caso.
+
+`ALERJ_PAYROLL_IDENTITY_REVIEW_REQUIRED` também cobre nomes civis conhecidos sem correspondência na folha atual e múltiplas correspondências possíveis. O nome parlamentar da lista não substitui o nome civil na folha. Nenhum desses casos permite vincular remuneração por semelhança ou partido político.
+
+## Vínculos de nomes revisados
+
+`normalization.name_variants.classify_name_variant` distingue equivalência após normalização,
+iniciais compatíveis, sufixos como `JR/JUNIOR` e partículas como `DE`. A classificação
+descreve uma variação textual; não confirma identidade nem une homônimos automaticamente.
+O custo é linear no tamanho dos nomes, com comparação dos tokens por posição.
+
+Quando existe aprovação humana explícita, `service.identity_resolution.reviewed_names`
+valida pessoa canônica, nomes registrados e publicados, fonte, competência e hash do arquivo.
+Recipientes ou pessoas repetidos na mesma revisão são rejeitados. A decisão fica no registro
+de origem do pagamento com sua referência de revisão; o nome original da folha é preservado.
+`crawlers.alerj.reviewed_payroll.collect_reviewed_payroll` usa o mesmo parser, armazenamento
+imutável e projeção idempotente dos demais pagamentos. Uma aprovação não é reutilizada para
+outra competência ou outro arquivo. A confirmação manual do pagamento não declara cargo em
+exercício nem preenche automaticamente filiação ou data de nascimento.
