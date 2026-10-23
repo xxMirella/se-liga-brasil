@@ -204,6 +204,7 @@ def test_payroll_identity_resolution_applies_review_only_when_explicitly_supplie
         ),
     )
     monkeypatch.setattr(identity_payroll, "build_identity_links", Mock(return_value=["link"]))
+    monkeypatch.setattr(identity_payroll, "save_payroll_identity_reviews", Mock())
     apply_links = Mock(return_value={"linked": 1})
     monkeypatch.setattr(identity_payroll, "apply_payroll_identity_links", apply_links)
     fetch_reviewed = Mock(return_value={})
@@ -214,7 +215,7 @@ def test_payroll_identity_resolution_applies_review_only_when_explicitly_supplie
     result = identity_payroll.resolve_payroll_identities(
         "db", 3, "url", [], uf="SP", office_code="7", reviewed_cases=cases
     )
-    assert result["recipients"] == 2 and result["unresolved_recipients"] == 1
+    assert result["recipients"] == 2 and result["unresolved_recipients"] == 2
     assert result["linked"] == 1
     assert crosswalk.called is reviewed and fetch_reviewed.called is reviewed
     apply_links.assert_called_once_with("db", 3, ["link"], "url")

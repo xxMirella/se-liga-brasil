@@ -1,13 +1,19 @@
 """Local ALESP joins use verified personal resolution and preserve temporal uncertainty."""
 
 import json
+import sqlite3
 import zipfile
 
 import pytest
 
 from crawlers.alesp.institutional_records import institutional_profiles
 from crawlers.alesp.local_enrichment import stage_local_records, verified_evidence_references
-from crawlers.alesp.local_records import authored_propositions, verified_author_index, xml_rows
+from crawlers.alesp.local_records import (
+    authored_propositions,
+    unique_proposition_rows,
+    verified_author_index,
+    xml_rows,
+)
 from crawlers.alesp.projection import AlespProjectionWriter
 from service.ingestion.contracts import IngestionError
 from storage.files import hash_file, read_json_lines
@@ -82,6 +88,24 @@ def test_ambiguous_person_bridge_is_rejected(tmp_path):
     roster = write_xml(tmp_path / "roster.xml", "<Deputados/>")
     with pytest.raises(IngestionError, match="ALESP_AUTHOR_PERSON_AMBIGUOUS"):
         verified_author_index(roster, [example_resolution(), example_resolution("person-two")])
+
+
+@pytest.mark.parametrize("conflicting", [False, True])
+def test_repeated_proposition_export_rows_are_deduplicated_or_rejected(tmp_path, conflicting):
+    second_number = "2" if conflicting else "1"
+    path = write_xml(
+        tmp_path / "propositions.xml",
+        "<proposituras>"
+        "<propositura><IdDocumento>42</IdDocumento><NroLegislativo>1</NroLegislativo>"
+        "</propositura><propositura><IdDocumento>42</IdDocumento>"
+        f"<NroLegislativo>{second_number}</NroLegislativo></propositura></proposituras>",
+    )
+    with sqlite3.connect(":memory:") as index:
+        if conflicting:
+            with pytest.raises(IngestionError, match="ALESP_PROPOSITION_EXPORT_CONFLICT"):
+                list(unique_proposition_rows(index, path))
+        else:
+            assert len(list(unique_proposition_rows(index, path))) == 1
 
 
 def test_evidence_checksum_checked_and_staging_preserves_observation_time(tmp_path):

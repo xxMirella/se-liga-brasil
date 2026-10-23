@@ -12,7 +12,7 @@ from service.ingestion.contracts import IngestionError
 from service.voting_pipeline.source_storage import latest_source_observation
 from storage.files import hash_content
 
-PARSER_VERSION = "camara-daily-voting-input-v4"
+PARSER_VERSION = "camara-daily-voting-input-v5"
 
 
 def latest_artifact_observation(artifacts):
@@ -77,7 +77,7 @@ def build_daily_records(events, identities, matters, matter_artifacts):
 
 
 def event_matter_fields(event, normalized, matters, uri):
-    matter = matter_fields(matters.get(uri), uri or normalized["official_url"])
+    matter = matter_fields(matters.get(uri), normalized["official_url"])
     if uri and identified_matter_uri(event["discovery"]) is None and matter["matter_name"]:
         matter["matter_name"] += " · matéria relacionada"
     return matter

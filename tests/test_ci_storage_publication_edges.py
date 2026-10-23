@@ -86,7 +86,7 @@ def test_queue_claim_passes_worker_ownership_and_returns_empty_result():
         )
     )
     assert voting_refresh.claim_voting_refresh(connection, "worker") is None
-    assert calls[0][1] == ("worker",)
+    assert calls[0][1] == (None, None, "worker")
     assert "SKIP LOCKED" in calls[0][0]
 
 

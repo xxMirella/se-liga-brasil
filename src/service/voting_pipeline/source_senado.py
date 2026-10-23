@@ -28,7 +28,7 @@ from storage.files import (
     write_json_line,
 )
 
-PARSER_VERSION = "senado-daily-voting-input-v2"
+PARSER_VERSION = "senado-daily-voting-input-v3"
 MAX_INPUT_BYTES = 64 * 1024 * 1024
 MAX_INPUT_ROWS = 100000
 
@@ -160,7 +160,7 @@ def daily_vote_record(raw, vote, artifact, processes, identity_observations=None
     voting = normalize_voting_record(raw)
     process, _, process_observed_at = processes.get(str(raw["idProcesso"]), ({}, None, None))
     profile_observed_at = (identity_observations or {}).get(vote["identity_profile_sha256"])
-    description = process.get("description") or None
+    description = nullable_text(process.get("description") or raw.get("ementa"))
     return {
         "person_id": vote["person_id"],
         "voting_id": "senado:" + vote["voting_key"],
@@ -177,14 +177,23 @@ def daily_vote_record(raw, vote, artifact, processes, identity_observations=None
         "matter_name": nullable_text(raw.get("identificacao")),
         "description": description,
         "description_origin": "official_text" if description else "unknown",
-        "official_url": "https://legis.senado.leg.br/dadosabertos/processo/"
-        + str(raw["idProcesso"]),
+        "official_url": nominal_voting_url(raw),
         "voting_subject": nullable_text(raw.get("descricaoVotacao")),
         "round_number": voting["round_number"],
         "source_observed_at": latest_observation(
             artifact.fetched_at, process_observed_at, profile_observed_at
         ),
     }
+
+
+def nominal_voting_url(raw):
+    """The legacy matter code identifies the readable nominal lists, unlike process IDs."""
+    matter_code = str(raw.get("codigoMateria", ""))
+    if not matter_code.isascii() or not matter_code.isdecimal() or int(matter_code) <= 0:
+        return None
+    return (
+        "https://www25.senado.leg.br/web/atividade/materias/-/materia/" + matter_code + "/votacoes"
+    )
 
 
 def latest_observation(*timestamps):

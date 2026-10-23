@@ -114,3 +114,51 @@ def test_reviewed_crosswalk_preserves_birth_conflict_and_requires_target_guards(
     }
     with pytest.raises(IngestionError, match="REVIEWED_TARGET_BIRTH_DATE_CHANGED"):
         apply_reviewed_crosswalk(resolutions, recipients, [case], changed)
+
+
+def test_unique_electoral_name_without_independent_source_identity_requires_review():
+    from database.person_identity import build_identity_links
+
+    index = PersonIdentityIndex([candidate()])
+    recipient = {
+        "recipient_name": "Pessoa Exemplo", "recipient_key": "key", "source_record_ids": [123],
+    }
+    resolution = resolve_payroll_recipient(recipient, index, [], [])
+    assert resolution["status"] == "requires_review"
+    assert resolution["suggested_person_id"] == "person-one"
+    assert resolution["reason_code"] == "PAYROLL_PERSONAL_IDENTITY_REQUIRED"
+    assert "person_id" not in resolution
+    assert build_identity_links([resolution], [recipient]) == []
+
+
+def test_pending_payroll_identity_is_saved_as_review_against_original_source():
+    from unittest.mock import Mock
+
+    from database.person_identity import save_payroll_identity_reviews
+
+    connection = Mock()
+    connection.execute.return_value.fetchone.return_value = {"total": 1}
+    resolutions = [{
+        "status": "requires_review", "recipient_key": "key",
+        "suggested_person_id": "person-one", "reason_code": "PAYROLL_PERSONAL_IDENTITY_REQUIRED",
+    }]
+    recipients = [{"recipient_key": "key", "source_record_ids": [123]}]
+    assert save_payroll_identity_reviews(connection, 9, resolutions, recipients) == 1
+    sql, parameters = connection.execute.call_args.args
+    assert "person_identity_review" in sql
+    assert "ON CONFLICT DO NOTHING" in sql
+    assert parameters[1] == 9
+    assert parameters[0].obj == [{
+        "source_record_id": 123, "suggested_person_id": "person-one",
+        "reason_code": "PAYROLL_PERSONAL_IDENTITY_REQUIRED",
+    }]
+
+
+def test_legacy_name_only_resolution_cannot_recreate_verified_payroll_bridge():
+    from database.person_identity import build_identity_links
+
+    legacy = {
+        "status": "matched", "recipient_key": "key", "person_id": "person-one",
+        "method": "exact_legal_name_and_electoral_scope", "official_subjects": [],
+    }
+    assert build_identity_links([legacy], []) == []

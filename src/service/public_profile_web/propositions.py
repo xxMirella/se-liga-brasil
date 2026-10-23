@@ -54,7 +54,11 @@ def render_proposition_pagination(profile, projection):
 def render_authorship_card(item):
     roles = " · ".join(ROLES.get(role, "Papel documentado") for role in item.get("roles", []))
     source = official_url(item.get("official_url"))
-    link = f'<a href="{text(source)}">Proposta na fonte oficial ↗</a>' if source else ""
+    link = (
+        f'<a href="{text(source)}" target="_blank" rel="noopener noreferrer">'
+        'Proposta na fonte oficial ↗</a>'
+        if source else ""
+    )
     occurred = item.get("occurred_on")
     year = occurred[:4] if occurred else "Sem data"
     month = MONTHS[int(occurred[5:7])][:3].upper() if occurred else "—"

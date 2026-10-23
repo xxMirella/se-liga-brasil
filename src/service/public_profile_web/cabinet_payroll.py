@@ -42,7 +42,10 @@ def render_role_totals(roles, caption):
 
 def render_cabinet_month(month):
     source = official_url(month["sourceUrl"])
-    link = f'<a href="{text(source)}">Folha oficial</a>' if source else ""
+    link = (
+        f'<a href="{text(source)}" target="_blank" rel="noopener noreferrer">Folha oficial</a>'
+        if source else ""
+    )
     return (
         f"<section><h3>{text(month['period'])}</h3>"
         + render_role_totals(month["roles"], "Soma por cargo na competência")

@@ -270,16 +270,20 @@ consultar.
 Essas escolhas são uma aplicação de estudos de aprendizagem; a compreensão deste guia por crianças
 de 10 anos ainda não foi testada.</p><ul>
 <li>
-<a href="https://doi.org/10.1016/j.edurev.2015.12.003">Richter e colegas (2016): sinalização de
+<a href="https://doi.org/10.1016/j.edurev.2015.12.003"
+target="_blank" rel="noopener noreferrer">Richter e colegas (2016): sinalização de
 relações entre texto e imagem</a>.</li>
 <li>
-<a href="https://doi.org/10.1007/s10648-018-9456-4">Rey e colegas (2019): divisão do conteúdo em
+<a href="https://doi.org/10.1007/s10648-018-9456-4"
+target="_blank" rel="noopener noreferrer">Rey e colegas (2019): divisão do conteúdo em
 partes</a>.</li>
 <li>
-<a href="https://www.psychologicalscience.org/journals/pspi/1529100612453266/">Dunlosky e
+<a href="https://www.psychologicalscience.org/journals/pspi/1529100612453266/"
+target="_blank" rel="noopener noreferrer">Dunlosky e
 colegas (2013): prática de lembrar respostas</a>.</li>
 <li>
-<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3932674/">Wing e colegas (2013): estudo de
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3932674/"
+target="_blank" rel="noopener noreferrer">Wing e colegas (2013): estudo de
 neuroimagem sobre prática de recuperação</a>.</li>
 </ul>
 <p>Resultados variam conforme o público e o material. Estudos do cérebro não certificam esta

@@ -43,20 +43,27 @@ def normalize_voting_event(discovery, detail):
     subject = normalize_text(detail.get("descUltimaAberturaVotacao"))
     subject = subject or normalize_text(detail.get("descricao"))
     subject = subject or normalize_text(discovery.get("proposicaoObjeto"))
-    text = subject or ""
-    turn = re.search(r"\b(primeiro|segundo|1[ºo]?|2[ºo]?)\s+turno\b", text, re.I)
-    round_number = (
-        None if turn is None else (1 if turn[1].lower() in {"primeiro", "1", "1º", "1o"} else 2)
-    )
     return {
         "voting_id": "camara:voting:" + key,
         "institution_code": "camara",
         "occurred_on": occurred_on,
         "date_precision": "day",
         "voting_subject": subject,
-        "round_number": round_number,
+        "round_number": published_round_number(subject, detail.get("descricao")),
         "official_url": detail["uri"],
     }
+
+
+def published_round_number(subject, result_description):
+    """Use an explicit event round; references to two rounds prove neither one."""
+    pattern = r"\b(primeiro|segundo|1[ºo]?|2[ºo]?)\s+turno\b"
+    matches = re.findall(pattern, subject or "", re.I)
+    result = normalize_text(result_description) or ""
+    approved = re.match(r"Aprovad[ao]s?,?\s+em\s+(.+)", result, re.I)
+    if approved:
+        matches.extend(re.findall(pattern, approved[1], re.I))
+    numbers = {1 if value.lower() in {"primeiro", "1", "1º", "1o"} else 2 for value in matches}
+    return numbers.pop() if len(numbers) == 1 else None
 
 
 def normalize_individual_vote(row):

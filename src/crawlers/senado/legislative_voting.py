@@ -41,7 +41,7 @@ def normalize_voting_record(row):
     if row["votacaoSecreta"] not in {"S", "N"}:
         raise IngestionError("SENATE_VOTING_SCHEMA_CHANGED")
     secret = row["votacaoSecreta"] == "S"
-    votes = [] if secret else row.get("votos", [])
+    votes = [] if secret or row.get("votos") is None else row["votos"]
     if not isinstance(votes, list) or any(not isinstance(vote, dict) for vote in votes):
         raise IngestionError("SENATE_VOTING_SCHEMA_CHANGED")
     report = row.get("informeLegislativo") or {}
@@ -85,7 +85,7 @@ def resolve_voting_individuals(raw_rows, profile_index):
         if row["votacaoSecreta"] == "S":
             continue
         seen_people = set()
-        for vote in row.get("votos", []):
+        for vote in row.get("votos") or []:
             match = profile_index.get(str(vote.get("codigoParlamentar")))
             if match is None:
                 unresolved += 1

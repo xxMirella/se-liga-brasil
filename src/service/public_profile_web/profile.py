@@ -164,7 +164,11 @@ def render_attendance_history(months):
         value = str(percentage).replace(".", ",") + "%" if percentage else "Não disponível"
         partial = " · parcial" if month.get("partial") else ""
         source = official_url(month.get("sourceUrl"))
-        link = f' · <a href="{text(source)}">Fonte oficial</a>' if source else ""
+        link = (
+            f' · <a href="{text(source)}" target="_blank" rel="noopener noreferrer">'
+            'Fonte oficial</a>'
+            if source else ""
+        )
         items.append(
             f"<li>{text(month.get('period'))}: {text(value)} · "
             f"{text(month.get('present'))} de {text(month.get('required'))} dias{partial}"

@@ -2,6 +2,8 @@
 
 O comando `collect-votes --source senado --start-date YYYY-MM-DD --end-date YYYY-MM-DD` consulta `votacao.json` da API oficial, versão 2, por intervalos mensais. O padrão permite uma partição e 25 votações; `--max-partitions` e `--limit` aumentam explicitamente os limites. O intervalo final é inclusivo. A aquisição reutiliza cache, bloqueio por fonte e política de espera após indisponibilidade.
 
+No dataset público, o link de detalhes aponta para a lista nominal em `https://www25.senado.leg.br/web/atividade/materias/-/materia/{codigoMateria}/votacoes`. O identificador é o `codigoMateria` publicado no registro da votação, nunca o `idProcesso`; quando não há código válido, o link permanece ausente. O endpoint técnico do processo fornece dados da proposta, mas não substitui a evidência do voto individual.
+
 Os arquivos originais são preservados. Perfis oficiais já baixados identificam pessoas por nome completo normalizado e data de nascimento, com correspondência única na tabela `person`. O código pessoal do provedor existe apenas durante a execução. Homônimos ou perfis sem comprovação ficam sem vínculo automático; a aquisição padrão não faz requisições adicionais por votante.
 
 A migração 0017 prepara `voting`, `person_vote` e `person_vote_revision`. A projeção também preenche `institution`, `proposition` e a proveniência em `source_record`. A data é armazenada com precisão de dia, sem horário inventado. Turnos são eventos separados. Correções de votos encerram a revisão anterior e criam outra; repetição do mesmo fato não cria revisão adicional. Uma correção explícita para votação secreta remove o voto individual vigente, preservando o histórico privado.

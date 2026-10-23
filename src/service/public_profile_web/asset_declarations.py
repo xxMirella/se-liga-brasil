@@ -27,7 +27,7 @@ def render_declared_item(item):
 def render_declaration_sources(items):
     urls = dict.fromkeys(official_url(item.get("official_url")) for item in items)
     links = [
-        f'<a href="{text(url)}" rel="noopener noreferrer">Fonte oficial no TSE</a>'
+        f'<a href="{text(url)}" target="_blank" rel="noopener noreferrer">Fonte oficial no TSE</a>'
         for url in islice((url for url in urls if url), 20)
     ]
     return '<p class="explanation">' + " · ".join(links) + "</p>" if links else ""

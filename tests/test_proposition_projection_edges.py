@@ -3,7 +3,11 @@ from types import SimpleNamespace
 
 import pytest
 
-from database.public_propositions import fetch_person_propositions
+from database.public_propositions import (
+    fetch_person_propositions,
+    public_document_label,
+    public_official_parent,
+)
 from service.public_profile_web.propositions import (
     render_authorship_card,
     render_person_propositions,
@@ -75,3 +79,24 @@ def test_authorship_history_handles_dated_and_undated_proposals_without_false_ap
 def test_proposal_pagination_keeps_all_pages_reachable():
     html = render_proposition_pagination({"person_id": PERSON}, {"page": 2, "truncated": True})
     assert "proposal_page=1" in html and "proposal_page=3" in html
+
+
+@pytest.mark.parametrize("principal", [
+    None, "https://example.com/proposicoes/10",
+    "https://dadosabertos.camara.leg.br/api/v2/proposicoes/0", 10,
+])
+def test_unverified_or_invalid_principal_never_becomes_a_group_relationship(principal):
+    row = {"official_key": "https://dadosabertos.camara.leg.br/api/v2/proposicoes/11",
+           "institution_code": "camara", "principal_key": principal}
+    assert public_official_parent(row) is None
+
+
+def test_verified_principal_is_projected_without_guessing_from_the_summary():
+    row = {"official_key": "https://dadosabertos.camara.leg.br/api/v2/proposicoes/11",
+           "institution_code": "camara", "principal_key":
+           "https://dadosabertos.camara.leg.br/api/v2/proposicoes/10",
+           "principal_title": "PL 10/2024", "principal_kind": "PL",
+           "principal_number": "10", "principal_year": 2024, "year": None}
+    assert public_official_parent(row)["title"] == "PL 10/2024"
+    assert public_document_label(row) == "Documento Câmara 11"
+    assert public_official_parent(row | {"institution_code": "senado"}) is None

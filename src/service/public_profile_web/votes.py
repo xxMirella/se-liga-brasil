@@ -100,8 +100,8 @@ def render_month_group(month, items):
     )
 
 
-def render_votes_timeline(votes):
-    items = list(islice(votes.get("items", []), 100))
+def render_votes_timeline(votes, *, maximum_items=100):
+    items = list(islice(votes.get("items", []), maximum_items))
     if not items:
         if (votes.get("coverage", {}).get("datasets") or {}).get("scan_budget_reached"):
             return (

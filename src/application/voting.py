@@ -23,6 +23,8 @@ def execute_voting_command(arguments):
     if arguments.command == "configure-voting-schedule":
         with connect_database(arguments.env_file) as connection:
             return configure_voting_schedule(connection)
+    if arguments.command == "enqueue-voting-history":
+        return enqueue_requested_history(arguments)
     with ExitStack() as stack:
         connection = stack.enter_context(connect_database(arguments.env_file))
         publisher = None
@@ -59,6 +61,11 @@ def run_requested_refresh(connection, arguments, publisher, source, start, end):
             filter(None, (getattr(arguments, "proposition_ids", None) or "").split(","))
         ),
         **({"cached_only": True} if getattr(arguments, "cached_only", False) else {}),
+        **(
+            {"max_processes": arguments.max_processes}
+            if getattr(arguments, "max_processes", None) is not None
+            else {}
+        ),
     )
 
 
@@ -80,7 +87,8 @@ def run_voting_worker(connection, arguments, publisher):
 def process_voting_jobs(connection, arguments, publisher, worker_id):
     results = []
     for _ in range(arguments.max_jobs):
-        job = claim_voting_refresh(connection, worker_id)
+        source = arguments.source if arguments.source in {"camara", "senado"} else None
+        job = claim_voting_refresh(connection, worker_id, source)
         if job is None:
             break
         try:
@@ -104,3 +112,22 @@ def process_voting_jobs(connection, arguments, publisher, worker_id):
                 {"source": job["source"], "status": "failed", "code": failure.get("code", "FAILED")}
             )
     return results
+
+
+def enqueue_requested_history(arguments):
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    from service.voting_pipeline.backfill import enqueue_historical_voting
+
+    today = datetime.now(ZoneInfo("America/Belem")).date()
+    with connect_database(arguments.env_file) as connection:
+        return enqueue_historical_voting(
+            connection,
+            arguments.person_id,
+            arguments.source,
+            date.fromisoformat(arguments.start_date or "2000-01-01"),
+            date.fromisoformat(arguments.end_date) if arguments.end_date else today,
+            today,
+            arguments.max_jobs,
+        )

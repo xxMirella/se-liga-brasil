@@ -42,6 +42,7 @@ def voting(key=1, voter="42"):
         "codigoSessaoVotacao": key,
         "dataSessao": "2026-10-01",
         "idProcesso": 123,
+        "codigoMateria": 456,
         "votacaoSecreta": "N",
         "sigla": "PL",
         "numero": "1",
@@ -75,11 +76,21 @@ def test_shared_process_cached_identity_and_private_whitelist(tmp_path):
     assert records[0]["description"] == "Ementa oficial demonstrativa."
     assert records[0]["description_origin"] == "official_text"
     assert records[0]["round_number"] == 1
+    assert records[0]["official_url"] == (
+        "https://www25.senado.leg.br/web/atividade/materias/-/materia/456/votacoes"
+    )
     assert set(records[0]) == VOTE_COLUMNS | MATTER_INPUT_COLUMNS | {"source_observed_at"}
     assert result["receipts"][0]["collection_complete"] is False
     assert result["evidence_dependencies"] == ["a" * 64, "b" * 64]
     assert "codigoParlamentar" not in path.read_text()
     assert result["profile_acquisition_attempts"] == 0
+
+
+@pytest.mark.parametrize("matter_code", [None, "", "invalid", "0", "-1", "٤٥٦"])
+def test_nominal_link_never_substitutes_a_process_id_for_a_matter_code(matter_code):
+    from service.voting_pipeline.source_senado import nominal_voting_url
+
+    assert nominal_voting_url({"idProcesso": 123, "codigoMateria": matter_code}) is None
 
 
 def test_missing_identity_and_description_budget_remain_partial(tmp_path):
@@ -298,3 +309,44 @@ def test_profile_evidence_correction_updates_source_observation(tmp_path):
         identity_observations={"b" * 64: "2026-10-19T13:00:00+00:00"},
     )
     assert json.loads(path.read_text())["source_observed_at"] == "2026-10-19T13:00:00+00:00"
+
+
+def test_backfill_reuses_official_original_ementa_without_process_downloads(tmp_path):
+    raw = voting() | {"ementa": "Ementa publicada na votação oficial."}
+    acquisition = FakeAcquisition([raw])
+    result = normalize_senate_source_files(
+        None,
+        acquisition,
+        [(date(2026, 10, 1), date(2026, 10, 1))],
+        tmp_path / "backfill.ndjson",
+        {"42": (str(uuid4()), "b" * 64)},
+        CachedProfiles(),
+        max_processes=0,
+    )
+    record = json.loads((tmp_path / "backfill.ndjson").read_text())
+    assert record["description"] == raw["ementa"]
+    assert record["description_origin"] == "official_text"
+    assert result["processes_acquired"] == 0
+    assert len(acquisition.calls) == 1
+
+
+def test_unpublished_nominal_list_does_not_fail_the_whole_historical_month(tmp_path):
+    raw = voting() | {"votos": None}
+    acquisition = FakeAcquisition([raw])
+    result = normalize_senate_source_files(
+        None,
+        acquisition,
+        [(date(2026, 10, 1), date(2026, 10, 1))],
+        tmp_path / "unavailable.ndjson",
+        {},
+        CachedProfiles(),
+        max_processes=0,
+    )
+    assert result["rows"] == 0
+    assert result["receipts"][0]["votings"] == 1
+    assert result["collection_complete"] is False
+    from crawlers.senado.legislative_voting import normalize_voting_record
+
+    normalized = normalize_voting_record(raw)
+    assert normalized["nominal_availability"] == "unavailable"
+    assert normalized["nominal_votes"] == []

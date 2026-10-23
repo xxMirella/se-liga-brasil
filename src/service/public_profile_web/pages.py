@@ -1,5 +1,6 @@
 """Compose server-rendered pages exclusively from public service projections."""
 
+from service.public_profile_web.activity import render_person_activity
 from service.public_profile_web.asset_declarations import render_asset_declarations
 from service.public_profile_web.forms import render_vote_filters
 from service.public_profile_web.layout import render_layout
@@ -7,7 +8,7 @@ from service.public_profile_web.office_scopes import render_office_scopes
 from service.public_profile_web.profile import render_profile_header
 from service.public_profile_web.propositions import render_person_propositions
 from service.public_profile_web.security import person_path, query_link, text
-from service.public_profile_web.votes import render_vote_pagination, render_votes_timeline
+from service.public_profile_web.votes import render_vote_pagination
 
 
 def render_tabs(path, filters, active):
@@ -66,10 +67,10 @@ def render_person_profile(profile, votes, filters):
             '<div class="activity-history"><p class="eyebrow">FEITOS E VOTAÇÕES</p>'
             '<h2>Atuação ao longo do tempo</h2>'
         )
-        content += render_votes_timeline(votes) + render_vote_pagination(path, votes, filters)
+        content += render_person_activity(profile, votes, filters)
+        content += render_vote_pagination(path, votes, filters)
         content += render_vote_filters(path, votes, filters)
         content += "</div>"
-        content += render_person_propositions(profile)
         content += (
             '<details class="activity-context">'
             "<summary>Sobre os registros e o cargo</summary>"

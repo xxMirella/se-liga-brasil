@@ -1,8 +1,10 @@
 """Source-specific legislative facts; collective decisions never imply final enactment."""
 
+import re
 from datetime import datetime
 
 from crawlers.camara.normalization import normalize_proposition
+from normalization.scalars import normalize_text
 from service.ingestion.contracts import IngestionError
 from storage.files import hash_content
 
@@ -18,8 +20,22 @@ def normalize_legislative_detail(row):
         key: value for key, value in status.items() if key != "uriUltimoRelator"
     }
     normalized["finalNormReference"] = row.get("urnFinal")
-    normalized["principalProposition"] = row.get("uriPropPrincipal")
+    normalized["principalProposition"] = normalize_principal_proposition(
+        row.get("uriPropPrincipal"), row["uri"]
+    )
     return normalized
+
+
+def normalize_principal_proposition(value, official_key):
+    principal = normalize_text(value, max_length=2048)
+    if principal is None:
+        return None
+    pattern = r"https://dadosabertos\.camara\.leg\.br/api/v2/proposicoes/[1-9][0-9]*"
+    if not re.fullmatch(pattern, principal):
+        raise IngestionError("CAMARA_INVALID_PRINCIPAL_PROPOSITION")
+    if principal == official_key:
+        raise IngestionError("CAMARA_SELF_REFERENTIAL_PRINCIPAL_PROPOSITION")
+    return principal
 
 
 def normalize_proceeding(row, proposition_key):

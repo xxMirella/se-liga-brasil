@@ -20,7 +20,7 @@ def requested_voter_profile_keys(rows):
     for row in rows:
         if row["votacaoSecreta"] == "S":
             continue
-        for vote in row.get("votos", []):
+        for vote in row.get("votos") or []:
             key = str(vote.get("codigoParlamentar", ""))
             if key.isascii() and key.isdigit() and int(key) > 0:
                 keys.add(key)

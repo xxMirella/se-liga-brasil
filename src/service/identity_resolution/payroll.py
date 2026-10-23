@@ -6,6 +6,7 @@ from database.person_identity import (
     fetch_electoral_identity_candidates,
     fetch_payroll_recipients,
     fetch_reviewed_people,
+    save_payroll_identity_reviews,
 )
 from service.identity_resolution.matching import (
     PersonIdentityIndex,
@@ -30,6 +31,7 @@ def resolve_payroll_identities(
     if reviewed_cases:
         targets = fetch_reviewed_people(connection, reviewed_cases, reviewed_cases[0]["scope"])
         resolutions = apply_reviewed_crosswalk(resolutions, recipients, reviewed_cases, targets)
+    save_payroll_identity_reviews(connection, source_id, resolutions, recipients)
     result = apply_payroll_identity_links(
         connection, source_id, build_identity_links(resolutions, recipients), source_url
     )

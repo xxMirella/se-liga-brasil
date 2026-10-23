@@ -1,6 +1,7 @@
 """Stage source-backed records for the existing generic ingestion repository."""
 
 from crawlers.senado.configuration import PARSER_VERSION
+from service.identity_resolution.evidence import IdentityEvidenceBuilder, load_identity_key
 from service.ingestion.contracts import ValidatedArtifact
 from storage.files import create_private_directory, hash_content, hash_file, write_json_line
 
@@ -28,6 +29,7 @@ def stage_records(artifact, configuration, data_rows) -> ValidatedArtifact:
                     "sourceGeneratedAt": artifact.fetched_at,
                     "entryName": artifact.path.name,
                     "rowNumber": number,
+                    **institutional_identity_evidence(artifact.resource.kind, data),
                 },
             )
     rejected.write_text("")
@@ -45,12 +47,23 @@ def stage_records(artifact, configuration, data_rows) -> ValidatedArtifact:
 
 
 def record_key(kind, data) -> str:
+    if kind == "senado_institutional_profile":
+        return data["officialSenatorCode"]
     if kind == "senado_payroll":
         return data["recipientKey"] + ":" + data["competence"]
     return data["personId"]
 
 
+def institutional_identity_evidence(kind, data):
+    if kind != "senado_institutional_profile":
+        return {}
+    builder = IdentityEvidenceBuilder(load_identity_key())
+    return {"identityEvidence": builder.build_evidence(data["civilName"])}
+
+
 def staging_scope(kind, rows):
+    if kind == "senado_institutional_profile":
+        return "senado:national-institutional-roster"
     if kind == "senado_payroll":
         return "senado:payroll:" + hash_content(sorted(row["personId"] for row in rows))
     return "senado:personal-enrichment"

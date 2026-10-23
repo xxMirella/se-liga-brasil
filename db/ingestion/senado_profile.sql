@@ -4,6 +4,13 @@ SELECT (b.normalized_data->>'personId')::uuid,p.id,b.source_generated_at::date,
  b.source_record_id,b.source_generated_at,'institution:senado','administrative'
 FROM ingestion_batch b JOIN se_liga_brasil.political_party p
  ON p.abbreviation=b.normalized_data->>'politicalPartyAbbreviation'
+WHERE NOT EXISTS(
+ SELECT 1 FROM se_liga_brasil.political_party_affiliation existing
+ WHERE existing.person_id=(b.normalized_data->>'personId')::uuid
+   AND existing.information_scope='institution:senado'
+   AND existing.information_valid_from=b.source_generated_at
+   AND existing.political_party_id=p.id
+)
 ON CONFLICT DO NOTHING;
 WITH periods AS (
  SELECT id,lead(information_valid_from) OVER(PARTITION BY person_id,information_scope

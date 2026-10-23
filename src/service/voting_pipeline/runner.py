@@ -18,6 +18,7 @@ def collect_source_input(
     max_identity_profiles=10,
     proposition_ids=(),
     cached_only=False,
+    max_processes=None,
 ):
     if source == "senado":
         from service.voting_pipeline.source_senado import collect_senate_source_files
@@ -30,7 +31,7 @@ def collect_source_input(
             output_path,
             max_partitions=3,
             max_votings=limit,
-            max_processes=min(limit, 100),
+            max_processes=min(limit, 100) if max_processes is None else max_processes,
             max_identity_profile_downloads=max_identity_profiles,
             **({"cached_only": True} if cached_only else {}),
         )
@@ -67,6 +68,7 @@ def run_source_refresh(
     max_identity_profiles=10,
     proposition_ids=(),
     cached_only=False,
+    max_processes=None,
 ):
     if source not in {"camara", "senado"} or start > end or (end - start).days > 62:
         raise ValueError("Select a supported source and bounded voting interval")
@@ -92,6 +94,7 @@ def run_source_refresh(
                 max_identity_profiles=max_identity_profiles,
                 **({"proposition_ids": proposition_ids} if proposition_ids else {}),
                 **({"cached_only": True} if cached_only else {}),
+                **({"max_processes": max_processes} if max_processes is not None else {}),
             )
             daily = consolidate_acquisition(
                 result, source, start, end, repository, temporary, publisher

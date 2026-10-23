@@ -118,12 +118,24 @@ def resolve_payroll_recipient(recipient: dict, candidates, subjects, subject_mat
         }
     person_id = next(iter(people))
     candidate = candidates.people[person_id]
-    method = "official_subject_bridge" if evidence else "exact_legal_name_and_electoral_scope"
+    return payroll_identity_decision(recipient, candidate, evidence)
+
+
+def payroll_identity_decision(recipient, candidate, evidence):
+    person_id = candidate.person_id
+    if not evidence:
+        return {
+            "status": "requires_review",
+            "recipient_key": recipient["recipient_key"],
+            "suggested_person_id": person_id,
+            "reason_code": "PAYROLL_PERSONAL_IDENTITY_REQUIRED",
+            "candidate_source_record_ids": sorted(candidate.source_record_ids),
+        }
     return {
         "status": "matched",
         "recipient_key": recipient["recipient_key"],
         "person_id": person_id,
-        "method": method,
+        "method": "official_subject_bridge",
         "candidate_source_record_ids": sorted(candidate.source_record_ids),
         "official_subjects": evidence,
     }

@@ -8,6 +8,7 @@ from contextlib import contextmanager
 from pathlib import Path
 
 from service.ingestion.contracts import IngestionError
+from storage.files import hash_content
 
 
 def xml_rows(path, record_tag):
@@ -86,12 +87,30 @@ def authored_propositions(dataset_directory, resolutions, person_ids=None):
     if not authors:
         return
     with indexed_authorships(dataset_directory / "81_documento_autor.zip", authors) as index:
-        for row in xml_rows(dataset_directory / "56_proposituras.zip", "propositura"):
+        for row in unique_proposition_rows(index, dataset_directory / "56_proposituras.zip"):
             people = index.execute(
                 "SELECT person FROM authors WHERE document=?", (row["IdDocumento"],)
             )
             for (person_id,) in people:
                 yield normalize_proposition(row, person_id)
+
+
+def unique_proposition_rows(index, path):
+    """Collapse repeated export rows on disk; conflicting source versions need review."""
+    index.execute("CREATE TABLE propositions(document TEXT PRIMARY KEY,content_hash TEXT)")
+    for row in xml_rows(path, "propositura"):
+        content_hash = hash_content(row)
+        inserted = index.execute(
+            "INSERT OR IGNORE INTO propositions VALUES(?,?)", (row["IdDocumento"], content_hash)
+        ).rowcount
+        if inserted:
+            yield row
+            continue
+        previous = index.execute(
+            "SELECT content_hash FROM propositions WHERE document=?", (row["IdDocumento"],)
+        ).fetchone()[0]
+        if previous != content_hash:
+            raise IngestionError("ALESP_PROPOSITION_EXPORT_CONFLICT")
 
 
 def normalize_proposition(row, person_id):

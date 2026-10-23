@@ -62,6 +62,7 @@ def create_argument_parser() -> argparse.ArgumentParser:
             "build-static-site",
             "configure-voting-schedule",
             "run-voting-pipeline",
+            "enqueue-voting-history",
             "voting-worker",
         ),
     )
@@ -106,6 +107,12 @@ def add_historical_arguments(parser):
     parser.add_argument("--end-date", help="Data final inclusiva YYYY-MM-DD")
     parser.add_argument("--limit", type=int, default=25)
     parser.add_argument("--max-partitions", type=int, default=1)
+    parser.add_argument(
+        "--max-processes",
+        type=int,
+        default=None,
+        help="Detalhes adicionais de processos do Senado (0 reutiliza ementas originais)",
+    )
     parser.add_argument(
         "--max-identity-profiles",
         type=int,
@@ -312,7 +319,12 @@ def execute_data_service_command(arguments):
         from service.static_publication.build import build_civic_site
 
         return build_civic_site(arguments.output_directory, backend_origin=arguments.backend_origin)
-    if arguments.command in {"configure-voting-schedule", "run-voting-pipeline", "voting-worker"}:
+    if arguments.command in {
+        "configure-voting-schedule",
+        "run-voting-pipeline",
+        "enqueue-voting-history",
+        "voting-worker",
+    }:
         from application.voting import execute_voting_command
 
         return execute_voting_command(arguments)

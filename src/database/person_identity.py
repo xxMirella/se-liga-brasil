@@ -46,7 +46,8 @@ def build_identity_links(resolutions: list[dict], recipients: list[dict]) -> lis
     indexed = {row["recipient_key"]: row for row in recipients}
     links = []
     for resolution in resolutions:
-        if resolution["status"] != "matched":
+        if (resolution["status"] != "matched"
+                or resolution.get("method") == "exact_legal_name_and_electoral_scope"):
             continue
         recipient = indexed[resolution["recipient_key"]]
         evidence = resolution | {
@@ -220,3 +221,33 @@ def save_birth_date_reviews(connection, parameters) -> None:
     """,
         parameters,
     )
+
+
+def save_payroll_identity_reviews(connection, source_id, resolutions, recipients) -> int:
+    """Keep insufficient personal evidence pending, without creating a person bridge."""
+    pending = [row for row in resolutions if row["status"] == "requires_review"]
+    if not pending:
+        return 0
+    indexed = {row["recipient_key"]: row for row in recipients}
+    reviews = [
+        {"source_record_id": record_id,
+         "suggested_person_id": resolution["suggested_person_id"],
+         "reason_code": resolution["reason_code"]}
+        for resolution in pending
+        for record_id in indexed[resolution["recipient_key"]]["source_record_ids"]
+    ]
+    row = connection.execute(
+        """
+        WITH inserted AS (
+          INSERT INTO se_liga_brasil.person_identity_review(source_record_id,
+            suggested_person_id,reason_code)
+          SELECT input.source_record_id,input.suggested_person_id,input.reason_code
+          FROM jsonb_to_recordset(%s) input(source_record_id bigint,
+            suggested_person_id uuid,reason_code text)
+          JOIN se_liga_brasil.source_record r ON r.id=input.source_record_id
+            AND r.source_id=%s
+          ON CONFLICT DO NOTHING RETURNING id
+        ) SELECT count(*) AS total FROM inserted
+        """, (Jsonb(reviews), source_id),
+    ).fetchone()
+    return row["total"]
