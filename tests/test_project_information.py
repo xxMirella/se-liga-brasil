@@ -92,7 +92,8 @@ def test_institutional_page_static_export_is_complete_and_fingerprinted(tmp_path
     path = tmp_path / "sobre/index.html"
     document = path.read_text()
     assert (tmp_path / "index.html").read_bytes() == path.read_bytes()
-    assert result["files"] == 10
+    assert result["files"] == 11
+    assert (tmp_path / "assets/brazil-flag.svg").is_file()
     assert 'href="/sobre/"' in document
     assert 'href="/como-funciona/"' in document
     assert 'action="https://api.example.org/pessoas"' in document

@@ -9,6 +9,10 @@ def public_stylesheet():
     return (Path(__file__).parent / "assets" / "public-profile.css").read_text(encoding="utf-8")
 
 
+def public_favicon():
+    return (Path(__file__).parent / "assets" / "brazil-flag.svg").read_text(encoding="utf-8")
+
+
 def render_public_navigation(active):
     links = []
     for key, label, url in (
@@ -29,6 +33,7 @@ def render_layout(title, content, query="", *, extra_stylesheet=None, active_sec
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{text(title)} · Se Liga, Brasil</title>
+<link rel="icon" type="image/svg+xml" sizes="any" href="/assets/brazil-flag.svg">
 <link rel="stylesheet" href="/assets/public-profile.css">{extra_style}</head>
 <body><a class="skip-link" href="#main">Ir para o conteúdo</a>
 <header class="topbar"><a class="brand" href="/">SE LIGA, <strong>BRASIL</strong>

@@ -1,6 +1,7 @@
 """Compose public HTML and JSON over read-only metadata and published datasets."""
 
 import json
+import logging
 import re
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -58,7 +59,10 @@ def dispatch_portal_request(application, target):
         return encode_public_error(target, error.code, error.status_code)
     except ValueError:
         return encode_public_error(target, "INVALID_REQUEST", 400)
-    except Exception:
+    except Exception as error:
+        logging.getLogger(__name__).error(
+            "Public portal request failed: error_type=%s", type(error).__name__
+        )
         return encode_public_error(target, "TEMPORARILY_UNAVAILABLE", 503)
 
 
@@ -110,6 +114,10 @@ def route_public_request(application, parsed):
         from service.public_profile_web import public_stylesheet
 
         return encode_response(public_stylesheet(), content_type="text/css")
+    if parsed.path in {"/assets/brazil-flag.svg", "/favicon.ico"} and not parsed.query:
+        from service.public_profile_web.layout import public_favicon
+
+        return encode_response(public_favicon(), content_type="image/svg+xml")
     match = PERSON_ROUTE.fullmatch(parsed.path)
     if match:
         return route_person_request(application, match, parsed.query)

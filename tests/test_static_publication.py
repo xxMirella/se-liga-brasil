@@ -17,7 +17,7 @@ def test_export_is_deterministic_and_all_filters_are_static(tmp_path):
         p.relative_to(output): p.read_bytes() for p in output.rglob("*") if p.is_file()
     }
     manifest = json.loads((output / "manifest.json").read_text())
-    assert len(manifest["files"]) == 10
+    assert len(manifest["files"]) == 11
     for sphere in ("municipal", "estadual", "federal", "distrital", "todos"):
         path = output / "como-funciona" / sphere / "index.html"
         document = path.read_text()

@@ -1,5 +1,6 @@
 """Canonical public SQL runs only in the rollback-only disposable fixture schema."""
 
+from contextlib import nullcontext
 from datetime import date
 
 import pytest
@@ -7,6 +8,27 @@ from test_public_profile_integration import create_public_read_fixture
 
 from database.public_people import PublicPeopleRepository
 from service.public_profile.people import PeopleQuery
+
+
+@pytest.mark.integration
+def test_release_check_serves_people_results_through_wsgi_and_real_sql(
+    integration_database, monkeypatch,
+):
+    from application.vercel import PublicPortalWSGI
+    from database import operations
+    from service.deployment_validation.public_portal import check_public_search
+
+    create_public_read_fixture(integration_database)
+    monkeypatch.setenv("DATABASE_URL", "postgresql://ci:ci@localhost/disposable")
+    monkeypatch.setattr(
+        operations, "connect_database", lambda *_: nullcontext(integration_database)
+    )
+    # The fixture already owns a transaction with forced rollback and isolated schema.
+    # PostgreSQL cannot change its isolation after fixture creation queries have run.
+    monkeypatch.setattr(PublicPeopleRepository, "read_snapshot", lambda _: nullcontext())
+    result = check_public_search(PublicPortalWSGI())
+    assert len(result["checks"]) == 3
+    assert all(check["status"] == 200 for check in result["checks"])
 
 
 @pytest.mark.integration

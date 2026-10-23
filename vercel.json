@@ -1,6 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "python",
+  "buildCommand": "python scripts/check_public_deployment.py",
   "functions": {
     "app.py": {
       "excludeFiles": "{.env,.env.*,.venv/**,.git/**,.codex/**,.cursor/**,.idea/**,.build/**,.pytest_cache/**,.ruff_cache/**,.coverage*,data/**,dist/**,reports/**,tests/**,docs/**,deploy/**}"

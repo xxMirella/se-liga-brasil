@@ -8,7 +8,7 @@ from urllib.parse import urlsplit
 
 from service.civic_education.page import SPHERES, civic_stylesheet, render_civic_education
 from service.project_information.page import render_project_information
-from service.public_profile_web.layout import public_stylesheet
+from service.public_profile_web.layout import public_favicon, public_stylesheet
 
 SPHERE_NAMES = (*SPHERES, "todos")
 
@@ -83,6 +83,9 @@ def build_civic_site(output_directory, *, backend_origin=None):
     directory = Path(output_directory)
     directory.mkdir(parents=True, exist_ok=True)
     asset_paths, files = {}, {}
+    files["assets/brazil-flag.svg"] = write_representation(
+        directory, "assets/brazil-flag.svg", public_favicon().encode("utf-8")
+    )
     for name, stylesheet in (
         ("public-profile", public_stylesheet()),
         ("civic-education", civic_stylesheet()),

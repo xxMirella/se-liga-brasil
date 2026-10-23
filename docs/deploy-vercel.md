@@ -34,5 +34,27 @@ O build remoto da Vercel ainda deve ser executado após publicar essas alteraç�
 os testes WSGI não substituem a verificação do bundle e das variáveis no ambiente
 remoto.
 
+## Validação obrigatória antes da publicação
+
+O `buildCommand` executa `python scripts/check_public_deployment.py`. Ele exige
+uma URL PostgreSQL e chama a aplicação WSGI nas rotas `/pessoas?limit=4`,
+`/api/people?limit=4` e uma busca JSON com nome. As consultas são somente leitura.
+HTTP diferente de 200 interrompe o build; nenhum segredo ou mensagem bruta de
+conexão entra no diagnóstico. O teste não exige que a base tenha resultados.
+
+A página `/pessoas` sem `limit` é apenas a estrutura inicial da busca: seu HTTP 200
+não comprova acesso ao banco. O incidente de 22/10/2026 ocorreu porque o projeto
+na Vercel estava sem variáveis de ambiente. `DATABASE_URL` deve ser configurada
+como segredo em Production e, se forem usados, nos ambientes Preview correspondentes.
+Alterar uma variável exige novo deploy para que ela seja aplicada.
+
+Os testes de regressão cobrem configuração ausente, falha de conexão sem vazamento,
+sucesso da estrutura inicial seguido de 503 nos resultados e as rotas WSGI com
+PostgreSQL isolado. São executados na suíte de CI existente.
+
+O favicon usa uma bandeira vetorial local da coleção
+[flag-icons v7.5.0](https://github.com/lipis/flag-icons/blob/v7.5.0/flags/4x3/br.svg),
+com licença MIT preservada no próprio SVG e em `flag-icons-LICENSE.txt`.
+
 Referências: [Python Runtime](https://vercel.com/docs/functions/runtimes/python)
 e [vercel.json](https://vercel.com/docs/project-configuration/vercel-json).

@@ -12,7 +12,10 @@ def public_cache_policy(target, status):
     path = urlsplit(target).path
     if path in {"/", "/como-funciona", "/sobre", "/sobre/"}:
         return "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400"
-    if path in {"/assets/public-profile.css", "/assets/civic-education.css"}:
+    if path in {
+        "/assets/public-profile.css", "/assets/civic-education.css", "/assets/brazil-flag.svg",
+        "/favicon.ico",
+    }:
         return "public, max-age=0, must-revalidate"
     return "no-store"
 

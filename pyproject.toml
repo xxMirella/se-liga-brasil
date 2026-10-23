@@ -39,7 +39,7 @@ max-complexity = 10
 
 [tool.setuptools.package-data]
 "service.project_information" = ["*.html"]
-"service.public_profile_web" = ["assets/*.css", "assets/people-viewport.js"]
+"service.public_profile_web" = ["assets/*.css", "assets/*.svg", "assets/*LICENSE.txt", "assets/people-viewport.js"]
 "service.civic_education" = ["assets/*.css", "assets/*.svg"]
 
 [tool.coverage.run]
