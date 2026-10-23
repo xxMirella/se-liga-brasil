@@ -37,8 +37,12 @@ remoto.
 ## Validação obrigatória antes da publicação
 
 O `buildCommand` executa `python scripts/check_public_deployment.py`. Ele exige
-uma URL PostgreSQL e chama a aplicação WSGI nas rotas `/pessoas?limit=4`,
-`/api/people?limit=4` e uma busca JSON com nome. As consultas são somente leitura.
+uma URL PostgreSQL e as credenciais de Storage no ambiente do deploy. Chama a
+aplicação WSGI nas rotas `/pessoas?limit=4`, `/api/people?limit=4` e uma busca JSON
+com nome. Em seguida seleciona uma pessoa da base e abre a aba HTML de atuação
+com `tab=activity&scope=history` e a API `/api/people/{uuid}/votes?scope=history`.
+As consultas são somente leitura. Uma base vazia impede verificar a atuação e
+interrompe o build com `PUBLIC_ACTIVITY_SAMPLE_PERSON_REQUIRED`.
 HTTP diferente de 200 interrompe o build; nenhum segredo ou mensagem bruta de
 conexão entra no diagnóstico. O teste não exige que a base tenha resultados.
 
@@ -50,7 +54,10 @@ Alterar uma variável exige novo deploy para que ela seja aplicada.
 
 Os testes de regressão cobrem configuração ausente, falha de conexão sem vazamento,
 sucesso da estrutura inicial seguido de 503 nos resultados e as rotas WSGI com
-PostgreSQL isolado. São executados na suíte de CI existente.
+PostgreSQL isolado. A atuação é exercitada com o leitor real e respostas HTTP do
+Storage simuladas, incluindo 401 por credencial rejeitada. São executados na suíte
+de CI existente. O acesso ao Storage não usa configuração privada local no teste
+de presença de variáveis: a validação considera apenas o ambiente do deploy.
 
 O favicon usa uma bandeira vetorial local da coleção
 [flag-icons v7.5.0](https://github.com/lipis/flag-icons/blob/v7.5.0/flags/4x3/br.svg),

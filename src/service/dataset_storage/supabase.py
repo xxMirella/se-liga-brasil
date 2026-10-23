@@ -36,6 +36,10 @@ def load_storage_configuration(env_file=None):
     if env_file:
         values.update(dotenv_values(env_file))
     values.update(os.environ)
+    return storage_configuration_from_values(values)
+
+
+def storage_configuration_from_values(values):
     url = values.get("SUPABASE_STORAGE_URL") or values.get("SUPABASE_URL", "")
     if not url.startswith("https://"):
         project = values.get("SUPABASE_PROJECT_ID", "")

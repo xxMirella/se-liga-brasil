@@ -9,9 +9,70 @@ from application.public_portal import PublicPortalApplication
 from application.vercel import PublicPortalWSGI
 from service.deployment_validation.public_portal import (
     DeploymentValidationError,
+    check_public_activity,
+    check_public_deployment,
     check_public_search,
     probe_wsgi,
 )
+
+
+def configure_release_environment(monkeypatch):
+    monkeypatch.setenv("DATABASE_URL", "postgresql://ci:ci@localhost/test")
+    monkeypatch.setenv("SUPABASE_STORAGE_URL", "https://example.supabase.co")
+    monkeypatch.setenv("SUPABASE_STORAGE_KEY", "fictitious-test-key")
+
+
+def test_database_alone_cannot_approve_release_without_storage(monkeypatch):
+    monkeypatch.setenv("DATABASE_URL", "postgresql://ci:ci@localhost/test")
+    for key in (
+        "SUPABASE_STORAGE_URL", "SUPABASE_STORAGE_KEY", "SUPABASE_URL",
+        "SUPABASE_PROJECT_ID", "SUPABASE_SERVICE_ROLE_KEY",
+    ):
+        monkeypatch.delenv(key, raising=False)
+    application = Mock()
+    with pytest.raises(DeploymentValidationError, match="SUPABASE_STORAGE_CONFIGURATION_REQUIRED"):
+        check_public_deployment(application)
+    application.assert_not_called()
+
+
+@pytest.mark.parametrize("failed_path", ["/pessoas/person", "/api/people/person/votes"])
+def test_activity_failure_blocks_release_despite_successful_people_search(monkeypatch, failed_path):
+    configure_release_environment(monkeypatch)
+
+    def application(environ, start_response):
+        status = "503 Service Unavailable" if environ["PATH_INFO"] == failed_path else "200 OK"
+        start_response(status, [])
+        return [json.dumps({"items": [{"person_id": "person"}]}).encode()]
+
+    assert check_public_search(application)["status"] == "passed"
+    with pytest.raises(DeploymentValidationError, match="PUBLIC_ACTIVITY_HTTP_503"):
+        check_public_deployment(application)
+
+
+def test_activity_check_opens_html_and_history_api(monkeypatch):
+    configure_release_environment(monkeypatch)
+    calls = []
+
+    def available(environ, start_response):
+        calls.append((environ["PATH_INFO"], environ["QUERY_STRING"]))
+        start_response("200 OK", [])
+        return [json.dumps({"items": [{"person_id": "person"}]}).encode()]
+
+    result = check_public_deployment(available)
+    assert len(result["checks"]) == 5
+    assert calls[-2:] == [
+        ("/pessoas/person", "tab=activity&scope=history"),
+        ("/api/people/person/votes", "scope=history"),
+    ]
+
+
+def test_empty_database_cannot_claim_activity_was_validated():
+    def empty(environ, start_response):
+        start_response("200 OK", [])
+        return [b'{"items": []}']
+
+    with pytest.raises(DeploymentValidationError, match="PUBLIC_ACTIVITY_SAMPLE_PERSON_REQUIRED"):
+        check_public_activity(empty)
 
 
 @pytest.mark.parametrize("value", [None, "", "https://project.supabase.co"])
