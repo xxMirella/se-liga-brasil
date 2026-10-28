@@ -26,7 +26,10 @@ def official_source_acquisition(connection, configuration, source, hosts, acquis
             local_run_lock(configuration.storage_directory / "source-locks" / source.code),
             httpx.Client(
                 timeout=configuration.request_timeout_seconds,
-                headers={"Accept": "application/json", "User-Agent": "SeLigaBrasilCrawler/1.0"},
+                headers={
+                    "Accept": getattr(configuration, "request_accept", "application/json"),
+                    "User-Agent": "SeLigaBrasilCrawler/1.0",
+                },
             ) as client,
         ):
             transport = OfficialHttpClient(configuration, client, hosts)

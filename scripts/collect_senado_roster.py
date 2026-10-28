@@ -2,13 +2,16 @@
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
-from crawlers.senado.roster_collection import (
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from crawlers.senado.roster_collection import (  # noqa: E402
     acquire_national_roster_batch,
     ingest_national_roster_batch,
 )
-from database.operations import connect_database, refresh_person_profiles
+from database.operations import connect_database, refresh_person_profiles  # noqa: E402
 
 
 def main():

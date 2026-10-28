@@ -10,11 +10,16 @@ def public_cache_policy(target, status):
     if status != 200:
         return "no-store"
     path = urlsplit(target).path
+    if path in {"/panorama", "/api/political-dashboard"}:
+        return "public, max-age=60, s-maxage=300, stale-while-revalidate=300"
     if path in {"/", "/como-funciona", "/sobre", "/sobre/"}:
         return "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400"
     if path in {
-        "/assets/public-profile.css", "/assets/civic-education.css", "/assets/brazil-flag.svg",
+        "/assets/public-profile.css",
+        "/assets/civic-education.css",
+        "/assets/brazil-flag.svg",
         "/favicon.ico",
+        "/assets/panorama.css",
     }:
         return "public, max-age=0, must-revalidate"
     return "no-store"

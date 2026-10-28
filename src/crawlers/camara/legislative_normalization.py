@@ -20,6 +20,7 @@ def normalize_legislative_detail(row):
         key: value for key, value in status.items() if key != "uriUltimoRelator"
     }
     normalized["finalNormReference"] = row.get("urnFinal")
+    normalized["textUrl"] = row.get("urlInteiroTeor")
     normalized["principalProposition"] = normalize_principal_proposition(
         row.get("uriPropPrincipal"), row["uri"]
     )

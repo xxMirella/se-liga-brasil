@@ -68,7 +68,7 @@ def dispatch_portal_request(application, target):
 
 def encode_public_error(target, code, status):
     if (
-        target.startswith(("/pessoas", "/como-funciona", "/sobre"))
+        target.startswith(("/pessoas", "/como-funciona", "/sobre", "/panorama"))
         or target.partition("?")[0] == "/"
     ):
         from service.public_profile_web import render_error_page
@@ -79,6 +79,11 @@ def encode_public_error(target, code, status):
             410: "Esta página expirou. Reinicie a consulta para carregar os dados publicados.",
         }
         message = messages.get(status, "A consulta está temporariamente indisponível.")
+        if target.startswith("/panorama") and status == 400:
+            message = (
+                "Confira o ano, a esfera e o estado. O Distrito Federal não possui "
+                "municípios, prefeitos ou vereadores."
+            )
         return encode_response(
             render_error_page(status, message), status=status, content_type="text/html"
         )
@@ -86,6 +91,9 @@ def encode_public_error(target, code, status):
 
 
 def route_public_request(application, parsed):
+    dashboard_response = route_dashboard_request(application, parsed)
+    if dashboard_response is not None:
+        return dashboard_response
     educational_response = route_education_request(parsed)
     if educational_response is not None:
         return educational_response
@@ -122,6 +130,24 @@ def route_public_request(application, parsed):
     if match:
         return route_person_request(application, match, parsed.query)
     return encode_response({"error": "ROUTE_NOT_FOUND"}, status=404)
+
+
+def route_dashboard_request(application, parsed):
+    if parsed.path == "/assets/panorama.css" and not parsed.query:
+        from service.political_dashboard.page import dashboard_stylesheet
+
+        return encode_response(dashboard_stylesheet(), content_type="text/css")
+    if parsed.path not in {"/panorama", "/api/political-dashboard"}:
+        return None
+    parameters = read_parameters(
+        parsed.query, {"uf", "year", "senate_uf", "level", "municipality_ibge", "territory", "view"}
+    )
+    result = application.fetch_political_dashboard(parameters)
+    if parsed.path == "/api/political-dashboard":
+        return encode_response(result)
+    from service.political_dashboard.page import render_dashboard
+
+    return encode_response(render_dashboard(result, application.today()), content_type="text/html")
 
 
 def route_education_request(parsed):
@@ -182,7 +208,51 @@ class PublicPortalApplication:
         from service.public_profile.search_cache import PublicSearchCache
 
         self.people_cache = PublicSearchCache()
+        self.dashboard_cache = PublicSearchCache(
+            ttl_seconds=300, capacity=64, max_bytes=4 * 1024 * 1024
+        )
         self.today = today or (lambda: datetime.now(ZoneInfo("America/Belem")).date())
+
+    def fetch_political_dashboard(self, parameters):
+        from service.political_dashboard.contracts import DashboardQuery
+
+        query = DashboardQuery.from_parameters(parameters, self.today())
+        return self.dashboard_cache.get_or_load(
+            query, lambda: self._load_political_dashboard(query)
+        )
+
+    def _load_political_dashboard(self, query):
+        from database.operations import connect_database
+        from database.political_dashboard_analytical import AnnualDashboardRepository
+        from service.political_dashboard_dataset.query import (
+            annual_dashboard_payload,
+            selected_territories,
+            validate_municipality_catalog,
+        )
+
+        territories = selected_territories(query)
+        with connect_database(self.env_file) as connection:
+            repository = AnnualDashboardRepository(connection)
+            if not repository.is_available():
+                return annual_dashboard_payload([], [], query, self.today().year)
+            catalog = (
+                repository.fetch_territorial_catalog(query.uf)
+                if query.level in {"state", "municipal"}
+                else None
+            )
+            validate_municipality_catalog(query, catalog)
+            snapshot = repository.fetch_annual_snapshot(
+                query.as_of.year, territories, self.today().year
+            )
+        payload = annual_dashboard_payload(
+            snapshot["partitions"], snapshot["history"], query, self.today().year
+        )
+        if catalog:
+            municipalities = catalog["municipalities"]
+            payload["municipalities"] = municipalities
+            payload["territorial_catalog_scope"] = catalog["temporal_scope"]
+            payload["territorial_catalog_observed_at"] = catalog["observed_at"]
+        return payload
 
     def fetch_people(self, parameters):
         from database.operations import connect_database
@@ -210,6 +280,7 @@ class PublicPortalApplication:
         return self.people_cache.get_or_load((query, as_of), load_public_people)
 
     def fetch_person(self, person_id, *, proposal_page=1):
+        from database.alerj_history import fetch_person_historical_activity
         from database.attendance import (
             fetch_person_attendance,
             fetch_person_attendance_history,
@@ -232,6 +303,9 @@ class PublicPortalApplication:
                 PublicAssetsRepository(connection), person_id, as_of
             )
             with repository.read_snapshot():
+                profile["historical_activity"] = fetch_person_historical_activity(
+                    connection, person_id, as_of
+                )
                 profile["attendance"] = fetch_person_attendance(connection, person_id, as_of)
                 profile["propositions"] = fetch_person_propositions(
                     connection, person_id, as_of, proposal_page

@@ -5,7 +5,10 @@ from urllib.parse import urlsplit
 from service.analytical_datasets.contracts import VOTE_COLUMNS, validate_person_vote
 from service.analytical_datasets.datasets import MAX_REPOSITORY_BYTES, publish_validated_dataset
 
-PUBLIC_TIMELINE_SCHEMA = "person_voting_timeline.v1"
+PUBLIC_TIMELINE_SCHEMA = "person_voting_timeline.v2"
+DOCUMENT_INPUT_COLUMNS = (
+    "matter_document_url", "matter_text_url", "voted_text_url", "final_norm_url",
+)
 MATTER_INPUT_COLUMNS = {
     "matter_kind",
     "matter_number",
@@ -45,6 +48,8 @@ PUBLIC_TIMELINE_COLUMNS = {
         "event_end_on",
     )
 } | {"matter_year": "INTEGER", "round_number": "INTEGER"}
+LEGACY_PUBLIC_TIMELINE_COLUMNS = dict(PUBLIC_TIMELINE_COLUMNS)
+PUBLIC_TIMELINE_COLUMNS.update(dict.fromkeys(DOCUMENT_INPUT_COLUMNS, "VARCHAR"))
 MAX_DESCRIPTION_CHARACTERS = 280
 
 
@@ -99,7 +104,8 @@ def project_description(description, origin):
 
 
 def project_public_voting_timeline(record, partition):
-    if not isinstance(record, dict) or set(record) != VOTE_COLUMNS | MATTER_INPUT_COLUMNS:
+    if (not isinstance(record, dict)
+            or set(record) - set(DOCUMENT_INPUT_COLUMNS) != VOTE_COLUMNS | MATTER_INPUT_COLUMNS):
         raise ValueError("Unexpected or missing voting timeline input fields")
     canonical_vote = validate_person_vote(
         {field: record[field] for field in VOTE_COLUMNS}, partition, allow_event_keys=True
@@ -124,6 +130,8 @@ def project_public_voting_timeline(record, partition):
     result.update(project_description(record["description"], record["description_origin"]))
     result["official_url"] = validate_official_url(record["official_url"])
     result["official_url_state"] = "available" if result["official_url"] else "missing"
+    result.update({field: validate_official_url(record.get(field))
+                   for field in DOCUMENT_INPUT_COLUMNS})
     return result
 
 

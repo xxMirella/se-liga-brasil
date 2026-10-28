@@ -10,7 +10,9 @@ def fetch_verified_payroll_profiles(connection, period, limit=100, person_id=Non
           JOIN se_liga_brasil.person_fact f ON f.person_id=p.id
           JOIN se_liga_brasil.source_record r ON r.id=f.source_record_id
           JOIN se_liga_brasil.source s ON s.id=r.source_id AND s.code='senado'
-          WHERE f.field_name LIKE 'senado_profile:%%' AND f.review_status='verified'
+          WHERE (f.field_name LIKE 'senado_profile:%%'
+            OR f.field_name LIKE 'senado_institutional_profile:%%')
+            AND f.review_status='verified'
             AND f.normalized_value->>'personId'=p.id::text
             AND f.normalized_value->>'birthDate'=p.birth_date::text
             AND f.normalized_value->>'identityMethod' IN

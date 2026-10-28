@@ -116,7 +116,9 @@ def publish_validated_dataset(
     validate_record=validate_person_vote,
     column_types=None,
 ):
-    if schema_version not in {SCHEMA_VERSION, "person_voting_timeline.v1"}:
+    if schema_version not in {
+        SCHEMA_VERSION, "person_voting_timeline.v1", "person_voting_timeline.v2",
+    }:
         raise ValueError("Unsupported dataset schema")
     if not isinstance(parser_version, str) or not parser_version or len(parser_version) > 100:
         raise ValueError("A bounded parser version is required")

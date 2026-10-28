@@ -173,7 +173,9 @@ def validate_daily_manifest(payload, partition):
     try:
         manifest = DailyDatasetManifest(**payload)
         validate_manifest(manifest)
-        if manifest.schema_version != "person_voting_timeline.v1":
+        if manifest.schema_version not in {
+            "person_voting_timeline.v1", "person_voting_timeline.v2",
+        }:
             raise ValueError("Unsupported schema")
         if (manifest.institution_code, manifest.occurred_on, manifest.year) != (
             partition.institution_code,

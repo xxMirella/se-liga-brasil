@@ -2,6 +2,7 @@
 
 from collections import OrderedDict
 
+from service.public_profile_web.document_links import render_reading_links
 from service.public_profile_web.security import official_url, person_path, text
 from service.public_profile_web.votes import MONTHS
 
@@ -67,5 +68,6 @@ def render_authorship_card(item):
         f'<strong>{month}</strong><span>{year}</span></div><div class="event-body">'
         f'<p class="category">{text(roles)} · {text(item.get("institution"))}</p>'
         f'<h3>{text(item.get("title"))}</h3><p>{text(item.get("summary"))}</p>'
-        f'<p>Apresentação: {text(occurred, "Data não informada")}</p>{link}</div></article>'
+        f'<p>Apresentação: {text(occurred, "Data não informada")}</p>'
+        f'{render_reading_links(item | {"action_type": "authorship"})}{link}</div></article>'
     )

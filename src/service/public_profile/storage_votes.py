@@ -1,5 +1,7 @@
 """Public voting pages compose SQL identity metadata with daily Storage datasets."""
 
+import re
+
 from service.dataset_storage.read import DatasetReadError
 from service.public_profile.contracts import PublicProfileError
 from service.public_profile.pagination import filter_fingerprint
@@ -12,6 +14,10 @@ INSTITUTION_NAMES = {"camara": "Câmara dos Deputados", "senado": "Senado Federa
 
 def serialize_dataset_vote(row):
     return {
+        "document_url": row.get("matter_document_url") or legacy_matter_document_url(row),
+        "text_url": row.get("matter_text_url"),
+        "voted_text_url": row.get("voted_text_url"),
+        "final_norm_url": row.get("final_norm_url"),
         "voting_id": row["voting_id"],
         "occurred_on": row["occurred_on"],
         "occurred_at": None,
@@ -121,3 +127,13 @@ def serialize_exercise_context(exercises):
         }
         for row in exercises[:100]
     ]
+
+
+def legacy_matter_document_url(row):
+    """A stored Senate nominal-list URL already contains the verified legacy matter key."""
+    url = row.get("official_url") or ""
+    pattern = (r"https://www25\.senado\.leg\.br/web/atividade/materias/-/materia/"
+               r"[1-9][0-9]*/votacoes")
+    if row.get("institution_code") == "senado" and re.fullmatch(pattern, url):
+        return url.removesuffix("/votacoes")
+    return None

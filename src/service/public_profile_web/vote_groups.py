@@ -3,6 +3,7 @@
 from collections import OrderedDict
 from hashlib import sha256
 
+from service.public_profile_web.document_links import render_reading_links
 from service.public_profile_web.security import official_url, text
 from service.public_profile_web.votes import (
     RESULTS,
@@ -13,6 +14,10 @@ from service.public_profile_web.votes import (
 
 EVENT_LABELS = {
     "official_proceeding": "Tramitação oficial",
+    "vote_declaration": "Declaração de voto",
+    "speech": "Discurso",
+    "voting_procedure": "Encaminhamento ou procedimento",
+    "legislative_comment": "Comentário legislativo",
     "revision": "Revisão",
     "amendment": "Emenda documentada",
     "status_change": "Alteração de situação",
@@ -58,7 +63,10 @@ def render_monthly_proposition(month, key, records):
     dialog_id = "voting-history-" + sha256(repr((month, key)).encode()).hexdigest()[:16]
     title = text(activity_document_title(first), "Matéria sem identificação disponível")
     description = text(first.get("short_description") or proposition.get("short_description"))
-    if (first.get("description_kind") or proposition.get("description_kind")) == "official_excerpt":
+    description_kind = first.get("description_kind") or proposition.get("description_kind")
+    if description_kind in {"official_text", "official_excerpt"}:
+        description = "Ementa oficial: " + description
+    if description_kind == "official_excerpt":
         description += " <small>Trecho da ementa oficial.</small>"
     entries = "".join(render_activity_history_entry(record) for record in records)
     institution = text((first.get("institution") or {}).get("name"))
@@ -98,7 +106,7 @@ def render_voting_history_entry(item):
     source = official_url(item.get("official_url"))
     link = (
         f'<a href="{text(source)}" target="_blank" rel="noopener noreferrer">'
-        'Detalhes na fonte oficial ↗</a>'
+        'Ver votação na fonte oficial ↗</a>'
         if source else ""
     )
     result = RESULTS.get(item.get("collective_result"), "Resultado não disponível")
@@ -108,7 +116,8 @@ def render_voting_history_entry(item):
         f'<div><dt>Pauta / objeto votado</dt><dd>{text(item.get("subject"))}</dd></div>'
         + render_individual_vote(item)
         + f'<div><dt>Turno</dt><dd>{text(item.get("round_number"), "Não informado")}</dd></div>'
-        + f'<div><dt>Resultado coletivo</dt><dd>{result}</dd></div></dl>{link}</li>'
+        + f'<div><dt>Resultado coletivo</dt><dd>{result}</dd></div></dl>'
+        + f'{render_reading_links(item)}{link}</li>'
     )
 
 
@@ -121,9 +130,9 @@ def render_activity_history_entry(item):
         action = " · ".join(ROLES.get(role, "Papel documentado") for role in item.get("roles", []))
         subject = "Participação documentada na proposta: " + (action or "papel documentado")
     else:
-        action = "Tramitação da matéria · " + EVENT_LABELS.get(
-            item.get("event_type"), "Registro oficial"
-        )
+        action = EVENT_LABELS.get(item.get("event_type"), "Registro oficial")
+        if item["action_type"] != "historical_activity":
+            action = "Tramitação da matéria · " + action
         subject = item.get("subject")
     date_label = (
         "Data de apresentação da matéria" if item["action_type"] == "authorship" else "Data"
@@ -140,7 +149,7 @@ def render_activity_history_entry(item):
         f'<div><dt>Documento</dt><dd>{text(activity_document_title(item))}</dd></div>'
         f'<div><dt>{date_label}'
         f'</dt><dd>{render_vote_date(item)}</dd></div>'
-        f'<div><dt>Descrição</dt><dd>{text(subject)}</dd></div></dl>{link}</li>'
+        f'<div><dt>Descrição</dt><dd>{text(subject)}</dd></div></dl>{render_reading_links(item)}{link}</li>'
     )
 
 

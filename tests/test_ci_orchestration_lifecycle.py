@@ -92,6 +92,11 @@ def test_group_requests_deduplicates_fields_and_preserves_source_boundaries():
 
 @pytest.mark.parametrize("source", ["tse", "alesp", "camara", "alerj", "senado", "tse_filiation"])
 def test_source_delegation_is_batched_and_scoped_to_requested_people(monkeypatch, source):
+    from crawlers.tse import requested_data
+
+    monkeypatch.setattr(requested_data, "load_requested_election_scope", Mock(return_value=[
+        {"person_id": "one", "election_year": 2024, "represented_uf": "AC"},
+    ]))
     execute = Mock(return_value={"status": "completed"})
     monkeypatch.setattr(orchestration, "execute_source_collection", execute)
     people = {"one": {"salary", "education"}}

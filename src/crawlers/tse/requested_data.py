@@ -9,13 +9,18 @@ from crawlers.tse.enrichment import AssetBackfillConfiguration
 class RequestedTseConfiguration(AssetBackfillConfiguration):
     document_fingerprints: frozenset[str] = frozenset()
     name_birth_pairs: frozenset[tuple[str, str]] = frozenset()
+    documentless_name_birth_pairs: frozenset[tuple[str, str]] = frozenset()
+    conflicting_document_fingerprints: frozenset[str] = frozenset()
 
     def allows_identity(self, record):
         evidence = record.get("identityEvidence", {})
         fingerprint = evidence.get("documentFingerprint")
-        if fingerprint:
-            return fingerprint in self.document_fingerprints
+        if fingerprint in self.conflicting_document_fingerprints:
+            return False
         pair = (evidence.get("normalizedName"), record["normalizedData"].get("birthDate"))
+        if fingerprint:
+            return (fingerprint in self.document_fingerprints
+                    or pair in self.documentless_name_birth_pairs)
         return pair in self.name_birth_pairs
 
 
@@ -32,7 +37,14 @@ def load_requested_personal_scope(connection, person_ids):
         """,
         (person_ids,),
     ).fetchall()
+    foreign_documents = connection.execute(
+        """SELECT document_fingerprint FROM se_liga_brasil.person_document_identity
+        WHERE NOT(person_id=ANY(%s::uuid[]))""", (person_ids,),
+    ).fetchall()
     return {
+        "conflicting_document_fingerprints": frozenset(
+            row["document_fingerprint"] for row in foreign_documents
+        ),
         "document_fingerprints": frozenset(
             row["document_fingerprint"] for row in rows if row["document_fingerprint"]
         ),
@@ -41,7 +53,33 @@ def load_requested_personal_scope(connection, person_ids):
             for row in rows
             if row["unique_name_birth"] and row["birth_date"]
         ),
+        "documentless_name_birth_pairs": frozenset(
+            (row["normalized_name"], row["birth_date"])
+            for row in rows
+            if row["unique_name_birth"] and row["birth_date"]
+            and not row["document_fingerprint"]
+        ),
     }
+
+
+def load_requested_election_scope(connection, person_ids):
+    """Mandate start selects an election archive, never establishes candidacy."""
+    return connection.execute(
+        """SELECT p.id::text person_id,
+          coalesce(c.election_year,extract(year FROM t.term_start)::int-1) election_year,
+          coalesce(c.represented_uf,t.represented_uf) represented_uf
+        FROM se_liga_brasil.person p
+        LEFT JOIN LATERAL(SELECT election_year,represented_uf
+          FROM se_liga_brasil.electoral_candidacy c WHERE c.person_id=p.id
+          ORDER BY election_year DESC LIMIT 1) c ON true
+        LEFT JOIN LATERAL(SELECT term_start,represented_uf
+          FROM se_liga_brasil.office_term t
+          JOIN se_liga_brasil.institution i ON i.id=t.institution_id AND i.code='senado'
+          JOIN se_liga_brasil.office_exercise e ON e.term_id=t.id
+          WHERE t.person_id=p.id AND e.ends_before IS NULL AND t.term_start IS NOT NULL
+          ORDER BY t.term_start DESC LIMIT 1) t ON true
+        WHERE p.id=ANY(%s::uuid[])""", (person_ids,),
+    ).fetchall()
 
 
 def repair_missing_personal_fields(connection, person_ids):

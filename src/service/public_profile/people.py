@@ -13,6 +13,7 @@ from service.public_profile.people_contracts import (
     validate_as_of,
     validate_person_id,
 )
+from service.public_profile.term_duration import remaining_term
 
 __all__ = ["PeopleQuery", "get_public_person", "search_people"]
 
@@ -73,6 +74,8 @@ def public_exercises(rows, as_of):
             "represented_uf": row["represented_uf"],
             "institution": {"code": row["institution_code"], "name": row["institution_name"]},
             "starts_on": row["starts_on"].isoformat(),
+            "remaining_term": remaining_term(row.get("term_end"), as_of),
+            "capacity": row.get("capacity"),
             "tenure": completed_tenure(row["starts_on"], as_of)
             if overlapping[(row["institution_code"], row["office_kind"])] == 1
             else {"years": None, "months": None, "status": "overlapping_exercises"},

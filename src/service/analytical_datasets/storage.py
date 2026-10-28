@@ -62,7 +62,9 @@ def validate_manifest(manifest: DatasetManifest):
     from service.analytical_datasets.contracts import SCHEMA_VERSION, DatasetPartition
 
     DatasetPartition(manifest.institution_code, manifest.year, manifest.collection_complete)
-    if manifest.schema_version not in {SCHEMA_VERSION, "person_voting_timeline.v1"}:
+    if manifest.schema_version not in {
+        SCHEMA_VERSION, "person_voting_timeline.v1", "person_voting_timeline.v2",
+    }:
         raise ValueError("Unsupported analytical schema version")
     for digest in (manifest.input_sha256, manifest.parquet_sha256):
         if not isinstance(digest, str) or not re.fullmatch(r"[a-f0-9]{64}", digest):

@@ -34,6 +34,44 @@ def test_unique_full_name_birth_fallback(tmp_path):
     assert configuration(tmp_path).allows_identity(record())
 
 
+def test_new_document_can_enrich_unique_documentless_person(tmp_path):
+    from dataclasses import replace
+
+    scope = replace(configuration(tmp_path), documentless_name_birth_pairs=frozenset({
+        ("PESSOA FICTICIA", "1980-01-01"),
+    }))
+    assert scope.allows_identity(record("new-document"))
+    assert not scope.allows_identity(record("new-document", birth="1981-01-01"))
+    conflicting = replace(scope, conflicting_document_fingerprints=frozenset({"other"}))
+    assert not conflicting.allows_identity(record("other"))
+
+
+def test_database_scope_only_enables_new_documents_for_unique_unidentified_people(tmp_path):
+    from unittest.mock import Mock
+
+    from crawlers.tse.requested_data import load_requested_personal_scope
+
+    connection = Mock()
+    connection.execute.return_value.fetchall.side_effect = [
+        [
+            {"normalized_name": "PESSOA FICTICIA", "birth_date": "1980-01-01",
+             "document_fingerprint": None, "unique_name_birth": True},
+            {"normalized_name": "HOMONIMO", "birth_date": "1980-01-01",
+             "document_fingerprint": None, "unique_name_birth": False},
+            {"normalized_name": "DOCUMENTADO", "birth_date": "1980-01-01",
+             "document_fingerprint": "known-document", "unique_name_birth": True},
+        ],
+        [{"document_fingerprint": "foreign-document"}],
+    ]
+    scope = RequestedTseConfiguration(
+        storage_directory=tmp_path, **load_requested_personal_scope(connection, ["person"])
+    )
+    assert scope.allows_identity(record("new-document"))
+    assert not scope.allows_identity(record("foreign-document"))
+    assert not scope.allows_identity(record("new-document", name="HOMONIMO"))
+    assert not scope.allows_identity(record("new-document", name="DOCUMENTADO"))
+
+
 def test_acquisition_groups_missing_kinds_without_reloading_existing(monkeypatch, tmp_path):
     from types import SimpleNamespace
 

@@ -1,7 +1,7 @@
 """One query checks the canonical people, including people with no electoral records."""
 
 
-def fetch_completeness_rows(connection, person_id=None) -> list:
+def fetch_completeness_rows(connection, person_id=None, person_ids=None) -> list:
     return connection.execute(
         """
         SELECT p.id::text AS person_id,p.civil_name,p.birth_date,p.education_level,p.photo_url,
@@ -43,9 +43,10 @@ def fetch_completeness_rows(connection, person_id=None) -> list:
             f.normalized_value->>'sourceObservedAt' DESC,f.id DESC LIMIT 1
         ) attendance ON true
         WHERE (%s::uuid IS NULL OR p.id=%s::uuid)
+          AND (%s::uuid[] IS NULL OR p.id=ANY(%s::uuid[]))
           AND NOT EXISTS(SELECT 1 FROM se_liga_brasil.person_identity_alias a
             WHERE a.alias_person_id=p.id)
         ORDER BY p.id
     """,
-        (person_id, person_id),
+        (person_id, person_id, person_ids, person_ids),
     ).fetchall()

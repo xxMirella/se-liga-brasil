@@ -1,0 +1,2078 @@
+{
+  "schema_version": "political_party_documentary_catalog.v1",
+  "version": "2026-10-27.1",
+  "reviewed_on": "2026-10-27",
+  "methodology": {
+    "method": "Qualitative documentary reading by dimension; no aggregate ideological score or behavioral inference.",
+    "dimensions": [
+      "economic",
+      "social",
+      "labor",
+      "state",
+      "civil_rights",
+      "customs",
+      "institutional",
+      "environment"
+    ],
+    "academic_sources": [
+      "https://doi.org/10.1590/S0104-44782013000100011",
+      "https://manifesto-project.wzb.eu/coding_schemes/mp_v5"
+    ],
+    "limits": [
+      "Dimensions are informed by programmatic analysis literature; full Manifesto Project coding, frequencies and scores were not performed.",
+      "A proposal and its analytical alignment are separate fields; neither proves votes, implementation or all members positions.",
+      "Missing literal spatial self-description does not mean center. Dated documents do not establish continuous historical classification.",
+      "Expert survey observations for 2018 and 2022 remain an independent evidence type.",
+      "Document publication, approval, registration and access dates have distinct meanings."
+    ]
+  },
+  "sources": {
+    "pl-program": {
+      "source_url": "https://partidoliberal.org.br/wp-content/uploads/2022/06/programa-do-partido-liberal.pdf",
+      "source_kind": "party_program",
+      "accessed_on": "2026-10-27",
+      "retrieval_status": "archived_pending_review",
+      "sha256": "b4d25cbbf76921fdb30c40e65c43b26abc566e8e4e76c174539ca8adf34d6955",
+      "hash_scope": "original_http_response_body_bytes",
+      "archive_path": "/home/mirella/projetos/se-liga-brasil/data/party-documents/archives/b4d25cbbf76921fdb30c40e65c43b26abc566e8e4e76c174539ca8adf34d6955.pdf",
+      "byte_count": 197101,
+      "published_on": null,
+      "document_date": null,
+      "locator": "Programa, PDFpág.2; Intervenção do Estado na Economia"
+    },
+    "pt-manifesto": {
+      "source_url": "https://pt.org.br/construindo-o-futuro-manifesto-do-pt-para-seguir-transformando-o-pais/",
+      "source_kind": "party_congress_manifesto",
+      "accessed_on": "2026-10-27",
+      "retrieval_status": "primary_web_review_with_qualified_transcription",
+      "error": "SOURCE_COOLDOWN_ACTIVE",
+      "error_details": {
+        "status": 403,
+        "retry_after_seconds": 3599.998312595999
+      },
+      "published_on": "2026-04-26",
+      "document_date": null,
+      "locator": "Manifesto do8ºCongresso, parágrafo das reformas estruturais",
+      "sha256": "12ae02348689c557fff25142a72ef8afc42b6596479595aa3297aa062d935850",
+      "hash_scope": "reviewed_excerpt_utf8_not_original_document",
+      "archive_path": "data/party-documents/reviewed-excerpts/pt-manifesto.txt"
+    },
+    "uniao-manifesto": {
+      "source_url": "https://uniaobrasil.org.br/wp-content/uploads/2024/08/BOOK-148x210mm-Manifesto_Uniao_BRASIL.pdf",
+      "source_kind": "party_program",
+      "accessed_on": "2026-10-27",
+      "retrieval_status": "archived_pending_review",
+      "sha256": "85c5f1811d7b13f1132d1f8abfcbc2b3d9a8f9f496cb401b2dd221f104a27332",
+      "hash_scope": "original_http_response_body_bytes",
+      "archive_path": "/home/mirella/projetos/se-liga-brasil/data/party-documents/archives/85c5f1811d7b13f1132d1f8abfcbc2b3d9a8f9f496cb401b2dd221f104a27332.pdf",
+      "byte_count": 786489,
+      "published_on": null,
+      "document_date": null,
+      "locator": "NossosValores ePrincípios; quatro pilares"
+    },
+    "pp-program": {
+      "source_url": "https://progressistas.org.br/programa-partidario/",
+      "source_kind": "party_program",
+      "accessed_on": "2026-10-27",
+      "retrieval_status": "primary_web_review_with_qualified_transcription",
+      "error": "HTTP_ERROR",
+      "error_details": {
+        "status": 403,
+        "retryable": false,
+        "retry_after_seconds": 0.0
+      },
+      "published_on": null,
+      "document_date": null,
+      "locator": "ProgramaPartidário, princípiosI–VI",
+      "sha256": "aed40ce6edbcbaa81872195bcbb18d46a8b58812c5934f0e858b9867c5be5483",
+      "hash_scope": "reviewed_excerpt_utf8_not_original_document",
+      "archive_path": "data/party-documents/reviewed-excerpts/pp-program.txt"
+    },
+    "republicanos-program": {
+      "source_url": "https://republicanos10.org.br/manifesto-e-programa/",
+      "source_kind": "party_program",
+      "accessed_on": "2026-10-27",
+      "retrieval_status": "archived_pending_review",
+      "sha256": "63512497b6f6cb64178c4fe13a3e16180d803dc72876a9b621447c68aa283049",
+      "hash_scope": "original_http_response_body_bytes",
+      "archive_path": "/home/mirella/projetos/se-liga-brasil/data/party-documents/archives/63512497b6f6cb64178c4fe13a3e16180d803dc72876a9b621447c68aa283049.html",
+      "byte_count": 96401,
+      "published_on": null,
+      "document_date": null,
+      "locator": "Nossaessência; apresentação do presidente nacional"
+    },
+    "psb-program": {
+      "source_url": "https://www.autorreformapsb.com.br/wp-content/uploads/2022/07/Manifesto_e_Programa_do_PSB.pdf",
+      "source_kind": "party_congress_program",
+      "accessed_on": "2026-10-27",
+      "retrieval_status": "archived_pending_review",
+      "sha256": "0d9e1b69041b562c13926b37b3ddc6fecae41bf290b7bfa4c0d2ed429175ce75",
+      "hash_scope": "original_http_response_body_bytes",
+      "archive_path": "/home/mirella/projetos/se-liga-brasil/data/party-documents/archives/0d9e1b69041b562c13926b37b3ddc6fecae41bf290b7bfa4c0d2ed429175ce75.pdf",
+      "byte_count": 12265910,
+      "published_on": null,
+      "document_date": "2022-04-30",
+      "locator": "Manifesto, parágrafo que situa oPSB na esquerda; apresentação informa aprovação30/04/2022"
+    },
+    "psdb-program": {
+      "source_url": "https://www.psdb.org.br/conheca/programa/",
+      "source_kind": "party_program",
+      "accessed_on": "2026-10-27",
+      "retrieval_status": "archived_pending_review",
+      "sha256": "476dbe6f9494dc46e9f0ac0270940dc8d1199d523aa8bef88d25597cde8a57a1",
+      "hash_scope": "original_http_response_body_bytes",
+      "archive_path": "/home/mirella/projetos/se-liga-brasil/data/party-documents/archives/476dbe6f9494dc46e9f0ac0270940dc8d1199d523aa8bef88d25597cde8a57a1.html",
+      "byte_count": 86960,
+      "published_on": "2016-08-16",
+      "document_date": null,
+      "locator": "Programa, cabeçalhos e introdução"
+    },
+    "psol-program": {
+      "source_url": "https://psol50.org.br/votepsol/programa-2026/",
+      "source_kind": "party_program",
+      "accessed_on": "2026-10-27",
+      "retrieval_status": "archived_pending_review",
+      "sha256": "5ab5e40aa2a437530a9b1f26ee29d7f770da175338f0c49ab1e7074bd40b2568",
+      "hash_scope": "original_http_response_body_bytes",
+      "archive_path": "/home/mirella/projetos/se-liga-brasil/data/party-documents/archives/5ab5e40aa2a437530a9b1f26ee29d7f770da175338f0c49ab1e7074bd40b2568.html",
+      "byte_count": 214700,
+      "published_on": null,
+      "document_date": null,
+      "locator": "Programa, apresentação histórica e item1.2"
+    },
+    "pcdob-program": {
+      "source_url": "https://pcdob.org.br/programa/",
+      "source_kind": "party_program",
+      "accessed_on": "2026-10-27",
+      "retrieval_status": "archived_pending_review",
+      "sha256": "00191f301c89d191588df9827ac9dc7becb34949b47ac16f39653b1a17c16204",
+      "hash_scope": "original_http_response_body_bytes",
+      "archive_path": "/home/mirella/projetos/se-liga-brasil/data/party-documents/archives/00191f301c89d191588df9827ac9dc7becb34949b47ac16f39653b1a17c16204.html",
+      "byte_count": 229834,
+      "published_on": null,
+      "document_date": null,
+      "locator": "Programa, item2"
+    },
+    "pdt-statute": {
+      "source_url": "https://www.pdt.org.br/wp-content/uploads/2020/07/EstatutoPDT-alteracao_18-03-2019-Registrado.pdf",
+      "source_kind": "party_statute",
+      "accessed_on": "2026-10-27",
+      "retrieval_status": "archived_pending_review",
+      "sha256": "1018827fd1b68ca1bc9a934ddab410de305f314aa323b5aa425dfcd91d7fa915",
+      "hash_scope": "original_http_response_body_bytes",
+      "archive_path": "/home/mirella/projetos/se-liga-brasil/data/party-documents/archives/1018827fd1b68ca1bc9a934ddab410de305f314aa323b5aa425dfcd91d7fa915.pdf",
+      "byte_count": 10294431,
+      "published_on": null,
+      "document_date": "2019-03-18",
+      "locator": "PDFpág.1, art.1º e compromissos básicos; inspeção visual"
+    },
+    "pv-program": {
+      "source_url": "https://pv.org.br/opartido/programa/",
+      "source_kind": "party_program",
+      "accessed_on": "2026-10-27",
+      "retrieval_status": "primary_web_review_with_qualified_transcription",
+      "error": "timed out",
+      "error_details": {},
+      "published_on": null,
+      "document_date": null,
+      "locator": "Princípios, item1",
+      "sha256": "47e036297f1ce248d63c9583dfc06c8fb8ef13442eda431ed514c6501d194ac2",
+      "hash_scope": "reviewed_excerpt_utf8_not_original_document",
+      "archive_path": "data/party-documents/reviewed-excerpts/pv-program.txt"
+    },
+    "novo-self-description": {
+      "source_url": "https://novo.org.br/noticias/por-que-ser-candidato-politico-novo-2026-motivos/",
+      "source_kind": "party_institutional_communication",
+      "accessed_on": "2026-10-27",
+      "retrieval_status": "archived_pending_review",
+      "sha256": "ab2eae5a3e8ba106a4fd1d552a7957edbb626790aa1ce4f8a1cd3cead443663d",
+      "hash_scope": "original_http_response_body_bytes",
+      "archive_path": "/home/mirella/projetos/se-liga-brasil/data/party-documents/archives/ab2eae5a3e8ba106a4fd1d552a7957edbb626790aa1ce4f8a1cd3cead443663d.html",
+      "byte_count": 130083,
+      "published_on": "2026-03-16",
+      "document_date": null,
+      "locator": "ArtigoPorqueecomosercandidato, seção7"
+    },
+    "rede-statute": {
+      "source_url": "https://redesustentabilidade.org.br/estatuto/",
+      "source_kind": "party_statute",
+      "accessed_on": "2026-10-27",
+      "retrieval_status": "archived_pending_review",
+      "sha256": "798bff5013dd98d4fa50421a3eeda1aa0dc1383c0bf978467d02c091f5653e8e",
+      "hash_scope": "original_http_response_body_bytes",
+      "archive_path": "/home/mirella/projetos/se-liga-brasil/data/party-documents/archives/798bff5013dd98d4fa50421a3eeda1aa0dc1383c0bf978467d02c091f5653e8e.html",
+      "byte_count": 152947,
+      "published_on": null,
+      "document_date": null,
+      "locator": "Estatuto, art.4º"
+    },
+    "psd-principles": {
+      "source_url": "https://psd.org.br/principios-e-valores/",
+      "accessed_on": "2026-10-27",
+      "source_kind": "party_foundational_principles",
+      "published_on": "2012-03-09",
+      "document_date": "2011-09-28",
+      "locator": "Lista de princípios; manifesto lido28/09/2011",
+      "sha256": "b7dceffd7dfee5e81861de6ff32f124118583d542426a9b048152eba4ed1f5c9",
+      "hash_scope": "reviewed_excerpt_utf8_not_original_document",
+      "archive_path": "data/party-documents/reviewed-excerpts/psd-principles.txt",
+      "retrieval_status": "primary_web_review_with_qualified_transcription"
+    },
+    "psd-center-2026": {
+      "source_url": "https://psd.org.br/noticias/psd-cresce-e-se-consolida-como-maior-partido-de-centro/",
+      "accessed_on": "2026-10-27",
+      "source_kind": "party_institutional_communication",
+      "published_on": "2026-10-05",
+      "document_date": null,
+      "locator": "Primeiro parágrafo",
+      "sha256": "6e6d9bb954448768df137f3094902f32d9e0a7c6479b653d7cddfe5d82bde0fc",
+      "hash_scope": "reviewed_excerpt_utf8_not_original_document",
+      "archive_path": "data/party-documents/reviewed-excerpts/psd-center-2026.txt",
+      "retrieval_status": "primary_web_review_with_qualified_transcription"
+    },
+    "missao-statute-2025": {
+      "source_url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse/arquivos-1/estatuto-do-partido-formato-pdf-aprovado-em-4-11.2025/%40%40display-file/file/estatuto-missao-deferido-pelo%252520-tse-4-11-2025.pdf",
+      "accessed_on": "2026-10-27",
+      "source_kind": "registered_party_statute",
+      "published_on": null,
+      "document_date": "2023-10-10",
+      "locator": "AnexoI, art.1º§2º, PDFpág.5",
+      "sha256": "fca5129b743746622f69668523d07ddb9606ac3927626d1fd12c4a7ae7cd1418",
+      "hash_scope": "reviewed_excerpt_utf8_not_original_document",
+      "archive_path": "data/party-documents/reviewed-excerpts/missao-statute-2025.txt",
+      "retrieval_status": "primary_web_review_with_qualified_transcription",
+      "approved_on": "2025-11-04"
+    },
+    "mdb_self": {
+      "source_url": "https://www.mdb.org.br/o-mdb-tem-hoje-uma-posicao-de-centro-direita-na-economia-e-de-centro-esquerda-na-area-social-diz-presidente-baleia-rossi-sobre-novo-programa-do-partido/",
+      "final_url": "https://www.mdb.org.br/o-mdb-tem-hoje-uma-posicao-de-centro-direita-na-economia-e-de-centro-esquerda-na-area-social-diz-presidente-baleia-rossi-sobre-novo-programa-do-partido/",
+      "http_status": 200,
+      "accessed_on": "2026-10-28T00:16:34.124118+00:00",
+      "sha256": "492130c461303c19690428c609332835d34a6c645281623208a21ac28398dddd",
+      "hash_scope": "original_http_response_body_bytes",
+      "content_type": "text/html; charset=UTF-8",
+      "byte_count": 150258
+    },
+    "mdb_program": {
+      "source_url": "https://www.mdb.org.br/quem-somos/",
+      "final_url": "https://www.mdb.org.br/quem-somos/",
+      "http_status": 200,
+      "accessed_on": "2026-10-28T00:16:32.727088+00:00",
+      "sha256": "1caeff306cba2453e71355bf5eb6d0911686b31ced3d817669a2b21a1693299e",
+      "hash_scope": "original_http_response_body_bytes",
+      "content_type": "text/html; charset=UTF-8",
+      "byte_count": 158160
+    },
+    "pode_statute": {
+      "source_url": "https://www.podemos.org.br/wp-content/uploads/2024/10/TSE-estatuto-do-Podemos-de-30.9.2023-aprovado-23.5.2024.pdf",
+      "final_url": "https://podemos.org.br/wp-content/uploads/2024/10/TSE-estatuto-do-Podemos-de-30.9.2023-aprovado-23.5.2024.pdf",
+      "http_status": 410,
+      "accessed_on": "2026-10-28T00:16:31.630747+00:00",
+      "sha256": "55f6a88dc02579e8f6f191ee9ec91f66067b5d362434877cfbc325e4bf23aef1",
+      "hash_scope": "original_http_response_body_bytes",
+      "content_type": "text/plain;charset=UTF-8",
+      "byte_count": 4
+    },
+    "pode_faq": {
+      "source_url": "https://podemos.org.br/wp-content/uploads/2021/09/CARTILHA-POSICIONAMENTO-AGOSTO21-SITE.pdf",
+      "final_url": "https://podemos.org.br/wp-content/uploads/2021/09/CARTILHA-POSICIONAMENTO-AGOSTO21-SITE.pdf",
+      "http_status": 410,
+      "accessed_on": "2026-10-28T00:16:31.933229+00:00",
+      "sha256": "55f6a88dc02579e8f6f191ee9ec91f66067b5d362434877cfbc325e4bf23aef1",
+      "hash_scope": "original_http_response_body_bytes",
+      "content_type": "text/plain;charset=UTF-8",
+      "byte_count": 4
+    },
+    "pode_current": {
+      "source_url": "https://podemos.org.br/estatuto",
+      "final_url": "https://podemos.org.br/estatuto",
+      "http_status": 200,
+      "accessed_on": "2026-10-28T00:16:32.372027+00:00",
+      "sha256": "cfc57c85e12747bfd0c021568c7fe6e84a1ba7ff5406e281d3e59d404563b765",
+      "hash_scope": "original_http_response_body_bytes",
+      "content_type": "text/html; charset=utf-8",
+      "byte_count": 29155
+    },
+    "avante_about": {
+      "source_url": "https://avante70.org.br/sobre-o-partido-avante/",
+      "final_url": "https://avante70.org.br/sobre-o-partido-avante/",
+      "http_status": 200,
+      "accessed_on": "2026-10-28T00:16:33.473709+00:00",
+      "sha256": "cd41bf5e89cd70a6495a96fa1014de7297fed238098a6f3b0a925f7cbbc9477f",
+      "hash_scope": "original_http_response_body_bytes",
+      "content_type": "text/html; charset=UTF-8",
+      "byte_count": 148641
+    },
+    "avante_statute": {
+      "source_url": "https://avante70.org.br/wp-content/uploads/2023/04/Estatuto_Avante-70_2022-VERSAO-IMPRESSAO.pdf",
+      "final_url": "https://avante70.org.br/wp-content/uploads/2023/04/Estatuto_Avante-70_2022-VERSAO-IMPRESSAO.pdf",
+      "http_status": 200,
+      "accessed_on": "2026-10-28T00:16:34.035001+00:00",
+      "sha256": "ae94ecb6fcd8e2a9144a905692ffe86f3ffdba08bd999b123f420de9160a967b",
+      "hash_scope": "original_http_response_body_bytes",
+      "content_type": "application/pdf",
+      "byte_count": 736878,
+      "archive_limitation": "Original PDF bytes hashed but not retained in research JSON; extracted review text retained."
+    },
+    "solid_self": {
+      "source_url": "https://solidariedade.org.br/artigo/solidariedade-a-historia-antes-do-nascimento/",
+      "final_url": "https://solidariedade.org.br/artigo/solidariedade-a-historia-antes-do-nascimento/",
+      "http_status": 200,
+      "accessed_on": "2026-10-28T00:16:33.605291+00:00",
+      "sha256": "11f473938f1c990a80430aba31cdb36eb7c30d6605d9a55bccd09eb83e79096e",
+      "hash_scope": "original_http_response_body_bytes",
+      "content_type": "text/html; charset=UTF-8",
+      "byte_count": 93924
+    },
+    "solid_program": {
+      "source_url": "https://solidariedade.org.br/nossa-historia/",
+      "final_url": "https://solidariedade.org.br/nossa-historia/",
+      "http_status": 200,
+      "accessed_on": "2026-10-28T00:16:33.686564+00:00",
+      "sha256": "06672ab2bed87d9f8a1bad492a9d07af083e50f9636326c2314c3898a5e1ee8b",
+      "hash_scope": "original_http_response_body_bytes",
+      "content_type": "text/html; charset=UTF-8",
+      "byte_count": 109893
+    },
+    "prd_about": {
+      "source_url": "https://prd25.org.br/quem-somos/",
+      "final_url": "https://prd25.org.br/quem-somos/",
+      "http_status": 200,
+      "accessed_on": "2026-10-28T00:16:34.543152+00:00",
+      "sha256": "dac5d576cf4321f83ebda343825ed63c273c3c06ab7430a17fd43dd654125234",
+      "hash_scope": "original_http_response_body_bytes",
+      "content_type": "text/html; charset=UTF-8",
+      "byte_count": 103727
+    },
+    "prd_statute": {
+      "source_url": "https://prd25.org.br/wp-content/uploads/2024/05/ESTATUTO-PRD-registrado-mai2024.pdf",
+      "final_url": "https://prd25.org.br/wp-content/uploads/2024/05/ESTATUTO-PRD-registrado-mai2024.pdf",
+      "http_status": 200,
+      "accessed_on": "2026-10-28T00:16:35.741983+00:00",
+      "sha256": "ae02ca400ae9854227cdae1d5680600142d43ccc1208f44cf57e48d3376ce93c",
+      "hash_scope": "original_http_response_body_bytes",
+      "content_type": "application/pdf",
+      "byte_count": 36882264,
+      "archive_limitation": "Original PDF bytes hashed but not retained in research JSON; extracted review text retained.",
+      "visual_review": {
+        "pdf_pages_reviewed": [
+          2,
+          3,
+          4
+        ],
+        "locator": "PDFpage3, article4",
+        "verified_short_quote": "prevalência do trabalho sobre o capital",
+        "original_hash_checked_on_refetch": true,
+        "limitation": "Image-only pages inspected visually; complete OCR not performed."
+      }
+    },
+    "cidadania_program": {
+      "source_url": "https://rede23.org/programa/",
+      "final_url": "https://rede23.org/programa/",
+      "http_status": 200,
+      "accessed_on": "2026-10-28T00:16:34.788431+00:00",
+      "sha256": "e7c00f5144822ec147572b9923740cfc4c383c28c547ed3fe6b76102dbc08315",
+      "hash_scope": "original_http_response_body_bytes",
+      "content_type": "text/html; charset=UTF-8",
+      "byte_count": 90909
+    },
+    "dc_program": {
+      "source_url": "https://www.democraciacrista.org.br/sobre-nos/programa/",
+      "final_url": "https://www.democraciacrista.org.br/sobre-nos/programa/",
+      "http_status": 200,
+      "accessed_on": "2026-10-28T00:16:38.876360+00:00",
+      "sha256": "e6f7d9ee4b8fa1026336f3f1d8b3b9e7ca7c3b8d61d905012c1d37c6e336a2f8",
+      "hash_scope": "original_http_response_body_bytes",
+      "content_type": "text/html; charset=UTF-8",
+      "byte_count": 108335
+    },
+    "dc_current": {
+      "source_url": "https://www.democraciacrista.org.br/nossas-lutas/",
+      "final_url": "https://www.democraciacrista.org.br/nossas-lutas/",
+      "http_status": 200,
+      "accessed_on": "2026-10-28T00:16:36.543848+00:00",
+      "sha256": "89092d9bd24f71e8e9a975d1359e6558b5155f87017beef656463bfdc7d19182",
+      "hash_scope": "original_http_response_body_bytes",
+      "content_type": "text/html; charset=UTF-8",
+      "byte_count": 103137
+    },
+    "pode_new_statute": {
+      "source_url": "https://podemos.org.br/__l5e/assets-v1/e1ad122c-ab40-479e-ab20-e098606ed8fa/estatuto-podemos.pdf",
+      "final_url": "https://podemos.org.br/__l5e/assets-v1/e1ad122c-ab40-479e-ab20-e098606ed8fa/estatuto-podemos.pdf",
+      "http_status": 200,
+      "sha256": "b49f2b743f42b481834d863ccc2bd35764f72ed4086cbb8345618c540f224f0b",
+      "hash_scope": "original_http_response_body_bytes",
+      "byte_count": 685303,
+      "archive_limitation": "PDF original hashed; extracted text retained; link discovered in live official /estatuto page."
+    },
+    "pode_faq_reviewed_transcription": {
+      "source_url": "https://podemos.org.br/wp-content/uploads/2021/09/CARTILHA-POSICIONAMENTO-AGOSTO21-SITE.pdf",
+      "status": "reviewed_search_index_transcription_original_url_gone",
+      "http_status": 410,
+      "reviewed_text": "Não somos esquerda, nem centro nem direita",
+      "sha256": "99f8bdee08cfbaf113b329fa256faa82754e287bc2385cfc020d89c50afe99e2",
+      "hash_scope": "reviewed_quote_transcription_utf8_not_original_pdf",
+      "reviewed_on": "2026-10-27"
+    }
+  },
+  "records": [
+    {
+      "political_party": "AVANTE",
+      "aliases": [],
+      "source_ids": [
+        "avante_about",
+        "avante_statute"
+      ],
+      "self_description": {
+        "status": "spatial_label_not_located_in_reviewed_documents",
+        "source_id": "avante_statute",
+        "locator": "Estatuto23/07/2022, arts.2º–3º",
+        "literal_quote": null,
+        "document_date": "2022-07-23"
+      },
+      "programmatic_terms": [
+        "trabalhismo",
+        "nacionalismo",
+        "solidarismo cristão",
+        "democracia plural e participativa"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Os princípios incluem finalidade social da propriedade e uso social do conhecimento tecnológico.",
+          "source_id": "avante_statute",
+          "locator": "Art.3º",
+          "analytical_alignment": "Limites sociais à propriedade podem convergir com propostas redistributivas; isso não prova rótulo global.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Prevê direitos humanos, justiça social, igualdade de gênero, diversidade e liberdade religiosa.",
+          "source_id": "avante_statute",
+          "locator": "Art.3º",
+          "analytical_alignment": "Combina compromissos inclusivos e referência cristã; a comparação é temática, sem converter em filiação ideológica exclusiva.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Afirma pluralismo, participação democrática e Estado de Direito.",
+          "source_id": "avante_statute",
+          "locator": "Arts.2º–3º",
+          "analytical_alignment": "Diretrizes institucionais são compromissos programáticos, não evidência de cumprimento.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Programa ou declaração não comprova prática parlamentar, voto ou execução governamental.",
+        "Não extrapolar para anos anteriores nem substituir a pesquisa de especialistas.",
+        "Estatuto disciplina princípios; não contém, nos artigos revisados, autodeclaração literal esquerda/centro/direita."
+      ]
+    },
+    {
+      "political_party": "CIDADANIA",
+      "aliases": [
+        "Cidadania23"
+      ],
+      "source_ids": [
+        "cidadania_program"
+      ],
+      "self_description": {
+        "status": "spatial_label_not_located_in_reviewed_program",
+        "source_id": "cidadania_program",
+        "locator": "Seções1–12; página publicada17/11/2025 e rodapé afirma aprovação26/10/2019",
+        "literal_quote": null,
+        "document_date": "2019-10-26"
+      },
+      "programmatic_terms": [
+        "humanismo",
+        "equidade",
+        "economia de mercado",
+        "sustentabilidade"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Combina economia de mercado com serviços públicos, responsabilidade fiscal e papel estatal em ciência e inovação.",
+          "source_id": "cidadania_program",
+          "locator": "Seções5,7,12",
+          "analytical_alignment": "Proposta combina mecanismos de mercado e provisão social; comparação temática não determina um rótulo único.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Defende direitos de mulheres, negros, indígenas e grupos LGBTI, educação laica e fortalecimento do SUS.",
+          "source_id": "cidadania_program",
+          "locator": "Seções4,8,9",
+          "analytical_alignment": "Agenda de inclusão e serviços públicos pode convergir com posições progressistas, sem equiparar programa à prática.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Defende Estado de Direito, transparência, participação e transição parlamentarista por reforma política.",
+          "source_id": "cidadania_program",
+          "locator": "Seção3",
+          "analytical_alignment": "O modelo institucional proposto é explícito; não é prova automática de esquerda, centro ou direita.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Programa ou declaração não comprova prática parlamentar, voto ou execução governamental.",
+        "Não extrapolar para anos anteriores nem substituir a pesquisa de especialistas.",
+        "Domínio legado cidadania23.org.br redireciona à rede23.org; programa identificado como Cidadania.",
+        "Página tem data2025, conteúdo declara aprovação2019; não atribuir a proposta como criação de2025.",
+        "Agente coordenador identificou notícia estadual com data de aprovação divergente; cotejo com PDF/TSE ainda pendente."
+      ]
+    },
+    {
+      "political_party": "DC",
+      "aliases": [
+        "Democracia Cristã",
+        "PSDC (denominação legada no documento)"
+      ],
+      "source_ids": [
+        "dc_program",
+        "dc_current"
+      ],
+      "self_description": {
+        "status": "doctrinal_self_description_not_spatial_label",
+        "source_id": "dc_program",
+        "locator": "Objetivo Fundamental; cabeçalho mantém denominaçãoPSDC",
+        "literal_quote": "Democracia Cristã",
+        "document_date": null,
+        "global_label": null
+      },
+      "programmatic_terms": [
+        "valores cristãos",
+        "liberdade",
+        "justiça",
+        "solidariedade",
+        "família"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Defende iniciativa privada e redução de tributos, condicionando propriedade à finalidade social e buscando distribuição do desenvolvimento.",
+          "source_id": "dc_program",
+          "locator": "Plano Econômico; Reforma Tributária",
+          "analytical_alignment": "Combina agenda de mercado com restrições sociais; caracterização temática não equivale a autodeclaração centro/direita.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Propõe direitos trabalhistas e serviços de saúde, ao lado de proteção familiar e controle de conteúdos considerados nocivos.",
+          "source_id": "dc_program",
+          "locator": "Plano Social",
+          "analytical_alignment": "Há compromissos de proteção social e valores familiares; evitar reduzir tudo a um único eixo.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Defende representação democrática, proporcionalidade eleitoral e valorização municipal.",
+          "source_id": "dc_program",
+          "locator": "Plano Político",
+          "analytical_alignment": "Declarações normativas não comprovam práticas de dirigentes.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Programa ou declaração não comprova prática parlamentar, voto ou execução governamental.",
+        "Não extrapolar para anos anteriores nem substituir a pesquisa de especialistas.",
+        "Programa usa denominação antigaPSDC e não informa data de revisão; tratar como documento legado disponibilizado no site atual.",
+        "Página atual Nossas lutas corrobora família, contribuinte e iniciativa privada, sem validar a vigência integral do programa legado."
+      ]
+    },
+    {
+      "political_party": "MDB",
+      "aliases": [
+        "Movimento Democrático Brasileiro"
+      ],
+      "source_ids": [
+        "mdb_self",
+        "mdb_program"
+      ],
+      "self_description": {
+        "status": "explicit_self_description_by_dimension",
+        "source_id": "mdb_self",
+        "locator": "Título e primeiro parágrafo; declaração de Baleia Rossi; 17/10/2025",
+        "literal_quote": "tem hoje uma posição de centro-direita na economia e de centro-esquerda na área social",
+        "document_date": "2025-10-17",
+        "economic_label": "centro-direita",
+        "social_label": "centro-esquerda",
+        "global_label": null
+      },
+      "programmatic_terms": [
+        "consenso",
+        "convergência",
+        "democracia"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "A direção declara orientação econômica de centro-direita; a notícia vincula o novo documento à responsabilidade fiscal.",
+          "source_id": "mdb_self",
+          "locator": "Título, primeiro parágrafo e apresentação do documento da FUG",
+          "analytical_alignment": "A classificação econômica é declaração da direção, não inferência de votos.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "A direção declara orientação social de centro-esquerda.",
+          "source_id": "mdb_self",
+          "locator": "Título e primeiro parágrafo",
+          "analytical_alignment": "Uma posição social distinta da econômica impede reduzir a autodeclaração a um único rótulo.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "A apresentação institucional destaca eleições e oposição à ditadura.",
+          "source_id": "mdb_program",
+          "locator": "Quem somos; primeiros parágrafos",
+          "analytical_alignment": "Democracia e consenso não identificam, isoladamente, uma posição espacial exclusiva.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Programa ou declaração não comprova prática parlamentar, voto ou execução governamental.",
+        "Não extrapolar para anos anteriores nem substituir a pesquisa de especialistas.",
+        "Declaração é de presidente partidário em notícia; não equivale a resolução estatutária nem a consenso de todos os filiados."
+      ]
+    },
+    {
+      "political_party": "MISSÃO",
+      "aliases": [],
+      "source_ids": [
+        "missao-statute-2025"
+      ],
+      "self_description": {
+        "status": "doctrinal_terms_without_verified_spatial_label",
+        "source_id": "missao-statute-2025",
+        "locator": "AnexoI, art.1º§2º, PDFpág.5",
+        "literal_quote": "O Partido possui caráter liberal",
+        "global_label": null,
+        "document_date": "2023-10-10",
+        "published_on": null
+      },
+      "programmatic_terms": [
+        "caráter liberal",
+        "Estado regulador"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Declara economia liberal com Estado regulador.",
+          "source_id": "missao-statute-2025",
+          "locator": "Art.1º§2º",
+          "analytical_alignment": "Conteúdo liberal econômico; regulação não implica centro espacial.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "labor",
+          "documented_position": "Inclui desenvolvimento e pleno emprego como objetivos.",
+          "source_id": "missao-statute-2025",
+          "locator": "Art.1º§2º",
+          "analytical_alignment": "Objetivo geral; direitos trabalhistas específicos não foram presumidos.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Declara defesa democrática e pluripartidarismo.",
+          "source_id": "missao-statute-2025",
+          "locator": "Art.1º§2º",
+          "analytical_alignment": "Compromisso estatutário, sem avaliação de conduta.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "civil_rights",
+          "documented_position": "Inclui direitos fundamentais e liberdades civis.",
+          "source_id": "missao-statute-2025",
+          "locator": "Art.1º§2º",
+          "analytical_alignment": "Dimensão de liberdades declaradas.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "environment",
+          "documented_position": "Inclui defesa ambiental entre os objetivos.",
+          "source_id": "missao-statute-2025",
+          "locator": "Art.1º§2º",
+          "analytical_alignment": "Compromisso ambiental genérico.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido.",
+        "TSElista versão mais recente aprovada14/04/2026; o texto de2025 foi identificado como histórico, não certificado como versão atual integral.",
+        "Não converter liberal automaticamente em direita.",
+        "Página de campanha deRenanSantos é candidate_campaign; não comprova autodeclaração institucional do partido."
+      ],
+      "areas_not_established_in_review": [
+        "social",
+        "state",
+        "customs"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    },
+    {
+      "political_party": "NOVO",
+      "aliases": [],
+      "source_ids": [
+        "novo-self-description"
+      ],
+      "self_description": {
+        "status": "explicit_spatial_self_description",
+        "source_id": "novo-self-description",
+        "locator": "ArtigoPorqueecomosercandidato, seção7",
+        "literal_quote": "A legenda se consolidou como a mais à direita no Brasil",
+        "global_label": "direita",
+        "document_date": null,
+        "published_on": "2026-03-16"
+      },
+      "programmatic_terms": [
+        "direita",
+        "liberdade econômica",
+        "responsabilidade fiscal"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Defende reduzir impostos e burocracia e favorecer empreendedorismo.",
+          "source_id": "novo-self-description",
+          "locator": "Seção8",
+          "analytical_alignment": "Conteúdo liberal econômico explicitado.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "state",
+          "documented_position": "Defende eficiência, segurança jurídica e contenção de privilégios.",
+          "source_id": "novo-self-description",
+          "locator": "Seções7–8",
+          "analytical_alignment": "Orientação gerencial e fiscal neste documento.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "civil_rights",
+          "documented_position": "Inclui respeito às liberdades individuais.",
+          "source_id": "novo-self-description",
+          "locator": "Seção8",
+          "analytical_alignment": "Liberdades civis não se confundem com todas as posições morais.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Afirma independência e coerência partidária.",
+          "source_id": "novo-self-description",
+          "locator": "Seções5–7",
+          "analytical_alignment": "Autoimagem institucional; não auditoria da conduta.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido.",
+        "A autodeclaração de2026 não comprova que esse rótulo era adotado em todos os anos anteriores.",
+        "Afirmações de desempenho e votos feitas pelo partido não foram validadas nem incorporadas como fatos."
+      ],
+      "areas_not_established_in_review": [
+        "social",
+        "labor",
+        "customs",
+        "environment"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    },
+    {
+      "political_party": "PCdoB",
+      "aliases": [],
+      "source_ids": [
+        "pcdob-program"
+      ],
+      "self_description": {
+        "status": "doctrinal_terms_without_verified_spatial_label",
+        "source_id": "pcdob-program",
+        "locator": "Programa, item2",
+        "literal_quote": "Este novo passo é o socialismo renovado, com feição brasileira",
+        "global_label": null,
+        "document_date": null,
+        "published_on": null
+      },
+      "programmatic_terms": [
+        "socialismo renovado",
+        "projeto nacional de desenvolvimento"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Defende planejamento, crédito público e empresas estatais.",
+          "source_id": "pcdob-program",
+          "locator": "Itens51–52",
+          "analytical_alignment": "Intervenção estatal vinculada à transição socialista.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Defende reformas tributária, agrária e universalização de direitos.",
+          "source_id": "pcdob-program",
+          "locator": "Itens50 e53",
+          "analytical_alignment": "Conteúdo redistributivo e universalista.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "labor",
+          "documented_position": "Defende renda do trabalho e direitos trabalhistas.",
+          "source_id": "pcdob-program",
+          "locator": "Item18e",
+          "analytical_alignment": "Proteção laboral explicitada.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "civil_rights",
+          "documented_position": "Defende emancipação feminina e combate a racismo e homofobia.",
+          "source_id": "pcdob-program",
+          "locator": "Itens18 e46",
+          "analytical_alignment": "Igualdade de direitos neste eixo.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Propõe ampliar democracia participativa e pluralismo.",
+          "source_id": "pcdob-program",
+          "locator": "Item53a",
+          "analytical_alignment": "Compromisso institucional declarado.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "environment",
+          "documented_position": "Inclui superação da degradação ambiental.",
+          "source_id": "pcdob-program",
+          "locator": "Item18i",
+          "analytical_alignment": "Conteúdo ecológico do projeto de desenvolvimento.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido.",
+        "O texto atual hospedado não foi atribuído a todo o histórico do partido."
+      ],
+      "areas_not_established_in_review": [
+        "state",
+        "customs"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    },
+    {
+      "political_party": "PDT",
+      "aliases": [],
+      "source_ids": [
+        "pdt-statute"
+      ],
+      "self_description": {
+        "status": "doctrinal_terms_without_verified_spatial_label",
+        "source_id": "pdt-statute",
+        "locator": "PDFpág.1, art.1º e compromissos básicos; inspeção visual",
+        "literal_quote": "visando à construção de uma sociedade democrática e socialista",
+        "global_label": null,
+        "document_date": "2019-03-18",
+        "published_on": null
+      },
+      "programmatic_terms": [
+        "trabalhismo",
+        "nacionalismo",
+        "sociedade democrática e socialista"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Defende patrimônio público e reorganização da agricultura.",
+          "source_id": "pdt-statute",
+          "locator": "PDFpág.1, art.1º",
+          "analytical_alignment": "Projeto estatal e agrário explicitado.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Propõe educação integral, alimentação infantil e assistência à saúde.",
+          "source_id": "pdt-statute",
+          "locator": "PDFpág.1, compromissos básicos",
+          "analytical_alignment": "Conteúdo de proteção e provisão pública social.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "labor",
+          "documented_position": "Defende trabalho digno e salário justo.",
+          "source_id": "pdt-statute",
+          "locator": "PDFpág.1",
+          "analytical_alignment": "Proteção laboral declarada.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Determina métodos democráticos e pacíficos.",
+          "source_id": "pdt-statute",
+          "locator": "PDFpág.1, §1º",
+          "analytical_alignment": "Regra partidária, não prova de conduta dos filiados.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "civil_rights",
+          "documented_position": "Prevê combater discriminação contra mulheres, negros e indígenas.",
+          "source_id": "pdt-statute",
+          "locator": "PDFpág.1",
+          "analytical_alignment": "Conteúdo de igualdade de direitos.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido.",
+        "Arquivoescaneado; revisão visual da primeira página, sem alegar leitura automática integral."
+      ],
+      "areas_not_established_in_review": [
+        "state",
+        "customs",
+        "environment"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    },
+    {
+      "political_party": "PL",
+      "aliases": [],
+      "source_ids": [
+        "pl-program"
+      ],
+      "self_description": {
+        "status": "doctrinal_terms_without_verified_spatial_label",
+        "source_id": "pl-program",
+        "locator": "Programa, PDFpág.2; Intervenção do Estado na Economia",
+        "literal_quote": "A atividade econômica deve ser desenvolvida pela empresa privada e livre",
+        "global_label": null,
+        "document_date": null,
+        "published_on": null
+      },
+      "programmatic_terms": [
+        "empresa privada",
+        "direitos humanos",
+        "bem comum"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Prioriza empresas privadas, admitindo intervenção contra monopólios.",
+          "source_id": "pl-program",
+          "locator": "PDFpág.2",
+          "analytical_alignment": "Combina mercado e regulação; não equivale a ausência de Estado.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Propõe redução de desigualdades e tributação de imóveis ociosos.",
+          "source_id": "pl-program",
+          "locator": "PDFpágs.2–3",
+          "analytical_alignment": "Conteúdo redistributivo deve ser registrado separadamente da política de mercado.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "labor",
+          "documented_position": "Defende participação dos trabalhadores nos lucros e na gestão.",
+          "source_id": "pl-program",
+          "locator": "PDFpág.3",
+          "analytical_alignment": "Proposta de participação laboral, não inferência sobre votos trabalhistas.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Prevê eleições diretas e equilíbrio entre poderes.",
+          "source_id": "pl-program",
+          "locator": "PDFpágs.1–2",
+          "analytical_alignment": "Compromisso programático democrático, não comprovação de conduta.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "civil_rights",
+          "documented_position": "Afirma pluralismo e proteção dos direitos humanos.",
+          "source_id": "pl-program",
+          "locator": "PDFpág.1",
+          "analytical_alignment": "Dimensão de liberdades civis, não rótulo exclusivo esquerda/direita.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido.",
+        "O PDF não traz data de aprovação confirmada; 2022/06 é caminho de hospedagem.",
+        "Não confundir a versão consultada com o PL anterior à fusão de2006."
+      ],
+      "areas_not_established_in_review": [
+        "state",
+        "customs",
+        "environment"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    },
+    {
+      "political_party": "PODE",
+      "aliases": [
+        "PODEMOS"
+      ],
+      "source_ids": [
+        "pode_current",
+        "pode_new_statute",
+        "pode_faq"
+      ],
+      "self_description": {
+        "status": "historical_explicit_disavowal_current_live_confirmation_pending",
+        "source_id": "pode_faq_reviewed_transcription",
+        "locator": "FAQ 2021, pergunta 01; resultado indexado preserva trecho, URL hoje HTTP410",
+        "literal_quote": "Não somos esquerda, nem centro nem direita",
+        "document_date": "2021-08",
+        "global_label": null
+      },
+      "programmatic_terms": [
+        "participação popular",
+        "transparência",
+        "democracia direta"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "O estatuto não define modelo econômico detalhado nos princípios revisados.",
+          "source_id": "pode_new_statute",
+          "locator": "Art.2º, caput e §1º",
+          "analytical_alignment": "Informação insuficiente para atribuir um eixo econômico com base neste trecho.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "O texto combina proteção da vida e família, combate à discriminação e defesa ambiental.",
+          "source_id": "pode_new_statute",
+          "locator": "Art.2º §1º II–IV e IX",
+          "analytical_alignment": "Há elementos de valores familiares e inclusão; não correspondem automaticamente a uma categoria única.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Prevê participação popular, pluralismo e eleições como via legítima de acesso ao poder.",
+          "source_id": "pode_new_statute",
+          "locator": "Art.2º caput e §1º V–VIII, X",
+          "analytical_alignment": "Compromisso democrático declarado não comprova práticas nem determina posição esquerda/direita.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Programa ou declaração não comprova prática parlamentar, voto ou execução governamental.",
+        "Não extrapolar para anos anteriores nem substituir a pesquisa de especialistas.",
+        "FAQ2021 indisponível no servidor atual: não apresentar a negativa como autodeclaração vigente em2026.",
+        "Estatuto de30/09/2023, anotação parcial TSE23/05/2024; o novo PDF200 foi localizado na página atual /estatuto."
+      ]
+    },
+    {
+      "political_party": "PP",
+      "aliases": [],
+      "source_ids": [
+        "pp-program"
+      ],
+      "self_description": {
+        "status": "doctrinal_terms_without_verified_spatial_label",
+        "source_id": "pp-program",
+        "locator": "ProgramaPartidário, princípiosI–VI",
+        "literal_quote": "consecução de um sistema econômico livre",
+        "global_label": null,
+        "document_date": null,
+        "published_on": null
+      },
+      "programmatic_terms": [
+        "economia social de mercado",
+        "dignidade humana"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Defende mercado com ação econômica do Estado.",
+          "source_id": "pp-program",
+          "locator": "PrincípiosIV–V",
+          "analytical_alignment": "Economia social de mercado combina livre iniciativa e objetivos sociais.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Propõe eliminar desigualdades e igualdade de oportunidades.",
+          "source_id": "pp-program",
+          "locator": "PrincípiosI eIV",
+          "analytical_alignment": "Conteúdo redistributivo declarado, sem escore geral.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "labor",
+          "documented_position": "Afirma trabalho digno e salário justo.",
+          "source_id": "pp-program",
+          "locator": "PrincípioII",
+          "analytical_alignment": "Compromisso laboral genérico, não votação observada.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Defende pluralismo e alternância por eleições periódicas.",
+          "source_id": "pp-program",
+          "locator": "Parágrafo sobre consolidação democrática",
+          "analytical_alignment": "Conteúdo democrático não exclusivo de um campo político.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "civil_rights",
+          "documented_position": "Afirma privacidade, culto e imprensa livres.",
+          "source_id": "pp-program",
+          "locator": "PrincípioII",
+          "analytical_alignment": "Liberdades civis explicitadas.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "environment",
+          "documented_position": "Inclui preservação ambiental entre direitos.",
+          "source_id": "pp-program",
+          "locator": "PrincípioII",
+          "analytical_alignment": "Compromisso ambiental genérico.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido."
+      ],
+      "areas_not_established_in_review": [
+        "state",
+        "customs"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    },
+    {
+      "political_party": "PRD",
+      "aliases": [
+        "Partido Renovação Democrática"
+      ],
+      "source_ids": [
+        "prd_about",
+        "prd_statute"
+      ],
+      "self_description": {
+        "status": "spatial_label_not_located_in_reviewed_sections",
+        "source_id": "prd_statute",
+        "locator": "PDFpág.3, estatuto art.4º; inspeção visual da imagem; registro05/12/2023",
+        "literal_quote": null,
+        "document_date": "2023-12-05"
+      },
+      "programmatic_terms": [
+        "direitos individuais e coletivos",
+        "soberania nacional",
+        "igualdade de oportunidades",
+        "pluralismo"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "O art.4º prioriza o trabalho na relação com o capital e distribuição equilibrada de riqueza entre regiões e classes.",
+          "source_id": "prd_statute",
+          "locator": "PDFpág.3, art.4º",
+          "analytical_alignment": "São objetivos distributivos que podem aproximar-se de propostas de esquerda; não provam que o partido se autodeclare de esquerda.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "O estatuto prevê igualdade de oportunidades e direitos fundamentais.",
+          "source_id": "prd_statute",
+          "locator": "PDFpág.3, art.4º",
+          "analytical_alignment": "Igualdade de direitos é princípio amplo, insuficiente para atribuir categoria espacial.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "O texto combina democracia interna, participação e representação, respeitando pluralidade de ideias, culturas e etnias.",
+          "source_id": "prd_statute",
+          "locator": "PDFpág.3, arts.1º e4º",
+          "analytical_alignment": "Compromissos constitucionais declarados não substituem análise da atuação.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Programa ou declaração não comprova prática parlamentar, voto ou execução governamental.",
+        "Não extrapolar para anos anteriores nem substituir a pesquisa de especialistas.",
+        "PDF36,9MB majoritariamente escaneado; extração textual automática não alcança as páginas programáticas. Página3 foi renderizada e revisada visualmente.",
+        "Revisão limitada aos princípios iniciais; programa integral ao final do documento ainda não foi transcrito.",
+        "Ausência de rótulo nos trechos revisados não demonstra ausência em todo o acervo partidário."
+      ]
+    },
+    {
+      "political_party": "PSB",
+      "aliases": [],
+      "source_ids": [
+        "psb-program"
+      ],
+      "self_description": {
+        "status": "explicit_spatial_self_description",
+        "source_id": "psb-program",
+        "locator": "Manifesto, parágrafo que situa oPSB na esquerda; apresentação informa aprovação30/04/2022",
+        "literal_quote": "Mesmo a esquerda - da qual o PSB é parte",
+        "global_label": "esquerda",
+        "document_date": "2022-04-30",
+        "published_on": null
+      },
+      "programmatic_terms": [
+        "socialismo criativo",
+        "democracia",
+        "economia criativa"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Propõe desenvolvimento industrial e economia criativa.",
+          "source_id": "psb-program",
+          "locator": "Eixos de desenvolvimento eeconomia criativa",
+          "analytical_alignment": "Combina política industrial e transformação socialista declarada.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Defende superar desigualdades e assegurar políticas sociais.",
+          "source_id": "psb-program",
+          "locator": "EixoPolíticasSociais",
+          "analytical_alignment": "Ênfase redistributiva.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "labor",
+          "documented_position": "Propõe empregos verdes e valorização do trabalho.",
+          "source_id": "psb-program",
+          "locator": "Teses sobre trabalho e sustentabilidade",
+          "analytical_alignment": "Proteção e transição produtiva devem ser examinadas conjuntamente.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "customs",
+          "documented_position": "Defende ampliar direitos sexuais e reprodutivos.",
+          "source_id": "psb-program",
+          "locator": "Tese356",
+          "analytical_alignment": "Conteúdo de autonomia neste eixo.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Vincula socialismo criativo a democracia.",
+          "source_id": "psb-program",
+          "locator": "EixoV",
+          "analytical_alignment": "Democracia não é inferida somente do nome do partido.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "environment",
+          "documented_position": "Propõe economia verde e Amazônia4.0.",
+          "source_id": "psb-program",
+          "locator": "EixoDesenvolvimentoeMeioAmbiente",
+          "analytical_alignment": "Transição ecológica e desenvolvimento aparecem conjugados.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido.",
+        "Não usar versões deProposta deTeses como se fossem automaticamente o programa final aprovado."
+      ],
+      "areas_not_established_in_review": [
+        "state",
+        "civil_rights"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    },
+    {
+      "political_party": "PSD",
+      "aliases": [],
+      "source_ids": [
+        "psd-principles",
+        "psd-center-2026"
+      ],
+      "self_description": {
+        "status": "explicit_spatial_self_description",
+        "source_id": "psd-center-2026",
+        "locator": "Título eprimeiroparágrafo",
+        "literal_quote": "principal legenda de Centro do País",
+        "global_label": "centro",
+        "document_date": null,
+        "published_on": "2026-10-05"
+      },
+      "programmatic_terms": [
+        "economia de mercado",
+        "Estado regulador",
+        "prioridades sociais"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Defende mercado, propriedade privada e Estado forte regulador.",
+          "source_id": "psd-principles",
+          "locator": "Princípios eValores, item econômico",
+          "analytical_alignment": "Mercado e regulação coexistem nesta declaração.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Apoia proteção social e igualdade de oportunidades.",
+          "source_id": "psd-principles",
+          "locator": "Itens de políticas sociais",
+          "analytical_alignment": "Conteúdo de assistência e inclusão, não escore geral.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "labor",
+          "documented_position": "Propõe inclusão pelo emprego digno e formação profissional.",
+          "source_id": "psd-principles",
+          "locator": "Itens sobre trabalho e oportunidades",
+          "analytical_alignment": "Ênfase em inserção laboral.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "civil_rights",
+          "documented_position": "Rejeita censura e restrições da mídia.",
+          "source_id": "psd-principles",
+          "locator": "Primeiro item",
+          "analytical_alignment": "Defesa declarada de expressão e informação.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "environment",
+          "documented_position": "Defende preservação com produção sustentável.",
+          "source_id": "psd-principles",
+          "locator": "Item ambiental",
+          "analytical_alignment": "Compatibilização ambiental e produtiva.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Defende voto distrital e diálogo entre adversários.",
+          "source_id": "psd-principles",
+          "locator": "Itens sobre voto e diálogo",
+          "analytical_alignment": "Reforma representativa; não evidência sobre prática.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido.",
+        "Autoimagem2026 e survey2018/2022 têm datas e objetos distintos; diferença não implica erro de um deles."
+      ],
+      "areas_not_established_in_review": [
+        "state",
+        "customs"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    },
+    {
+      "political_party": "PSDB",
+      "aliases": [],
+      "source_ids": [
+        "psdb-program"
+      ],
+      "self_description": {
+        "status": "doctrinal_terms_without_verified_spatial_label",
+        "source_id": "psdb-program",
+        "locator": "Programa, cabeçalhos e introdução",
+        "literal_quote": "A agenda social-democrática prevaleceu",
+        "global_label": null,
+        "document_date": null,
+        "published_on": "2016-08-16"
+      },
+      "programmatic_terms": [
+        "social-democracia",
+        "mais governo e mais mercado"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Apresenta a combinação de mais governo e mais mercado.",
+          "source_id": "psdb-program",
+          "locator": "TópicoMaisgovernoemaismercado",
+          "analytical_alignment": "Economia mista não equivale automaticamente a centro espacial.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Afirma universalização de escola, saúde e seguridade.",
+          "source_id": "psdb-program",
+          "locator": "Introdução",
+          "analytical_alignment": "Objetivos de serviços sociais universais.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Defende aperfeiçoar democracia e distritalizar o voto.",
+          "source_id": "psdb-program",
+          "locator": "Tópicos finais",
+          "analytical_alignment": "Reforma representativa declarada.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "labor",
+          "documented_position": "Inclui defesa da renda dos trabalhadores.",
+          "source_id": "psdb-program",
+          "locator": "Introdução",
+          "analytical_alignment": "Compromisso genérico, sem inferência de voto.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido.",
+        "Página é de2016; não comprova invariância posterior nem substitui revisão de novos programas."
+      ],
+      "areas_not_established_in_review": [
+        "state",
+        "civil_rights",
+        "customs",
+        "environment"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    },
+    {
+      "political_party": "PSOL",
+      "aliases": [],
+      "source_ids": [
+        "psol-program"
+      ],
+      "self_description": {
+        "status": "explicit_spatial_self_description",
+        "source_id": "psol-program",
+        "locator": "Programa, apresentação histórica e item1.2",
+        "literal_quote": "como um partido fundamental para a renovação da esquerda no Brasil",
+        "global_label": "esquerda",
+        "document_date": null,
+        "published_on": null
+      },
+      "programmatic_terms": [
+        "socialismo do século21",
+        "anticapitalismo",
+        "liberdade"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Propõe superar capitalismo e controlar democraticamente produção.",
+          "source_id": "psol-program",
+          "locator": "Item1.2",
+          "analytical_alignment": "Projeto socialista é explícito no texto.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Defende justiça econômica, social e igualdade de direitos.",
+          "source_id": "psol-program",
+          "locator": "Item1.2",
+          "analytical_alignment": "Ênfase redistributiva e igualitária.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "labor",
+          "documented_position": "Propõe combater precarização e proteger trabalho em plataformas.",
+          "source_id": "psol-program",
+          "locator": "Debate sobre plataformas",
+          "analytical_alignment": "Conteúdo de proteção laboral.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "civil_rights",
+          "documented_position": "Defende lutas feministas, antirracistas e anti-LGBTfóbicas.",
+          "source_id": "psol-program",
+          "locator": "Porumaesquerdaconectada",
+          "analytical_alignment": "Igualdade e não discriminação neste eixo.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Vincula projeto socialista a democracia e soberania popular.",
+          "source_id": "psol-program",
+          "locator": "Item1.2",
+          "analytical_alignment": "Posição programática, não aferição de atuação efetiva.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "environment",
+          "documented_position": "Propõe enfrentar crise climática e transição ecológica.",
+          "source_id": "psol-program",
+          "locator": "Capítulos deecologia",
+          "analytical_alignment": "Conteúdo ecossocialista multitemático.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido.",
+        "Página intituladaPrograma2026 não foi usada para inventar data exata de aprovação."
+      ],
+      "areas_not_established_in_review": [
+        "state",
+        "customs"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    },
+    {
+      "political_party": "PT",
+      "aliases": [],
+      "source_ids": [
+        "pt-manifesto"
+      ],
+      "self_description": {
+        "status": "doctrinal_terms_without_verified_spatial_label",
+        "source_id": "pt-manifesto",
+        "locator": "Manifesto do8ºCongresso, parágrafo das reformas estruturais",
+        "literal_quote": "tendo como horizonte programático o socialismo democrático",
+        "global_label": null,
+        "document_date": null,
+        "published_on": "2026-04-26"
+      },
+      "programmatic_terms": [
+        "socialismo democrático",
+        "desenvolvimento nacional",
+        "redistribuição"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Propõe política industrial, planejamento e investimento público.",
+          "source_id": "pt-manifesto",
+          "locator": "Três eixos centrais do projeto nacional",
+          "analytical_alignment": "Conteúdo de intervenção e coordenação econômica estatal.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Propõe distribuir renda, riqueza e patrimônio e ampliar direitos.",
+          "source_id": "pt-manifesto",
+          "locator": "Segundo eixo das reformas",
+          "analytical_alignment": "Ênfase redistributiva; sem medir resultado efetivo.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "labor",
+          "documented_position": "Defende reduzir jornada e eliminar a escala6×1.",
+          "source_id": "pt-manifesto",
+          "locator": "Parágrafos sobre jornada e soberania",
+          "analytical_alignment": "Conteúdo de proteção e ampliação do tempo livre do trabalho.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Defende participação social e reformas políticas democráticas.",
+          "source_id": "pt-manifesto",
+          "locator": "Reformas política e administrativa",
+          "analytical_alignment": "Instituições e democratização são dimensão própria.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "environment",
+          "documented_position": "Propõe transição produtiva e ambiental sustentável.",
+          "source_id": "pt-manifesto",
+          "locator": "Terceiro eixo",
+          "analytical_alignment": "Ênfase de transformação ecológica.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido.",
+        "A publicação diz manifesto aprovado; data exata da deliberação não foi inferida da publicação."
+      ],
+      "areas_not_established_in_review": [
+        "state",
+        "civil_rights",
+        "customs"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    },
+    {
+      "political_party": "PV",
+      "aliases": [],
+      "source_ids": [
+        "pv-program"
+      ],
+      "self_description": {
+        "status": "doctrinal_terms_without_verified_spatial_label",
+        "source_id": "pv-program",
+        "locator": "Princípios, item1",
+        "literal_quote": "O PV é um instrumento da ecologia política",
+        "global_label": null,
+        "document_date": null,
+        "published_on": null
+      },
+      "programmatic_terms": [
+        "ecologia política",
+        "democracia",
+        "desenvolvimento sustentável"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Propõe desenvolvimento baseado em tecnologias limpas.",
+          "source_id": "pv-program",
+          "locator": "EconomiaVerde",
+          "analytical_alignment": "Economia ecológica, não uma nota espacial automática.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Defende renda mínima e combate público à miséria.",
+          "source_id": "pv-program",
+          "locator": "EconomiaVerde, item6",
+          "analytical_alignment": "Proteção redistributiva declarada.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "customs",
+          "documented_position": "Propõe descriminalizar uso de drogas e enfrentar tema pela saúde.",
+          "source_id": "pv-program",
+          "locator": "JustiçaeSegurança",
+          "analytical_alignment": "Conteúdo de autonomia e descriminalização neste tema.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Defende pluralipartidarismo e subordinação militar ao poder civil.",
+          "source_id": "pv-program",
+          "locator": "Princípios, item5",
+          "analytical_alignment": "Princípios democráticos explicitados.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "environment",
+          "documented_position": "Prioriza renováveis, preservação e agricultura ecológica.",
+          "source_id": "pv-program",
+          "locator": "Energia eMeioAmbiente",
+          "analytical_alignment": "Ecologia é dimensão central e não apenas uma proposta isolada.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido.",
+        "O texto questiona esquerda tradicional e hegemonia neoliberal; isso não foi traduzido em centro.",
+        "Data de adoção não confirmada."
+      ],
+      "areas_not_established_in_review": [
+        "labor",
+        "state",
+        "civil_rights"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    },
+    {
+      "political_party": "REDE",
+      "aliases": [],
+      "source_ids": [
+        "rede-statute"
+      ],
+      "self_description": {
+        "status": "doctrinal_terms_without_verified_spatial_label",
+        "source_id": "rede-statute",
+        "locator": "Estatuto, art.4º",
+        "literal_quote": "desenvolvimento justo e sustentável da Nação",
+        "global_label": null,
+        "document_date": null,
+        "published_on": null
+      },
+      "programmatic_terms": [
+        "sustentabilidade",
+        "justiça social",
+        "democracia participativa"
+      ],
+      "positions": [
+        {
+          "area": "social",
+          "documented_position": "Inclui justiça social e combate às discriminações.",
+          "source_id": "rede-statute",
+          "locator": "Art.4º, §1º",
+          "analytical_alignment": "Compromissos de igualdade declarados.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Defende participação cidadã e aprofundamento democrático.",
+          "source_id": "rede-statute",
+          "locator": "Art.4º",
+          "analytical_alignment": "Conteúdo de participação e abertura institucional.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "civil_rights",
+          "documented_position": "Afirma dignidade e respeito às diversidades.",
+          "source_id": "rede-statute",
+          "locator": "Art.4º, §1º",
+          "analytical_alignment": "Conteúdo de direitos civis e não discriminação.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "environment",
+          "documented_position": "Afirma proteção da natureza e equilíbrio ambiental.",
+          "source_id": "rede-statute",
+          "locator": "Art.4º, §1ºV",
+          "analytical_alignment": "Sustentabilidade explícita; não rótulo espacial automático.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido.",
+        "O estatuto consultado não basta para classificar todas as propostas econômicas ou de costumes."
+      ],
+      "areas_not_established_in_review": [
+        "economic",
+        "labor",
+        "state",
+        "customs"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    },
+    {
+      "political_party": "REPUBLICANOS",
+      "aliases": [],
+      "source_ids": [
+        "republicanos-program"
+      ],
+      "self_description": {
+        "status": "doctrinal_terms_without_verified_spatial_label",
+        "source_id": "republicanos-program",
+        "locator": "Nossaessência; apresentação do presidente nacional",
+        "literal_quote": "Nossa postura é fundamentada nos valores cristãos",
+        "global_label": null,
+        "document_date": null,
+        "published_on": null
+      },
+      "programmatic_terms": [
+        "valores cristãos",
+        "conservadorismo",
+        "livre iniciativa"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Defende liberdade de empreender e mercado gerador de renda.",
+          "source_id": "republicanos-program",
+          "locator": "Eixos3 e7",
+          "analytical_alignment": "Compatível com liberalismo econômico neste eixo.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Prevê ação estatal por justiça social sem substituir mercado.",
+          "source_id": "republicanos-program",
+          "locator": "Eixo7",
+          "analytical_alignment": "Combinação de proteção social e primazia do mercado.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "customs",
+          "documented_position": "Afirma família e continuidade de tradições.",
+          "source_id": "republicanos-program",
+          "locator": "Eixo6",
+          "analytical_alignment": "Conteúdo conservador na dimensão de costumes.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Afirma harmonia e independência entre poderes.",
+          "source_id": "republicanos-program",
+          "locator": "Eixo1",
+          "analytical_alignment": "Posição institucional declarada.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "state",
+          "documented_position": "Propõe digitalização e redução de ineficiência administrativa.",
+          "source_id": "republicanos-program",
+          "locator": "Eixo2",
+          "analytical_alignment": "Reforma gerencial não determina sozinha esquerda/direita.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido.",
+        "Conservador não foi convertido em autodeclaração espacial literal de direita."
+      ],
+      "areas_not_established_in_review": [
+        "labor",
+        "civil_rights",
+        "environment"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    },
+    {
+      "political_party": "SOLIDARIEDADE",
+      "aliases": [
+        "SD"
+      ],
+      "source_ids": [
+        "solid_self",
+        "solid_program"
+      ],
+      "self_description": {
+        "status": "explicit_historical_self_description_by_national_officer",
+        "source_id": "solid_self",
+        "locator": "Artigo de Jefferson Coriteac, tesoureiro-geral nacional; parágrafo sobre número77",
+        "literal_quote": "os princípios de sermos centro-esquerda",
+        "document_date": "2021-09-01",
+        "global_label": "centro-esquerda"
+      },
+      "programmatic_terms": [
+        "origem sindical",
+        "direitos dos trabalhadores",
+        "inclusão",
+        "redução de desigualdades"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "A apresentação relaciona a origem sindical à defesa de trabalhadores e pessoas de baixa renda.",
+          "source_id": "solid_self",
+          "locator": "Parágrafos iniciais e encerramento",
+          "analytical_alignment": "A prioridade distributiva é coerente com a autodeclaração histórica; não se presume comportamento legislativo.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "A missão anuncia dignidade, igualdade, diversidade e sustentabilidade.",
+          "source_id": "solid_program",
+          "locator": "Missão, visão e valores",
+          "analytical_alignment": "São diretrizes sociais inclusivas; verificar propostas e votos separadamente.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "O partido apresenta diálogo e políticas públicas como instrumentos de mudança social.",
+          "source_id": "solid_program",
+          "locator": "Ideologia e programa partidário",
+          "analytical_alignment": "O método de compromisso não define, sozinho, localização no eixo.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Programa ou declaração não comprova prática parlamentar, voto ou execução governamental.",
+        "Não extrapolar para anos anteriores nem substituir a pesquisa de especialistas.",
+        "É artigo assinado em2021, não estatuto nem nova autodeclaração para2026; incorporações e federação não autorizam herança de rótulos."
+      ]
+    },
+    {
+      "political_party": "UNIÃO",
+      "aliases": [],
+      "source_ids": [
+        "uniao-manifesto"
+      ],
+      "self_description": {
+        "status": "doctrinal_terms_without_verified_spatial_label",
+        "source_id": "uniao-manifesto",
+        "locator": "NossosValores ePrincípios; quatro pilares",
+        "literal_quote": "O valor do Estado como garantidor dos direitos sociais básicos da população",
+        "global_label": null,
+        "document_date": null,
+        "published_on": null
+      },
+      "programmatic_terms": [
+        "democracia",
+        "Estado garantidor",
+        "liberdade",
+        "família"
+      ],
+      "positions": [
+        {
+          "area": "economic",
+          "documented_position": "Defende iniciativa privada e economia competitiva com Estado indutor.",
+          "source_id": "uniao-manifesto",
+          "locator": "Compromisso21",
+          "analytical_alignment": "Conjuga centralidade do mercado e intervenção regulatória.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "social",
+          "documented_position": "Atribui ao Estado proteção dos vulneráveis e garantia de serviços.",
+          "source_id": "uniao-manifesto",
+          "locator": "Compromissos12–13 e21",
+          "analytical_alignment": "Conteúdo social explícito, sem presumir filiação à esquerda.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "labor",
+          "documented_position": "Propõe qualificação profissional e apoio ao trabalho informal.",
+          "source_id": "uniao-manifesto",
+          "locator": "Compromissos20 e23",
+          "analytical_alignment": "Ênfase em inserção produtiva; direitos trabalhistas específicos exigem fonte própria.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "customs",
+          "documented_position": "Coloca a família entre os pilares do manifesto.",
+          "source_id": "uniao-manifesto",
+          "locator": "Quatro pilares ecompromisso18",
+          "analytical_alignment": "Valorização familiar não prova posição sobre cada tema moral.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "institutional",
+          "documented_position": "Defende alternância, direitos das minorias e rejeita autoritarismo.",
+          "source_id": "uniao-manifesto",
+          "locator": "Compromissos1–2",
+          "analytical_alignment": "Compromissos institucionais observáveis no texto.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        },
+        {
+          "area": "civil_rights",
+          "documented_position": "Defende expressão e imprensa livres.",
+          "source_id": "uniao-manifesto",
+          "locator": "Compromissos4–5",
+          "analytical_alignment": "Conteúdo de liberdades civis.",
+          "alignment_status": "analytical_inference_not_party_self_label"
+        }
+      ],
+      "limitations": [
+        "Documentação partidária não comprova votação, exercício do cargo ou execução de governo.",
+        "Data de acesso não é aprovação; não projetar o documento para todos os anos da legenda.",
+        "Rótulo espacial não localizado não significa posição de centro.",
+        "Sínteses por área são análise editorial identificada, sem escore global inferido.",
+        "Não herdar autodeclarações deDEM ouPSL; o documento é da nova legenda.",
+        "Sem data expressa de aprovação confirmada no manifesto."
+      ],
+      "areas_not_established_in_review": [
+        "state",
+        "environment"
+      ],
+      "expert_survey_reference": {
+        "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+        "reference_years": [
+          2018,
+          2022
+        ],
+        "relation": "Independent dated evidence; self-description and program interpretation do not replace expert survey scores."
+      }
+    }
+  ],
+  "publication_notice": "Primary documentary evidence and qualified reviewed excerpts. No raw source bodies are embedded. Read source-level hash_scope and record limitations."
+}

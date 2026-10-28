@@ -8,7 +8,7 @@ from service.ingestion.contracts import SourceDescriptor
 API_BASE = "https://dadosabertos.camara.leg.br/api/v2/"
 PORTAL_BASE = "https://www.camara.leg.br/deputados/"
 OFFICIAL_HOSTS = frozenset({"dadosabertos.camara.leg.br", "www.camara.leg.br"})
-PARSER_VERSION = "camara-enrichment-python-v4"
+PARSER_VERSION = "camara-enrichment-python-v5"
 SOURCE = SourceDescriptor("camara", "Câmara dos Deputados", "https://www.camara.leg.br")
 
 

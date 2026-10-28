@@ -1,0 +1,279 @@
+{
+  "schema_version": "senate_orientation_editorial.v1",
+  "version": "2026-10-28.2",
+  "reviewed_on": "2026-10-28",
+  "institution_code": "senado",
+  "classification_year": 2026,
+  "reference_year": 2022,
+  "scope": "national_party_placement_applied_to_documented_senate_roster",
+  "rule": "Esquerda <4,5; centro de 4,5 a 5,5 inclusive; direita >5,5. Centro-direita, direita e extrema direita da escala geral entram no bloco direita. A Casa só tem maioria absoluta quando o bloco supera 40 das 81 cadeiras.",
+  "limitation": "Síntese editorial de 2026 baseada em estimativas partidárias de 2022; não medição acadêmica de 2026, filiação individual ideológica, apoio ao governo ou presença em sessão. Não estender a outros anos.",
+  "party_identity_note": "PODE é a sigla do Podemos na composição oficial; correspondência nominal explícita com PODEMOS do survey, sem transferência entre organizações diferentes.",
+  "records": [
+    {
+      "political_party": "PL",
+      "reference_political_party": "PL",
+      "reference_score": 8.79550102,
+      "category": "right",
+      "reference_year": 2022,
+      "classification_year": 2026,
+      "evidence_kind": "editorial_application_of_dated_expert_estimate",
+      "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+      "source_column": "ideol_22_pl",
+      "source_sha256": "74fe0ac6948c4da4bc0c8e824d547159d9c6adcec10c8cafcefec574c90d6754"
+    },
+    {
+      "political_party": "PSD",
+      "reference_political_party": "PSD",
+      "reference_score": 6.93679458,
+      "category": "right",
+      "reference_year": 2022,
+      "classification_year": 2026,
+      "evidence_kind": "editorial_application_of_dated_expert_estimate",
+      "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+      "source_column": "ideol_22_psd",
+      "source_sha256": "74fe0ac6948c4da4bc0c8e824d547159d9c6adcec10c8cafcefec574c90d6754"
+    },
+    {
+      "political_party": "MDB",
+      "reference_political_party": "MDB",
+      "reference_score": 6.49894292,
+      "category": "right",
+      "reference_year": 2022,
+      "classification_year": 2026,
+      "evidence_kind": "editorial_application_of_dated_expert_estimate",
+      "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+      "source_column": "ideol_22_mdb",
+      "source_sha256": "74fe0ac6948c4da4bc0c8e824d547159d9c6adcec10c8cafcefec574c90d6754"
+    },
+    {
+      "political_party": "PT",
+      "reference_political_party": "PT",
+      "reference_score": 2.67864271,
+      "category": "left",
+      "reference_year": 2022,
+      "classification_year": 2026,
+      "evidence_kind": "editorial_application_of_dated_expert_estimate",
+      "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+      "source_column": "ideol_22_pt",
+      "source_sha256": "74fe0ac6948c4da4bc0c8e824d547159d9c6adcec10c8cafcefec574c90d6754"
+    },
+    {
+      "political_party": "PP",
+      "reference_political_party": "PP",
+      "reference_score": 8.15261044,
+      "category": "right",
+      "reference_year": 2022,
+      "classification_year": 2026,
+      "evidence_kind": "editorial_application_of_dated_expert_estimate",
+      "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+      "source_column": "ideol_22_progre",
+      "source_sha256": "74fe0ac6948c4da4bc0c8e824d547159d9c6adcec10c8cafcefec574c90d6754"
+    },
+    {
+      "political_party": "PSB",
+      "reference_political_party": "PSB",
+      "reference_score": 3.58924731,
+      "category": "left",
+      "reference_year": 2022,
+      "classification_year": 2026,
+      "evidence_kind": "editorial_application_of_dated_expert_estimate",
+      "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+      "source_column": "ideol_22_psb",
+      "source_sha256": "74fe0ac6948c4da4bc0c8e824d547159d9c6adcec10c8cafcefec574c90d6754"
+    },
+    {
+      "political_party": "REPUBLICANOS",
+      "reference_political_party": "REPUBLICANOS",
+      "reference_score": 8.33333333,
+      "category": "right",
+      "reference_year": 2022,
+      "classification_year": 2026,
+      "evidence_kind": "editorial_application_of_dated_expert_estimate",
+      "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+      "source_column": "ideol_22_rep",
+      "source_sha256": "74fe0ac6948c4da4bc0c8e824d547159d9c6adcec10c8cafcefec574c90d6754"
+    },
+    {
+      "political_party": "PSDB",
+      "reference_political_party": "PSDB",
+      "reference_score": 6.7593819,
+      "category": "right",
+      "reference_year": 2022,
+      "classification_year": 2026,
+      "evidence_kind": "editorial_application_of_dated_expert_estimate",
+      "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+      "source_column": "ideol_22_psdb",
+      "source_sha256": "74fe0ac6948c4da4bc0c8e824d547159d9c6adcec10c8cafcefec574c90d6754"
+    },
+    {
+      "political_party": "PODE",
+      "reference_political_party": "PODEMOS",
+      "reference_score": 7.4373673,
+      "category": "right",
+      "reference_year": 2022,
+      "classification_year": 2026,
+      "evidence_kind": "editorial_application_of_dated_expert_estimate",
+      "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+      "source_column": "ideol_22_podemos",
+      "source_sha256": "74fe0ac6948c4da4bc0c8e824d547159d9c6adcec10c8cafcefec574c90d6754"
+    },
+    {
+      "political_party": "UNIÃO",
+      "reference_political_party": "UNIÃO",
+      "reference_score": 8.4852071,
+      "category": "right",
+      "reference_year": 2022,
+      "classification_year": 2026,
+      "evidence_kind": "editorial_application_of_dated_expert_estimate",
+      "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+      "source_column": "ideol_22_uniao",
+      "source_sha256": "74fe0ac6948c4da4bc0c8e824d547159d9c6adcec10c8cafcefec574c90d6754"
+    },
+    {
+      "political_party": "AVANTE",
+      "reference_political_party": "AVANTE",
+      "reference_score": 6.47281324,
+      "category": "right",
+      "reference_year": 2022,
+      "classification_year": 2026,
+      "evidence_kind": "editorial_application_of_dated_expert_estimate",
+      "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+      "source_column": "ideol_22_avante",
+      "source_sha256": "74fe0ac6948c4da4bc0c8e824d547159d9c6adcec10c8cafcefec574c90d6754"
+    },
+    {
+      "political_party": "PDT",
+      "reference_political_party": "PDT",
+      "reference_score": 3.85529158,
+      "category": "left",
+      "reference_year": 2022,
+      "classification_year": 2026,
+      "evidence_kind": "editorial_application_of_dated_expert_estimate",
+      "source_url": "https://doi.org/10.7910/DVN/MFIXKW",
+      "source_column": "ideol_22_pdt",
+      "source_sha256": "74fe0ac6948c4da4bc0c8e824d547159d9c6adcec10c8cafcefec574c90d6754"
+    }
+  ],
+  "disputed_parties": [
+    "PSD",
+    "MDB"
+  ],
+  "documentary_sources": [
+    {
+      "political_party": "PSD",
+      "source_url": "https://psd.org.br/noticias/psd-cresce-e-se-consolida-como-maior-partido-de-centro/",
+      "source_title": "PSD cresce e se consolida como maior partido de Centro",
+      "source_publication_year": 2026,
+      "publication_date": "2026-10-05",
+      "evidence_kind": "party_self_description",
+      "summary": "Autodeclaração atual de centro diverge do agrupamento da estimativa acadêmica de 2022."
+    },
+    {
+      "political_party": "MDB",
+      "source_url": "https://www.mdb.org.br/o-mdb-tem-hoje-uma-posicao-de-centro-direita-na-economia-e-de-centro-esquerda-na-area-social-diz-presidente-baleia-rossi-sobre-novo-programa-do-partido/",
+      "source_title": "MDB: centro-direita na economia e centro-esquerda na área social",
+      "source_publication_year": 2025,
+      "publication_date": "2025-10-17",
+      "evidence_kind": "party_leadership_self_description_by_dimension",
+      "summary": "Declaração por dimensão e diversidade interna não equivalem a medição global de 2026; alternativa de centro é preservada na sensibilidade."
+    },
+    {
+      "political_party": "PSD",
+      "source_url": "https://psd.org.br/noticias/o-psd-na-centro-direita/",
+      "source_title": "PSD · O PSD na centro-direita, declaração de Gilberto Kassab",
+      "source_publication_year": 2025,
+      "publication_date": "2025-11-21",
+      "evidence_kind": "party_leadership_explicit_self_description",
+      "summary": "Presidente nacional declara centro-direita; o subtítulo também fala em centro. Em 2026, o partido voltou a se autodenominar centro. Preservar ambos os registros."
+    },
+    {
+      "source_url": "https://www.scielo.br/j/ea/a/dF4xSTxDz4KGTzg9mhMzMRJ/?lang=pt",
+      "source_title": "Rachel Meneguello (2026) · Retrocesso democrático e o avanço da direita",
+      "source_publication_year": 2026,
+      "publication_date": "2026-08-07",
+      "evidence_kind": "academic_historical_party_bloc_classification",
+      "research_period": "Composição eleitoral de 2002–2022; classificação Power e Zucco (2011) com atualizações e identificação de partidos",
+      "evidence_locator": "Legendas dos gráficos 5 e 6; notas das tabelas 1, 3 e 4",
+      "limitation": "Publicação em 2026 não é survey de 2026. PSD fundado em 2011 é centro-direita e MDB é centro. Aplicar às bancadas atuais é síntese editorial."
+    },
+    {
+      "source_url": "https://andreborges.org/wp-content/uploads/2023/11/Ideological-classification-of-Brazilian-parties_appendix.pdf",
+      "source_title": "André Borges (2023) · classificação agregada de partidos, tabela A.1",
+      "source_publication_year": 2023,
+      "publication_date": "2023-11",
+      "evidence_kind": "academic_multisource_period_summary",
+      "research_period": "BLS 1990–2017; PREPPS 2006–2019; V-Party 2020; médias entre fontes e eleições",
+      "evidence_locator": "página 2, tabela A.1 e critérios de operacionalização",
+      "limitation": "Classificação agregada histórica; aplicação às bancadas de 2026 é editorial. As identidades PMDB/MDB e PRB/Republicanos são reconciliadas explicitamente."
+    },
+    {
+      "political_party": "MDB",
+      "source_url": "https://fundacaoulysses.org.br/controle-fiscal-central-de-governanca-e-sustentabilidade-de-programa-sociais-sao-foco-de-documento-da-fundacao-ulysses-guimaraes-do-mdb/",
+      "source_title": "FUG/MDB · Caminhos para o Brasil, documento de 2025 para 2026",
+      "source_publication_year": 2025,
+      "publication_date": "2025-10-22",
+      "evidence_kind": "party_foundation_programmatic_presentation",
+      "summary": "Apresenta plataforma de centro democrático: responsabilidade fiscal, programas sociais e ação do BNDES. Não é codificação integral do programa nem comprovação dos votos."
+    }
+  ],
+  "comparison_methods": [
+    {
+      "methodology_id": "meneguello_2026_historical_blocs_applied_2026",
+      "label": "Meneguello (2026), classificação histórica aplicada editorialmente",
+      "source_url": "https://www.scielo.br/j/ea/a/dF4xSTxDz4KGTzg9mhMzMRJ/?lang=pt",
+      "source_publication_year": 2026,
+      "reference_period": "2002–2022; não é survey de 2026",
+      "right": [
+        "PL",
+        "PSD",
+        "PP",
+        "REPUBLICANOS",
+        "PSDB",
+        "PODE",
+        "UNIÃO"
+      ],
+      "center": [
+        "MDB",
+        "AVANTE"
+      ],
+      "left": [
+        "PT",
+        "PSB",
+        "PDT"
+      ],
+      "note": "Centro-direita somada à direita. Avante aparece em centro na classificação nacional do gráfico 5; MDB é centro; PSD fundado em 2011 é centro-direita."
+    },
+    {
+      "methodology_id": "borges_2023_multisource_applied_2026",
+      "label": "Borges (2023), médias históricas aplicadas editorialmente",
+      "source_url": "https://andreborges.org/wp-content/uploads/2023/11/Ideological-classification-of-Brazilian-parties_appendix.pdf",
+      "source_publication_year": 2023,
+      "reference_period": "1990–2020; não é survey de 2026",
+      "right": [
+        "PL",
+        "PSD",
+        "PP",
+        "REPUBLICANOS",
+        "PODE",
+        "UNIÃO"
+      ],
+      "center": [
+        "MDB",
+        "PSDB",
+        "AVANTE"
+      ],
+      "left": [
+        "PT",
+        "PSB",
+        "PDT"
+      ],
+      "note": "Tabela A.1: PSD à direita; PMDB, PSDB e Avante no centro. PMDB/MDB, PRB/Republicanos e UB/União reconciliados sem extensão temporal automática."
+    }
+  ],
+  "research_conclusions": {
+    "PSD": "Evidência forte para inclusão na direita ampla, especialmente centro-direita. Preservar autodeclarações de centro e distinguir média bruta de ponderada. Não declarar homogeneidade de toda a bancada.",
+    "MDB": "Evidência quantitativa para centro-direita em 2022, com divergência substantiva frente a classificações de centro e programa multidimensional. Não há prova conclusiva de toda a bancada ser de direita em 2026.",
+    "senate": "A maioria de direita ampla subsiste nos métodos alternativos consultados com MDB no centro. Métodos são comparados separadamente; não se faz média entre escalas nem se afirma consenso."
+  }
+}

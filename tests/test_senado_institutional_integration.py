@@ -112,3 +112,36 @@ def test_same_instant_institutional_observation_does_not_duplicate_affiliation(
         ).fetchone()["n"]
         == 1
     )
+
+
+def test_ambiguous_party_abbreviation_never_selects_arbitrary_party(
+    integration_database,
+    tmp_path,
+    institutional_subject,  # noqa: F811
+):
+    connection = integration_database
+    data = normalize_institutional_profile(*institutional_subject, "2026-10-22")
+    artifact = institutional_artifact(tmp_path, data)
+    config = SenateConfiguration(tmp_path)
+    ingest_national_roster_batch(connection, config, [(artifact, data)])
+    connection.execute(
+        """INSERT INTO se_liga_brasil.political_party(code,name,abbreviation,source_record_id)
+        SELECT code,'Partido fictício','TESTE',p.primary_record_id
+        FROM se_liga_brasil.person p CROSS JOIN (VALUES('FAKE1'),('FAKE2')) codes(code)"""
+    )
+    changed = data | {"officialSenatorCode": "123457"}
+    ingest_national_roster_batch(
+        connection, config, [(institutional_artifact(tmp_path, changed), changed)]
+    )
+    assert (
+        connection.execute(
+            "SELECT count(*) n FROM se_liga_brasil.political_party_affiliation"
+        ).fetchone()["n"]
+        == 0
+    )
+    assert (
+        connection.execute(
+            "SELECT current_public_office_kind FROM se_liga_brasil.person"
+        ).fetchone()["current_public_office_kind"]
+        == "senator"
+    )

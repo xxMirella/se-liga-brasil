@@ -56,3 +56,55 @@ de origem do pagamento com sua referência de revisão; o nome original da folha
 imutável e projeção idempotente dos demais pagamentos. Uma aprovação não é reutilizada para
 outra competência ou outro arquivo. A confirmação manual do pagamento não declara cargo em
 exercício nem preenche automaticamente filiação ou data de nascimento.
+
+## Sinopses históricas da atividade parlamentar
+
+O comando `scripts/collect_alerj_history.py` ingere narrativas datadas das sinopses oficiais,
+sem converter discursos, encaminhamentos ou resultados coletivos em votos nominais.
+A primeira fonte validada é
+[Sinopse de Flávio Bolsonaro, 2018](https://www2.alerj.rj.gov.br/leideacesso/spic/arquivo/Flavio_Bolsonaro_2018.pdf).
+O [perfil histórico ALERJ](https://www.alerj.rj.gov.br/Deputados/PerfilDeputado/275)
+informa nome parlamentar e nascimento. A ponte independente é o JSON oficial do Senado,
+que contém nome parlamentar, nome civil e nascimento, já arquivado com hash validado.
+O nome civil e nascimento precisam corresponder univocamente à pessoa canônica; o nome
+isolado do PDF nunca autoriza a associação. Esse caminho atende também outros ex-deputados
+identificados no Senado; pessoas sem essa ponte ficam pendentes de evidência independente.
+
+Exemplo (substituir o caminho do arquivo de ambiente local, sem publicar credenciais):
+
+```bash
+.venv/bin/python scripts/collect_alerj_history.py \
+  --env-file /caminho/privado/.env \
+  --person-id 4c30de36-97ec-4f4c-af89-dd16ff3d99a9 \
+  --profile-url https://www.alerj.rj.gov.br/Deputados/PerfilDeputado/275 \
+  --senator-code 5894 \
+  --synopsis-url https://www2.alerj.rj.gov.br/leideacesso/spic/arquivo/Flavio_Bolsonaro_2018.pdf
+```
+
+`--synopsis-url` aceita até dez documentos oficiais explicitamente localizados, sem gerar
+centenas de URLs por tentativa. `--offline` reaplica somente arquivos íntegros do cache,
+sem requests e sem contornar cooldown. O documento mantém bytes originais, SHA-256,
+observação, página PDF, referência da identidade e staging de rejeições. O checkpoint
+registra documentos reconciliados, inclusive quando um documento seguinte falha. O
+repositório genérico impede duplicação no replay e preserva versões observadas.
+
+O parser usa a data da **sessão**, e não a data posterior do Diário Oficial. Cada narrativa
+é `vote_declaration`, `speech`, `voting_procedure` ou `legislative_comment`. Declaração de
+voto é evidência de manifestação individual descrita na sinopse, não lista nominal com
+placar certificado. Nenhuma dessas entradas cria `person_vote` ou falsa autoria em
+`proposition_person`. Ações ficam em `person_fact` com prefixo `alerj_historical_activity:`
+e chegam ao histórico mensal do perfil com o link exato `PDF#page=N`. A sinopse não é o
+texto integral da proposta; não reutilizar esse link como se fosse a lei votada.
+
+O primeiro lote de 2018 contém 54 narrativas datadas, incluindo quatro declarações de voto,
+sem rejeições. É **cobertura parcial**: as tabelas iniciais de autoria do PDF ainda não têm
+contrato validado neste parser; tampouco foi comprovada uma enumeração completa de sinopses
+para 2000–2017. O perfil de Flávio registra legislaturas a partir de 2003; não se infere
+atuação parlamentar em 2000 nem posse pessoal a partir de limites gerais da legislatura.
+O portal não deve declarar sua carreira ALERJ completa enquanto essas lacunas existirem.
+
+A aquisição especifica `Accept` compatível com PDF/HTML: a preferência genérica anterior
+por JSON provocava HTTP 406 nessa fonte. São preservados allowlist, orçamento, pacing,
+locks e política de cooldown compartilhados. Parsing e staging são O(n) no tamanho do
+arquivo; o banco reconcilia em lotes e a consulta pública limita mil eventos por perfil,
+com indicação explícita de truncamento no contrato.

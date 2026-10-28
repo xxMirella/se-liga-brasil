@@ -104,8 +104,9 @@ def test_monthly_salary_staging_isolated_and_corrections_preserve_one_payment(
 
 
 @pytest.mark.integration
+@pytest.mark.parametrize("prefix", ["senado_profile", "senado_institutional_profile"])
 def test_stored_payroll_profiles_require_matching_canonical_birth_and_verified_identity(
-    salary_repository,
+    salary_repository, prefix,
 ):
     from database.senado_payroll import fetch_verified_payroll_profiles
 
@@ -126,7 +127,7 @@ def test_stored_payroll_profiles_require_matching_canonical_birth_and_verified_i
             "INSERT INTO se_liga_brasil.person_fact(person_id,field_name,original_value,"
             "normalized_value,source_record_id,review_status,evidence_kind) "
             "VALUES(%s,%s,%s,%s,%s,'verified','administrative')",
-            (person, f"senado_profile:{position}", Jsonb(profile), Jsonb(profile), record),
+            (person, f"{prefix}:{position}", Jsonb(profile), Jsonb(profile), record),
         )
     profiles = fetch_verified_payroll_profiles(connection, PERIOD)
     assert [profile["personId"] for profile in profiles] == [people[0]]

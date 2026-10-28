@@ -4,6 +4,13 @@ from html import escape
 from urllib.parse import urlencode, urlsplit
 from uuid import UUID
 
+OFFICIAL_SOURCE_HOSTS = frozenset({
+    "www.defensoria.rj.def.br", "agenciabrasil.ebc.com.br", "prefeitura.rio",
+    "neamp.pucsp.br", "repositorio.unb.br", "psd.org.br",
+    "files.ufgd.edu.br", "periodicos.fclar.unesp.br",
+    "progressistas.org.br", "uniaobrasil.org.br", "albalegis.nopapercloud.com.br",
+})
+
 
 def text(value, fallback="Não disponível"):
     return escape(str(value), quote=True) if value is not None and value != "" else fallback
@@ -20,7 +27,8 @@ def official_url(value):
             or parsed.username
             or parsed.password
             or parsed.port
-            or not hostname.endswith((".leg.br", ".gov.br", ".jus.br"))
+            or not (hostname.endswith((".leg.br", ".gov.br", ".jus.br"))
+                    or hostname in OFFICIAL_SOURCE_HOSTS)
         ):
             return None
     except ValueError:

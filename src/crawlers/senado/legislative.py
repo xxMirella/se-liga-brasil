@@ -62,6 +62,7 @@ def normalize_process(payload):
     document = payload.get("documento") or {}
     return {
         "source_key": str(payload["id"]),
+        "document_url": document.get("url"),
         "kind": payload["sigla"],
         "number": payload.get("numero"),
         "year": payload.get("ano"),

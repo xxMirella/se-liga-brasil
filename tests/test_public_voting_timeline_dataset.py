@@ -46,7 +46,7 @@ def test_real_public_parquet_roundtrip_preserves_two_turns_and_no_private_gates(
     original = source.read_bytes()
     partition = DatasetPartition("senado", 2026)
     manifest = publish_person_voting_timeline(source, repository, partition, "test")
-    assert manifest.schema_version == "person_voting_timeline.v1" and manifest.row_count == 2
+    assert manifest.schema_version == "person_voting_timeline.v2" and manifest.row_count == 2
     assert publish_person_voting_timeline(source, repository, partition, "test") == manifest
     partition_path = repository / "legislative/senado/person_voting_timeline/year=2026"
     assert read_manifest(partition_path) == manifest

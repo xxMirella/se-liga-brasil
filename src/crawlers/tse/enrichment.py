@@ -82,24 +82,30 @@ def collect_declared_assets(connection, storage, targets) -> dict:
 
 
 def build_requested_configuration(connection, storage, targets):
-    from crawlers.tse.requested_data import RequestedTseConfiguration, load_requested_personal_scope
+    from crawlers.tse.requested_data import (
+        RequestedTseConfiguration,
+        load_requested_election_scope,
+        load_requested_personal_scope,
+    )
 
     fields = {field for row in targets for field in row["fields"]}
     kinds = tuple(
         kind
         for kind, relevant in (
             ("candidate", {"birth_date", "education_level", "full_name"}),
+            ("complement", {"declared_assets", "declared_wealth"}),
             ("asset", {"declared_assets", "declared_wealth"}),
         )
         if fields & relevant
     )
     person_ids = sorted({row["person_id"] for row in targets})
+    election_scopes = load_requested_election_scope(connection, person_ids)
     return RequestedTseConfiguration(
         **load_requested_personal_scope(connection, person_ids),
         target_person_ids=tuple(person_ids),
         storage_directory=storage / "tse",
         years=tuple(sorted({row["election_year"] for row in targets})),
-        ufs=("SP", "RJ"),
+        ufs=tuple(sorted({r["represented_uf"] for r in election_scopes if r["represented_uf"]})),
         kinds=kinds,
         office_codes=("5", "6", "7"),
     )
@@ -122,7 +128,9 @@ def collect_requested_tse_data(connection, storage, targets) -> dict:
         repository.begin_run(str(uuid4()), {"purpose": "requested_tse_data"})
         run_started = True
         office_codes = populate_candidate_scope(connection, index, targets)
-        configuration = replace(configuration, office_codes=office_codes)
+        configuration = replace(
+            configuration, office_codes=tuple(sorted(set(office_codes) | {"5", "9", "10"}))
+        )
         with httpx.Client(timeout=configuration.request_timeout_seconds) as client:
             downloads, failures = acquire_asset_backfill(
                 configuration, OfficialHttpClient(configuration, client)

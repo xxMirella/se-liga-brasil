@@ -79,7 +79,9 @@ def test_shared_process_cached_identity_and_private_whitelist(tmp_path):
     assert records[0]["official_url"] == (
         "https://www25.senado.leg.br/web/atividade/materias/-/materia/456/votacoes"
     )
-    assert set(records[0]) == VOTE_COLUMNS | MATTER_INPUT_COLUMNS | {"source_observed_at"}
+    assert set(records[0]) == VOTE_COLUMNS | MATTER_INPUT_COLUMNS | {
+            "source_observed_at", "matter_document_url", "matter_text_url"
+        }
     assert result["receipts"][0]["collection_complete"] is False
     assert result["evidence_dependencies"] == ["a" * 64, "b" * 64]
     assert "codigoParlamentar" not in path.read_text()

@@ -28,7 +28,7 @@ from storage.files import (
     write_json_line,
 )
 
-PARSER_VERSION = "senado-daily-voting-input-v3"
+PARSER_VERSION = "senado-daily-voting-input-v4"
 MAX_INPUT_BYTES = 64 * 1024 * 1024
 MAX_INPUT_ROWS = 100000
 
@@ -178,12 +178,19 @@ def daily_vote_record(raw, vote, artifact, processes, identity_observations=None
         "description": description,
         "description_origin": "official_text" if description else "unknown",
         "official_url": nominal_voting_url(raw),
+        "matter_document_url": matter_reading_url(raw),
+        "matter_text_url": process.get("document_url"),
         "voting_subject": nullable_text(raw.get("descricaoVotacao")),
         "round_number": voting["round_number"],
         "source_observed_at": latest_observation(
             artifact.fetched_at, process_observed_at, profile_observed_at
         ),
     }
+
+
+def matter_reading_url(raw):
+    nominal = nominal_voting_url(raw)
+    return nominal.removesuffix("/votacoes") if nominal else None
 
 
 def nominal_voting_url(raw):

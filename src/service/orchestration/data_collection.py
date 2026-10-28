@@ -41,14 +41,16 @@ def ordered_source_candidates(candidates, people):
 def collect_requested_source(connection, storage, source, people, rows, candidates):
     candidates = ordered_source_candidates(candidates, people)
     if source == "tse":
+        from crawlers.tse.requested_data import load_requested_election_scope
+
         targets = [
             {
                 "person_id": row["person_id"],
-                "election_year": row["latest_election"],
+                "election_year": row["election_year"],
                 "fields": sorted(people[row["person_id"]]),
             }
-            for row in rows
-            if row["person_id"] in people and row["latest_election"]
+            for row in load_requested_election_scope(connection, list(people))
+            if row["election_year"]
         ]
         return execute_source_collection(collect_requested_tse_data, connection, storage, targets)
     if source == "alesp":

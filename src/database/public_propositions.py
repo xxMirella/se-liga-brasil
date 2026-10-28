@@ -12,13 +12,17 @@ def fetch_person_propositions(connection, person_id, as_of, page=1):
         """SELECT p.id,p.title,p.kind,p.number,p.year,p.introduced_on,p.summary,p.official_key,
           i.name AS institution,i.code AS institution_code,
           detail.normalized_data->>'principalProposition' AS principal_key,
+          detail.normalized_data->>'textUrl' AS text_url,
           parent.title AS principal_title,parent.kind AS principal_kind,
           parent.number AS principal_number,parent.year AS principal_year,
           array_agg(DISTINCT link.role) AS roles,
           (SELECT coalesce(jsonb_agg(item),'[]'::jsonb) FROM (
             SELECT e.official_event_key,e.occurred_at,e.event_type,e.description,
+              evidence.payload->>'documentUrl' AS text_url,
               (e.occurred_at AT TIME ZONE 'America/Belem')::date AS occurred_on
-            FROM se_liga_brasil.proposition_event e WHERE e.proposition_id=p.id
+            FROM se_liga_brasil.proposition_event e
+            LEFT JOIN se_liga_brasil.source_record evidence ON evidence.id=e.source_record_id
+            WHERE e.proposition_id=p.id
               AND (e.occurred_at AT TIME ZONE 'America/Belem')::date<=%s
             ORDER BY e.occurred_at DESC,e.id DESC LIMIT 101) item) AS events
         FROM se_liga_brasil.proposition_person link
@@ -40,7 +44,8 @@ def fetch_person_propositions(connection, person_id, as_of, page=1):
         {"id": row["id"], "title": row["title"], "kind": row["kind"],
          "occurred_on": row["introduced_on"].isoformat() if row["introduced_on"] else None,
          "date_precision": "day" if row["introduced_on"] else "unknown",
-         "summary": row["summary"], "official_url": row["official_key"],
+         "summary": row["summary"], "official_url": public_proposition_document_url(row),
+         "document_url": public_proposition_document_url(row), "text_url": row.get("text_url"),
          "official_key": row["official_key"], "number": row.get("number"),
          "year": row.get("year"), "institution_code": row.get("institution_code"),
          "official_parent": public_official_parent(row),
@@ -75,3 +80,12 @@ def public_document_label(row):
     if identifier is None:
         return None
     return "Documento Câmara " + identifier[1]
+
+
+def public_proposition_document_url(row):
+    key = str(row["official_key"])
+    if row.get("institution_code") == "alesp":
+        if key.isascii() and key.isdecimal() and int(key) > 0:
+            return "https://www.al.sp.gov.br/propositura/?id=" + key
+        return None
+    return key

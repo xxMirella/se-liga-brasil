@@ -92,9 +92,31 @@ def render_tenures(profile):
             value = f"{text(tenure['years'])} anos e {text(tenure['months'])} meses"
         institution = (office.get("institution") or {}).get("name")
         metrics.append(render_metric("Tempo no exercício atual", value, text(institution)))
-    return "".join(metrics) or render_metric(
-        "Tempo no exercício", "Não disponível", "Início individual não confirmado"
+        metrics.append(render_remaining_term(office))
+    return "".join(metrics) or (
+        render_metric("Tempo no exercício", "Não disponível", "Início individual não confirmado")
+        + render_metric(
+            "Tempo restante previsto", "Não disponível", "Sem mandato atual confirmado"
+        )
     )
+
+
+def render_remaining_term(office):
+    remaining = office.get("remaining_term") or {}
+    if remaining.get("status") != "documented_term_boundary":
+        return render_metric(
+            "Tempo restante previsto", "Término não informado", "Sem data final documentada"
+        )
+    value = (
+        f"{text(remaining['years'])} anos, {text(remaining['months'])} meses "
+        f"e {text(remaining['days'])} dias"
+    )
+    reference = f"Mandato previsto até {text(remaining['last_day'])}"
+    if office.get("capacity") == "substitute":
+        reference += "; exercício de suplência pode terminar antes"
+    else:
+        reference += "; não garante permanência no cargo"
+    return render_metric("Tempo restante previsto do mandato", value, reference)
 
 
 def render_payments(profile):

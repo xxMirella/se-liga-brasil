@@ -26,7 +26,23 @@ def check_public_deployment(application=None):
     application = application if application is not None else PublicPortalWSGI()
     search = check_public_search(application)
     activity = check_public_activity(application)
-    return {"status": "passed", "checks": search["checks"] + activity}
+    dashboard = check_public_dashboard(application)
+    return {"status": "passed", "checks": search["checks"] + activity + dashboard}
+
+
+def check_public_dashboard(application):
+    checks = []
+    for path, query in (
+        ("/panorama", "level=federal"),
+        ("/panorama", "level=federal&year=1889"),
+        ("/api/political-dashboard", "level=state&uf=SP"),
+        ("/api/political-dashboard", "level=municipal&uf=SP"),
+    ):
+        result = probe_wsgi(application, path, query)
+        if result["status"] != 200:
+            raise DeploymentValidationError(f"PUBLIC_DASHBOARD_HTTP_{result['status']}")
+        checks.append({"path": path, "query": query, "status": result["status"]})
+    return checks
 
 
 def check_public_activity(application):

@@ -2,8 +2,10 @@ INSERT INTO se_liga_brasil.political_party_affiliation(person_id,political_party
  source_record_id,information_valid_from,information_scope,evidence_kind)
 SELECT (b.normalized_data->>'personId')::uuid,p.id,b.source_generated_at::date,
  b.source_record_id,b.source_generated_at,'institution:senado','administrative'
-FROM ingestion_batch b JOIN se_liga_brasil.political_party p
- ON p.abbreviation=b.normalized_data->>'politicalPartyAbbreviation'
+FROM ingestion_batch b JOIN (
+ SELECT abbreviation,min(id) AS id FROM se_liga_brasil.political_party
+ GROUP BY abbreviation HAVING count(*)=1
+) p ON p.abbreviation=b.normalized_data->>'politicalPartyAbbreviation'
 WHERE NOT EXISTS(
  SELECT 1 FROM se_liga_brasil.political_party_affiliation existing
  WHERE existing.person_id=(b.normalized_data->>'personId')::uuid

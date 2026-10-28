@@ -81,7 +81,7 @@ class PublicPeopleRepository(PublicProfileRepository):
             """SELECT DISTINCT ON (t.id) e.id AS exercise_id,t.id AS term_id,
               t.office_kind,t.represented_uf,
               i.code AS institution_code,i.name AS institution_name,
-              e.starts_on,e.ends_before,e.capacity
+              e.starts_on,e.ends_before,e.capacity,t.term_end
             FROM se_liga_brasil.office_term t
             JOIN se_liga_brasil.office_exercise e ON e.term_id=t.id
             JOIN se_liga_brasil.institution i ON i.id=t.institution_id

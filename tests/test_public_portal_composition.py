@@ -22,6 +22,10 @@ def application(monkeypatch):
 def test_profile_composes_existing_projections_without_source_requests(monkeypatch):
     app, _ = application(monkeypatch)
     monkeypatch.setattr(
+        "database.alerj_history.fetch_person_historical_activity",
+        lambda *_: {"items": [], "coverage": "partial_official_synopsis"},
+    )
+    monkeypatch.setattr(
         "service.public_profile.people.get_public_person", lambda *_: {"person_id": PERSON}
     )
     monkeypatch.setattr(

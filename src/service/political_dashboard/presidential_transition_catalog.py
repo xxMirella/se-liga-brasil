@@ -1,0 +1,41 @@
+"""Source-qualified transition causes reviewed against archived official biographies."""
+
+REVIEWED_TRANSITION_EVENTS = ((1930,
+  '1930-10-24',
+  'Deposição e governo coletivo',
+  'Uma junta militar depôs Washington Luís e assumiu o controle do governo.',
+  'https://presidentes.an.gov.br/index.php/centro-de-referencia-de-acervos-presidenciais/assuntos/biografias/219-junta-governativa'),
+ (1930,
+  '1930-11-03',
+  'Transferência do governo',
+  'A Junta Governativa entregou a chefia do governo a Getúlio Vargas.',
+  'https://presidentes.an.gov.br/index.php/centro-de-referencia-de-acervos-presidenciais/assuntos/biografias/219-junta-governativa'),
+ (1945,
+  '1945-10-29',
+  'Deposição e transição',
+  'Após a deposição de Vargas, José Linhares, presidente do Supremo Tribunal Federal, '
+  'assumiu a Presidência até a posse de Dutra.',
+  'https://presidentes.an.gov.br/index.php/centro-de-referencia-de-acervos-presidenciais/assuntos/biografias/180-jose-linhares'),
+ (1955,
+  '1955-11-08',
+  'Substituição interina',
+  'Com o afastamento de Café Filho, o presidente da Câmara, Carlos Luz, assumiu '
+  'interinamente a Presidência.',
+  'https://presidentes.an.gov.br/index.php/centro-de-referencia-de-acervos-presidenciais/assuntos/biografias/195-carlos-coimbra-da-luz'),
+ (1955,
+  '1955-11-11',
+  'Impedimento e sucessão',
+  'O Congresso declarou Carlos Luz impedido; Nereu Ramos o substituiu na Presidência.',
+  'https://presidentes.an.gov.br/index.php/centro-de-referencia-de-acervos-presidenciais/assuntos/biografias/195-carlos-coimbra-da-luz'),
+ (1955,
+  '1955-11-22',
+  'Confirmação até a posse do eleito',
+  'Após o afastamento definitivo de Café Filho, a Câmara confirmou Nereu Ramos na '
+  'Presidência até a posse de Juscelino Kubitschek.',
+  'https://presidentes.an.gov.br/index.php/centro-de-referencia-de-acervos-presidenciais/assuntos/biografias/194-nereu-de-oliveira-ramos'),
+ (1969,
+  '1969-08-31',
+  'Junta militar e impedimento do vice',
+  'Após o adoecimento de Costa e Silva, o AI-12 impediu a posse de Pedro Aleixo e transferiu '
+  'o exercício presidencial a uma junta de ministros militares.',
+  'https://presidentes.an.gov.br/index.php/centro-de-referencia-de-acervos-presidenciais/assuntos/biografias/192-junta-militar'))

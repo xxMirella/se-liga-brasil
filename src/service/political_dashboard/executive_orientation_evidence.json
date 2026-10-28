@@ -1,0 +1,638 @@
+{
+  "schema_version": "executive_orientation_evidence.v1",
+  "version": "2026-10-28.3",
+  "records": [
+    {
+      "executive_source_id": "br-presidency-jair-bolsonaro-2019-2022",
+      "executive_name": "Jair Bolsonaro",
+      "institution": "presidency",
+      "territory": "BR",
+      "valid_years": [
+        2019,
+        2020,
+        2021,
+        2022
+      ],
+      "category": "far_right",
+      "label": "Extrema direita",
+      "status": "documented_academic_analysis",
+      "evidence_kind": "academic_government_analysis",
+      "scope": "government_discourse",
+      "source_terminology": "populismo de extrema direita",
+      "source_title": "O populismo de extrema direita no governo Bolsonaro: uma abordagem discursiva",
+      "source_authors": [
+        "Marcelo de Souza Marques",
+        "Euzeneia Carlos"
+      ],
+      "source_url": "https://www.scielo.br/j/soc/a/Rdd3xgrqpCF9Cr5QrLNPT8R/?lang=pt",
+      "source_doi": "https://doi.org/10.1590/1807-0337/e140107",
+      "source_publication_year": 2025,
+      "research_corpus_years": [
+        2018,
+        2022
+      ],
+      "document_count": 23,
+      "literal_quote": "o discurso populista de extrema direita do governo Bolsonaro",
+      "evidence_locator": "Resumo, último parágrafo; Introdução, delimitação do objeto e descrição do corpus",
+      "accessed_on": "2026-10-27",
+      "sha256": "22043d134a44d32994026ffe5697c022742daad7d9d30290f5df3b625ede87a1",
+      "hash_scope": "reviewed_excerpt_utf8_not_original_document",
+      "archive_path": "data/executive-orientation/bolsonaro-sociologias-2025-reviewed-excerpt.txt",
+      "limitations": [
+        "Classificação atribuída pelos autores ao discurso de governo; não é autodeclaração nem escore de partido.",
+        "O artigo analisa um corpus delimitado de programa e discursos, não cada política ou ação do governo.",
+        "2019–2022 é o período governamental estudado, não uma série de medições anuais independentes.",
+        "A publicação em 2025 analisa retrospectivamente o governo; publicação e período estudado são campos distintos.",
+        "Não transfere a classificação ao Congresso, aliados, eleitores ou partidos; não estabelece equivalência automática com fascismo ou ditadura."
+      ],
+      "exercise_id": "arquivo-nacional-president:199:2019-01-01",
+      "person_id": "arquivo-nacional-president:199",
+      "period_start": "2019-01-01",
+      "period_end_exclusive": "2023-01-01"
+    },
+    {
+      "executive_source_id": "br-presidency-lula-2003-2010",
+      "executive_name": "Luiz Inácio Lula da Silva",
+      "exercise_id": "arquivo-nacional-president:204:2003-01-01",
+      "person_id": "arquivo-nacional-president:204",
+      "institution": "presidency",
+      "territory": "BR",
+      "valid_years": [
+        2003,
+        2004,
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010
+      ],
+      "category": "left",
+      "label": "Esquerda",
+      "status": "literature_based_editorial_summary",
+      "evidence_kind": "academic_government_analysis",
+      "scope": "government_orientation_synthesis",
+      "source_terminology": "esquerda; moderação e conciliação sob presidencialismo de coalizão",
+      "source_url": "https://www.scielo.br/j/dados/a/Qpx4fcr5TZxzyBd5sz3xFhR/?lang=pt",
+      "source_title": "A Esquerda Dividida: Os Governos Lula e Dilma no Pensamento Político Brasileiro",
+      "source_authors": [
+        "Marcelo Sevaybricker Moreira"
+      ],
+      "source_publication_year": 2023,
+      "research_corpus_years": [
+        2003,
+        2010
+      ],
+      "classification_basis": "Síntese editorial de literatura retrospectiva sobre governos Lula I e II; esquerda com moderação programática e conciliação, sem classificar cada política como esquerda.",
+      "coalition_note": "Orientação geral de esquerda com conciliação entre classes, coalizão heterogênea e políticas de diferentes orientações. Não pressupõe que todas as ações sejam de esquerda.",
+      "evidence_locator": "Resumo e discussão sobre limites programáticos, coalizão e governos Lula",
+      "accessed_on": "2026-10-27",
+      "sha256": "a82582da9063b65cea57ace54dd881a2566bd84bf54df9ca0e6e12b52eff45d0",
+      "hash_scope": "reviewed_notes_utf8_not_original_document",
+      "archive_path": "data/executive-orientation/lula-2003-2010-reviewed-notes.txt",
+      "limitations": [
+        "Síntese editorial fundamentada na literatura, não autodeclaração nem escore de partido.",
+        "Não classifica automaticamente Congresso, aliados ou cada política econômica/social.",
+        "Não estende evidência dos primeiros mandatos ao terceiro: registros e períodos separados."
+      ],
+      "supporting_sources": [
+        {
+          "source_url": "https://www.scielo.br/j/nec/a/gLqzRSkjs3C8gFgwCQDNWjK/",
+          "publication_year": 2009,
+          "author": "André Singer",
+          "role": "mixed_left_and_right_elements_stability_and_distribution"
+        }
+      ]
+    },
+    {
+      "executive_source_id": "br-presidency-lula-2023",
+      "executive_name": "Luiz Inácio Lula da Silva",
+      "exercise_id": "arquivo-nacional-president:204:2023-01-01",
+      "person_id": "arquivo-nacional-president:204",
+      "institution": "presidency",
+      "territory": "BR",
+      "valid_years": [
+        2023
+      ],
+      "category": "left",
+      "label": "Esquerda",
+      "status": "literature_based_editorial_summary",
+      "evidence_kind": "academic_government_analysis",
+      "scope": "government_orientation_synthesis",
+      "source_terminology": "esquerda; moderação e conciliação sob presidencialismo de coalizão",
+      "source_url": "https://www.scielo.br/j/ccrh/a/SbtzYkB8xtPDcmSgpLC9LgN/?lang=pt",
+      "source_title": "O TERCEIRO GOVERNO LULA: limites e perspectivas",
+      "source_authors": [
+        "Carlos Zacarias de Sena Júnior",
+        "Luís Felipe Miguel",
+        "Luiz Filgueiras"
+      ],
+      "source_publication_year": 2023,
+      "research_corpus_years": [
+        2023,
+        2023
+      ],
+      "classification_basis": "Síntese editorial do estudo sobre o início do terceiro mandato: esquerda em sentido amplo, com coalizão heterogênea e concessões programáticas; não cobre automaticamente2024–2026.",
+      "coalition_note": "Orientação geral de esquerda com conciliação entre classes, coalizão heterogênea e políticas de diferentes orientações. Não pressupõe que todas as ações sejam de esquerda.",
+      "evidence_locator": "Resumo e discussão sobre limites programáticos, coalizão e governos Lula",
+      "accessed_on": "2026-10-27",
+      "sha256": "84acac75e54f06853348a2f759964006a7271b09b44eb9d2f25b92df6caa4d4e",
+      "hash_scope": "reviewed_notes_utf8_not_original_document",
+      "archive_path": "data/executive-orientation/lula-2023-reviewed-notes.txt",
+      "limitations": [
+        "Síntese editorial fundamentada na literatura, não autodeclaração nem escore de partido.",
+        "Não classifica automaticamente Congresso, aliados ou cada política econômica/social.",
+        "Não estende evidência dos primeiros mandatos ao terceiro: registros e períodos separados.",
+        "O estudo foca os primeiros seis meses de2023; não comprova isoladamente orientação anual integral nem continuidade até2026."
+      ]
+    },
+    {
+      "executive_source_id": "br-presidency-lula-2024-2026-editorial",
+      "executive_name": "Luiz Inácio Lula da Silva",
+      "exercise_id": "arquivo-nacional-president:204:2023-01-01",
+      "person_id": "arquivo-nacional-president:204",
+      "institution": "presidency",
+      "territory": "BR",
+      "valid_years": [
+        2024,
+        2025,
+        2026
+      ],
+      "category": "left",
+      "label": "Esquerda",
+      "status": "editorial_mandate_summary",
+      "evidence_kind": "editorial_government_classification",
+      "scope": "general_government_orientation",
+      "source_terminology": "esquerda; moderação e conciliação sob presidencialismo de coalizão",
+      "source_url": "https://www.scielo.br/j/ccrh/a/SbtzYkB8xtPDcmSgpLC9LgN/?lang=pt",
+      "source_title": "O TERCEIRO GOVERNO LULA: limites e perspectivas",
+      "source_authors": [
+        "Carlos Zacarias de Sena Júnior",
+        "Luís Felipe Miguel",
+        "Luiz Filgueiras"
+      ],
+      "source_publication_year": 2023,
+      "research_corpus_years": [
+        2023,
+        2023
+      ],
+      "classification_basis": "Classificação geral de esquerda adotada por decisão editorial explícita da usuária em2026-10-27 para o terceiro governo Lula em curso; não é medição acadêmica anual de2024–2026.",
+      "coalition_note": "Orientação geral de esquerda com conciliação entre classes, coalizão heterogênea e políticas de diferentes orientações. Não pressupõe que todas as ações sejam de esquerda.",
+      "evidence_locator": "Resumo e discussão sobre limites programáticos, coalizão e governos Lula",
+      "accessed_on": "2026-10-27",
+      "sha256": "84acac75e54f06853348a2f759964006a7271b09b44eb9d2f25b92df6caa4d4e",
+      "hash_scope": "reviewed_notes_utf8_not_original_document",
+      "archive_path": "data/executive-orientation/lula-2023-reviewed-notes.txt",
+      "limitations": [
+        "A fonte acadêmica de2023 analisa somente os primeiros seis meses daquele ano; não comprova isoladamente2024–2026.",
+        "Aplicação aos anos2024–2026 é decisão editorial documentada em2026-10-27, não resultado original dos autores.",
+        "Não afirma que todas as políticas, aliados ou parlamentares sejam de esquerda.",
+        "Não extrapola para2027 ou governos futuros."
+      ],
+      "editorial_reference_date": "2026-10-27",
+      "source_scope": "first_six_months_2023",
+      "ui_qualifier": "Classificação geral do governo; coalizão e políticas de orientações distintas. Síntese editorial, não medição anual."
+    },
+    {
+      "executive_source_id": "br-presidency-dilma-2011-2016",
+      "executive_name": "Dilma Rousseff",
+      "exercise_id": "arquivo-nacional-president:205:2011-01-01",
+      "person_id": "arquivo-nacional-president:205",
+      "institution": "presidency",
+      "territory": "BR",
+      "valid_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "category": "left",
+      "label": "Esquerda",
+      "status": "literature_based_editorial_summary",
+      "evidence_kind": "academic_government_analysis",
+      "scope": "government_orientation_synthesis",
+      "source_terminology": "esquerda; moderação e conciliação sob presidencialismo de coalizão",
+      "source_url": "https://www.scielo.br/j/dados/a/Qpx4fcr5TZxzyBd5sz3xFhR/?lang=pt",
+      "source_title": "A Esquerda Dividida: Os Governos Lula e Dilma no Pensamento Político Brasileiro",
+      "source_authors": [
+        "Marcelo Sevaybricker Moreira"
+      ],
+      "source_publication_year": 2023,
+      "research_corpus_years": [
+        2003,
+        2016
+      ],
+      "classification_basis": "Síntese editorial fundamentada na leitura de Moreira (2023) sobre governos petistas de 2003–2016; orientação geral de esquerda com conciliação e controvérsias, não classificação anual medida pelos autores.",
+      "coalition_note": "Orientação geral de esquerda com conciliação entre classes, coalizão heterogênea e políticas de diferentes orientações. Não pressupõe que todas as ações sejam de esquerda.",
+      "evidence_locator": "Resumo e discussão sobre limites programáticos, coalizão e governos Lula",
+      "accessed_on": "2026-10-28",
+      "sha256": "c54b3e7e84cfb90b575d6ec432a4951de6b5c8be38fe97ef35542950377655b7",
+      "hash_scope": "reviewed_notes_utf8_not_original_document",
+      "archive_path": "data/executive-orientation/dilma-2011-2016-reviewed-notes.txt",
+      "limitations": [
+        "Síntese editorial fundamentada em literatura; não medição acadêmica anual nem unanimidade interpretativa.",
+        "Não classifica aliados, Congresso ou cada ação governamental.",
+        "O exercício presidencial termina com afastamento em 12/05/2016; o mandato formal só termina em 31/08. Não transferir a classificação ao substituto."
+      ],
+      "period_start": "2011-01-01",
+      "period_end_exclusive": "2016-05-12",
+      "ui_qualifier": "Em 2016, aplica-se somente ao exercício de Dilma até 12/05 (fim exclusivo); Temer exerce a Presidência a partir dessa data."
+    },
+    {
+      "executive_name": "Michel Temer",
+      "person_id": "arquivo-nacional-president:201",
+      "institution": "presidency",
+      "territory": "BR",
+      "category": "right",
+      "label": "Direita",
+      "status": "literature_based_editorial_summary",
+      "evidence_kind": "academic_government_analysis",
+      "scope": "government_orientation_synthesis",
+      "source_terminology": "orientação mais à direita; forte orientação pró-mercado",
+      "source_title": "Governo Temer: a ponte entre os governos petistas e a ascensão de Bolsonaro",
+      "source_authors": [
+        "Carolina Maria Fernandes Guerra",
+        "Vera Lucia Michalany Chaia"
+      ],
+      "source_url": "https://e-legis.camara.leg.br/cefor/index.php/e-legis/article/view/698",
+      "source_doi": "https://doi.org/10.51206/elegis.v14i36.698",
+      "source_publication_year": 2021,
+      "research_corpus_years": [
+        2016,
+        2018
+      ],
+      "classification_basis": "Síntese editorial fundamentada em Guerra e Chaia (2021): orientação geral de direita, abrangendo centro-direita, do governo efetivamente em exercício; não decorre da filiação ao PMDB/MDB.",
+      "coalition_note": "A categoria ampla Direita inclui centro-direita nesta síntese; não classifica automaticamente todos os aliados ou cada medida governamental.",
+      "evidence_locator": "Resumo, parágrafos1–3: mudança de orientação à direita, austeridade e orientação pró-mercado",
+      "accessed_on": "2026-10-28",
+      "sha256": "f0cf0780e5c8b5ddfe9cf3fb59300ed07a2097b6423536da9dc9b80662b0726c",
+      "hash_scope": "reviewed_notes_utf8_not_original_document",
+      "archive_path": "data/executive-orientation/temer-2016-2018-reviewed-notes.txt",
+      "limitations": [
+        "Síntese editorial da literatura retrospectiva; não escore partidário nem medição acadêmica anual.",
+        "Preserva o exercício interino e o definitivo; não estende Temer ao período de Dilma.",
+        "A eleição de2018 não inicia o governo Bolsonaro: posse em01/01/2019."
+      ],
+      "supporting_sources": [
+        {
+          "source_url": "https://www12.senado.leg.br/noticias/materias/2016/08/31/michel-temer-toma-posse-na-presidencia-da-republica",
+          "role": "official_definitive_exercise_dates"
+        },
+        {
+          "source_url": "https://www.camara.leg.br/noticias/497259-michel-temer-toma-posse-como-presidente-da-republica/",
+          "role": "official_acting_exercise_start"
+        }
+      ],
+      "executive_source_id": "br-presidency-michel-temer-acting",
+      "exercise_id": "arquivo-nacional-president:201:2016-05-12",
+      "period_start": "2016-05-12",
+      "period_end_exclusive": "2016-08-31",
+      "valid_years": [
+        2016
+      ],
+      "ui_qualifier": "Exercício interino desde12/05/2016; definitivo desde31/08/2016 até31/12/2018. Eleição não altera o ocupante."
+    },
+    {
+      "executive_name": "Michel Temer",
+      "person_id": "arquivo-nacional-president:201",
+      "institution": "presidency",
+      "territory": "BR",
+      "category": "right",
+      "label": "Direita",
+      "status": "literature_based_editorial_summary",
+      "evidence_kind": "academic_government_analysis",
+      "scope": "government_orientation_synthesis",
+      "source_terminology": "orientação mais à direita; forte orientação pró-mercado",
+      "source_title": "Governo Temer: a ponte entre os governos petistas e a ascensão de Bolsonaro",
+      "source_authors": [
+        "Carolina Maria Fernandes Guerra",
+        "Vera Lucia Michalany Chaia"
+      ],
+      "source_url": "https://e-legis.camara.leg.br/cefor/index.php/e-legis/article/view/698",
+      "source_doi": "https://doi.org/10.51206/elegis.v14i36.698",
+      "source_publication_year": 2021,
+      "research_corpus_years": [
+        2016,
+        2018
+      ],
+      "classification_basis": "Síntese editorial fundamentada em Guerra e Chaia (2021): orientação geral de direita, abrangendo centro-direita, do governo efetivamente em exercício; não decorre da filiação ao PMDB/MDB.",
+      "coalition_note": "A categoria ampla Direita inclui centro-direita nesta síntese; não classifica automaticamente todos os aliados ou cada medida governamental.",
+      "evidence_locator": "Resumo, parágrafos1–3: mudança de orientação à direita, austeridade e orientação pró-mercado",
+      "accessed_on": "2026-10-28",
+      "sha256": "f0cf0780e5c8b5ddfe9cf3fb59300ed07a2097b6423536da9dc9b80662b0726c",
+      "hash_scope": "reviewed_notes_utf8_not_original_document",
+      "archive_path": "data/executive-orientation/temer-2016-2018-reviewed-notes.txt",
+      "limitations": [
+        "Síntese editorial da literatura retrospectiva; não escore partidário nem medição acadêmica anual.",
+        "Preserva o exercício interino e o definitivo; não estende Temer ao período de Dilma.",
+        "A eleição de2018 não inicia o governo Bolsonaro: posse em01/01/2019."
+      ],
+      "supporting_sources": [
+        {
+          "source_url": "https://www12.senado.leg.br/noticias/materias/2016/08/31/michel-temer-toma-posse-na-presidencia-da-republica",
+          "role": "official_definitive_exercise_dates"
+        },
+        {
+          "source_url": "https://www.camara.leg.br/noticias/497259-michel-temer-toma-posse-como-presidente-da-republica/",
+          "role": "official_acting_exercise_start"
+        }
+      ],
+      "executive_source_id": "br-presidency-michel-temer-definitive",
+      "exercise_id": "arquivo-nacional-president:201:2016-08-31",
+      "period_start": "2016-08-31",
+      "period_end_exclusive": "2019-01-01",
+      "valid_years": [
+        2016,
+        2017,
+        2018
+      ],
+      "ui_qualifier": "Exercício interino desde12/05/2016; definitivo desde31/08/2016 até31/12/2018. Eleição não altera o ocupante."
+    },
+    {
+      "executive_source_id": "br-presidency-fhc-term-1",
+      "executive_name": "Fernando Henrique Cardoso",
+      "exercise_id": "arquivo-nacional-president:197:1995-01-01",
+      "person_id": "arquivo-nacional-president:197",
+      "institution": "presidency",
+      "territory": "BR",
+      "valid_years": [
+        1995,
+        1996,
+        1997,
+        1998
+      ],
+      "period_start": "1995-01-01",
+      "period_end_exclusive": "1999-01-01",
+      "category": "right",
+      "label": "Direita",
+      "status": "literature_based_editorial_summary",
+      "evidence_kind": "academic_government_analysis",
+      "scope": "government_orientation_synthesis",
+      "source_terminology": "centro-direita; reformas liberais e coalizão conservadora",
+      "classification_basis": "Síntese editorial de orientação geral do governo; Direita é categoria ampla que inclui centro-direita. Fundamentada em análise da coalizão e agenda governamental, com documentação de privatizações e reformas; não deriva automaticamente da sigla PSDB.",
+      "coalition_note": "Centro-direita nesta síntese. A origem social-democrata do PSDB, as funções reguladoras do Estado e políticas sociais como Bolsa Escola são preservadas como ressalvas; não é extrema direita.",
+      "evidence_locator": "Introdução; Composição política do governo e apoio parlamentar; tabelas até fevereiro de1999",
+      "accessed_on": "2026-10-28",
+      "sha256": "9b9835087db26cf5150335ff39a8bd5b7ae06352fcf82934acc5c15521423363",
+      "hash_scope": "reviewed_notes_utf8_not_original_document",
+      "archive_path": "data/executive-orientation/fhc-1995-2002-reviewed-notes.txt",
+      "ui_qualifier": "Direita inclui centro-direita: síntese editorial do governo, não medição anual ou classificação de cada política.",
+      "limitations": [
+        "O artigo de1999 se concentra no primeiro mandato; não foi extrapolado sozinho para1999–2002.",
+        "Lenardão2008 fornece interpretação crítica retrospectiva; há divergências sobre agenda neoliberal e projeto social-democrata.",
+        "Documentos oficiais comprovam medidas e programa, não classificam ideologia independentemente.",
+        "Não classifica permanentemente PSDB, aliados ou Congresso; não equivale a extrema direita."
+      ],
+      "supporting_sources": [
+        {
+          "source_url": "https://www.scielo.br/j/ts/a/Xkk6C76SD6zfrn7v8n7dNqG/?lang=pt",
+          "source_title": "Governabilidade e concentração de poder institucional: o governo FHC",
+          "source_authors": [
+            "Argelina Cheibub Figueiredo",
+            "Fernando Limongi",
+            "Ana Luzia Valente"
+          ],
+          "source_publication_year": 1999,
+          "scope": "first_fhc_term_coalition_and_legislative_agenda",
+          "finding": "Classifica explicitamente a coalizão governamental como centro-direita; não é classificação do PSDB isolado.",
+          "locator": "Introdução; Composição política do governo e apoio parlamentar; tabelas até fevereiro de1999"
+        },
+        {
+          "source_url": "https://www.scielo.br/j/rsocp/a/F4ZSgN94CSm8mSPn5X8jkXK/?lang=pt",
+          "source_title": "A relação entre modernização neoliberal e práticas políticas atrasadas no Brasil dos anos1990",
+          "source_authors": [
+            "Elsio Lenardão"
+          ],
+          "source_publication_year": 2008,
+          "scope": "retrospective_analysis_both_fhc_terms",
+          "finding": "Analisa reformas neoliberais e coalizão conservadora nos dois mandatos; interpretação crítica, distinta da análise institucional de Figueiredo e colegas.",
+          "locator": "SeçõesII–III, referência explícita aos dois mandatos e à Lei de Responsabilidade Fiscal de2000"
+        },
+        {
+          "source_url": "https://bresserpereira.org.br/documents/mare/PlanoDiretor/planodiretor.pdf",
+          "source_title": "Plano Diretor da Reforma do Aparelho do Estado",
+          "source_authors": [
+            "Presidência da República",
+            "Câmara da Reforma do Estado",
+            "Ministério da Administração Federal e Reforma do Estado"
+          ],
+          "source_publication_year": 1995,
+          "scope": "official_government_program",
+          "finding": "Propõe ajuste fiscal, privatização e regulação; também rejeita Estado mínimo e defende fortalecimento estatal e funções sociais. Documento de programa, não avaliação independente.",
+          "locator": "Páginas impressas11–12,44 e47; PDFp11–12,44 e47"
+        },
+        {
+          "source_url": "https://www.bndes.gov.br/wps/portal/site/home/transparencia/desestatizacao/projetos-encerrados/privatizacao-federais-telecomunicacoes",
+          "source_title": "Privatização — Federais — Telecomunicações",
+          "source_authors": [
+            "BNDES"
+          ],
+          "source_publication_year": null,
+          "scope": "official_historical_telecommunications_reforms",
+          "finding": "Documenta abertura legal de1995, Lei Geral de1997 e privatização do Sistema Telebrás em1998, com regulação e universalização.",
+          "locator": "Seção inicial e histórico do Sistema Telebrás"
+        },
+        {
+          "source_url": "https://cdn-www.bcb.gov.br/content/ri/relatorioinflacao/200203/RELINF200203-ri200203c6p.pdf",
+          "source_title": "Relatório de Inflação — março de2002 — O Processo de Decisão do Copom",
+          "source_authors": [
+            "Banco Central do Brasil"
+          ],
+          "source_publication_year": 2002,
+          "scope": "official_monetary_framework_description",
+          "finding": "Documenta adoção de metas de inflação após câmbio flutuante em1999. Descreve instrumentos, não determina sozinho ideologia.",
+          "locator": "Página impressa116; PDFp12"
+        },
+        {
+          "source_url": "https://www2.camara.leg.br/legin/fed/lei/2001/lei-10219-11-abril-2001-358177-publicacaooriginal-1-pl.html",
+          "source_title": "Lei nº10.219, de11 de abril de2001 — Bolsa Escola",
+          "source_authors": [
+            "Congresso Nacional",
+            "Presidência da República"
+          ],
+          "source_publication_year": 2001,
+          "scope": "original_federal_social_policy_legislation",
+          "finding": "Criação de programa federal de renda mínima vinculado à educação; impede caracterização de ausência de política social.",
+          "locator": "Artigos1–2; Diário Oficial da União12/04/2001"
+        }
+      ],
+      "source_url": "https://www.scielo.br/j/ts/a/Xkk6C76SD6zfrn7v8n7dNqG/?lang=pt",
+      "source_title": "Governabilidade e concentração de poder institucional: o governo FHC",
+      "source_authors": [
+        "Argelina Cheibub Figueiredo",
+        "Fernando Limongi",
+        "Ana Luzia Valente"
+      ],
+      "source_publication_year": 1999,
+      "research_corpus_years": [
+        1995,
+        1998
+      ]
+    },
+    {
+      "executive_source_id": "br-presidency-fhc-term-2",
+      "executive_name": "Fernando Henrique Cardoso",
+      "exercise_id": "arquivo-nacional-president:197:1999-01-01",
+      "person_id": "arquivo-nacional-president:197",
+      "institution": "presidency",
+      "territory": "BR",
+      "valid_years": [
+        1999,
+        2000,
+        2001,
+        2002
+      ],
+      "period_start": "1999-01-01",
+      "period_end_exclusive": "2003-01-01",
+      "category": "right",
+      "label": "Direita",
+      "status": "literature_based_editorial_summary",
+      "evidence_kind": "academic_government_analysis",
+      "scope": "government_orientation_synthesis",
+      "source_terminology": "centro-direita; reformas liberais e coalizão conservadora",
+      "classification_basis": "Síntese editorial de orientação geral do governo; Direita é categoria ampla que inclui centro-direita. Fundamentada em análise da coalizão e agenda governamental, com documentação de privatizações e reformas; não deriva automaticamente da sigla PSDB.",
+      "coalition_note": "Centro-direita nesta síntese. A origem social-democrata do PSDB, as funções reguladoras do Estado e políticas sociais como Bolsa Escola são preservadas como ressalvas; não é extrema direita.",
+      "evidence_locator": "SeçõesII–III, referência explícita aos dois mandatos e à Lei de Responsabilidade Fiscal de2000",
+      "accessed_on": "2026-10-28",
+      "sha256": "9b9835087db26cf5150335ff39a8bd5b7ae06352fcf82934acc5c15521423363",
+      "hash_scope": "reviewed_notes_utf8_not_original_document",
+      "archive_path": "data/executive-orientation/fhc-1995-2002-reviewed-notes.txt",
+      "ui_qualifier": "Direita inclui centro-direita: síntese editorial do governo, não medição anual ou classificação de cada política.",
+      "limitations": [
+        "O artigo de1999 se concentra no primeiro mandato; não foi extrapolado sozinho para1999–2002.",
+        "Lenardão2008 fornece interpretação crítica retrospectiva; há divergências sobre agenda neoliberal e projeto social-democrata.",
+        "Documentos oficiais comprovam medidas e programa, não classificam ideologia independentemente.",
+        "Não classifica permanentemente PSDB, aliados ou Congresso; não equivale a extrema direita."
+      ],
+      "supporting_sources": [
+        {
+          "source_url": "https://www.scielo.br/j/ts/a/Xkk6C76SD6zfrn7v8n7dNqG/?lang=pt",
+          "source_title": "Governabilidade e concentração de poder institucional: o governo FHC",
+          "source_authors": [
+            "Argelina Cheibub Figueiredo",
+            "Fernando Limongi",
+            "Ana Luzia Valente"
+          ],
+          "source_publication_year": 1999,
+          "scope": "first_fhc_term_coalition_and_legislative_agenda",
+          "finding": "Classifica explicitamente a coalizão governamental como centro-direita; não é classificação do PSDB isolado.",
+          "locator": "Introdução; Composição política do governo e apoio parlamentar; tabelas até fevereiro de1999"
+        },
+        {
+          "source_url": "https://www.scielo.br/j/rsocp/a/F4ZSgN94CSm8mSPn5X8jkXK/?lang=pt",
+          "source_title": "A relação entre modernização neoliberal e práticas políticas atrasadas no Brasil dos anos1990",
+          "source_authors": [
+            "Elsio Lenardão"
+          ],
+          "source_publication_year": 2008,
+          "scope": "retrospective_analysis_both_fhc_terms",
+          "finding": "Analisa reformas neoliberais e coalizão conservadora nos dois mandatos; interpretação crítica, distinta da análise institucional de Figueiredo e colegas.",
+          "locator": "SeçõesII–III, referência explícita aos dois mandatos e à Lei de Responsabilidade Fiscal de2000"
+        },
+        {
+          "source_url": "https://bresserpereira.org.br/documents/mare/PlanoDiretor/planodiretor.pdf",
+          "source_title": "Plano Diretor da Reforma do Aparelho do Estado",
+          "source_authors": [
+            "Presidência da República",
+            "Câmara da Reforma do Estado",
+            "Ministério da Administração Federal e Reforma do Estado"
+          ],
+          "source_publication_year": 1995,
+          "scope": "official_government_program",
+          "finding": "Propõe ajuste fiscal, privatização e regulação; também rejeita Estado mínimo e defende fortalecimento estatal e funções sociais. Documento de programa, não avaliação independente.",
+          "locator": "Páginas impressas11–12,44 e47; PDFp11–12,44 e47"
+        },
+        {
+          "source_url": "https://www.bndes.gov.br/wps/portal/site/home/transparencia/desestatizacao/projetos-encerrados/privatizacao-federais-telecomunicacoes",
+          "source_title": "Privatização — Federais — Telecomunicações",
+          "source_authors": [
+            "BNDES"
+          ],
+          "source_publication_year": null,
+          "scope": "official_historical_telecommunications_reforms",
+          "finding": "Documenta abertura legal de1995, Lei Geral de1997 e privatização do Sistema Telebrás em1998, com regulação e universalização.",
+          "locator": "Seção inicial e histórico do Sistema Telebrás"
+        },
+        {
+          "source_url": "https://cdn-www.bcb.gov.br/content/ri/relatorioinflacao/200203/RELINF200203-ri200203c6p.pdf",
+          "source_title": "Relatório de Inflação — março de2002 — O Processo de Decisão do Copom",
+          "source_authors": [
+            "Banco Central do Brasil"
+          ],
+          "source_publication_year": 2002,
+          "scope": "official_monetary_framework_description",
+          "finding": "Documenta adoção de metas de inflação após câmbio flutuante em1999. Descreve instrumentos, não determina sozinho ideologia.",
+          "locator": "Página impressa116; PDFp12"
+        },
+        {
+          "source_url": "https://www2.camara.leg.br/legin/fed/lei/2001/lei-10219-11-abril-2001-358177-publicacaooriginal-1-pl.html",
+          "source_title": "Lei nº10.219, de11 de abril de2001 — Bolsa Escola",
+          "source_authors": [
+            "Congresso Nacional",
+            "Presidência da República"
+          ],
+          "source_publication_year": 2001,
+          "scope": "original_federal_social_policy_legislation",
+          "finding": "Criação de programa federal de renda mínima vinculado à educação; impede caracterização de ausência de política social.",
+          "locator": "Artigos1–2; Diário Oficial da União12/04/2001"
+        }
+      ],
+      "source_url": "https://www.scielo.br/j/rsocp/a/F4ZSgN94CSm8mSPn5X8jkXK/?lang=pt",
+      "source_title": "A relação entre modernização neoliberal e práticas políticas atrasadas no Brasil dos anos1990",
+      "source_authors": [
+        "Elsio Lenardão"
+      ],
+      "source_publication_year": 2008,
+      "research_corpus_years": [
+        1995,
+        2002
+      ]
+    }
+  ],
+  "regime_records": [
+    {
+      "regime_source_id": "senado-vcb:16005",
+      "regime_name": "Ditadura militar brasileira",
+      "territory": "BR",
+      "scope": "political_regime",
+      "category": "right",
+      "label": "Direita",
+      "status": "documented_historiographical_synthesis",
+      "evidence_kind": "academic_regime_analysis",
+      "period_start": "1964-04-01",
+      "period_end_exclusive": "1985-03-15",
+      "source_url": "https://periodicos.ufmg.br/index.php/temporalidades/article/view/46806",
+      "source_title": "Os elementos conservadores do autoritarismo na Ditadura Militar (1964–1985)",
+      "source_publication_year": 2024,
+      "source_authors": [
+        "Rodrigo de Souza Costa"
+      ],
+      "supporting_sources": [
+        {
+          "source_url": "https://www.scielo.br/j/bpsr/a/NM7nctR83dYfLXyhgR3KgPn/",
+          "author": "Diogo Cunha",
+          "publication_year": 2021,
+          "role": "historical_analysis_conservative_legitimation"
+        },
+        {
+          "source_url": "https://adm.senado.leg.br/vcb/vocab/index.php?%2Fregime-militar-1964-1985=&tema=16005",
+          "role": "institutional_period_dates"
+        }
+      ],
+      "evidence_locator": "Costa2024 PDFp11, página impressa563; Cunha2021 resumo e introdução; SenadoVCB definição",
+      "classification_basis": "Síntese historiográfica das bases conservadoras, identificação de grupos militares à direita e legitimação do regime; não derivada apenas da natureza ditatorial.",
+      "accessed_on": "2026-10-27",
+      "sha256": "db30e9124b617e96c4a51b495fc8da2de30c78c2bd7ff45b7e8e94584d2c3f6a",
+      "hash_scope": "reviewed_notes_utf8_not_original_document",
+      "archive_path": "data/executive-orientation/military-regime-reviewed-notes.txt",
+      "limitations": [
+        "Classificação do regime, sem atribuição automática a todos os indivíduos, partidos ou casas legislativas.",
+        "As fontes reconhecem diversidade interna; direita é síntese agregada, não homogeneidade ideológica ou extrema direita presumida.",
+        "1964 e1985 têm somente parte do ano dentro do intervalo; não classificar o ano inteiro.",
+        "Fim exclusivo15/03/1985 acompanha a mudança de regime naquela data; não informa hora exata."
+      ]
+    }
+  ]
+}

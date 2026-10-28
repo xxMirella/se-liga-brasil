@@ -25,8 +25,11 @@ def configure_release_environment(monkeypatch):
 def test_database_alone_cannot_approve_release_without_storage(monkeypatch):
     monkeypatch.setenv("DATABASE_URL", "postgresql://ci:ci@localhost/test")
     for key in (
-        "SUPABASE_STORAGE_URL", "SUPABASE_STORAGE_KEY", "SUPABASE_URL",
-        "SUPABASE_PROJECT_ID", "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_STORAGE_URL",
+        "SUPABASE_STORAGE_KEY",
+        "SUPABASE_URL",
+        "SUPABASE_PROJECT_ID",
+        "SUPABASE_SERVICE_ROLE_KEY",
     ):
         monkeypatch.delenv(key, raising=False)
     application = Mock()
@@ -59,11 +62,24 @@ def test_activity_check_opens_html_and_history_api(monkeypatch):
         return [json.dumps({"items": [{"person_id": "person"}]}).encode()]
 
     result = check_public_deployment(available)
-    assert len(result["checks"]) == 5
-    assert calls[-2:] == [
+    assert len(result["checks"]) == 9
+    assert calls[4:6] == [
         ("/pessoas/person", "tab=activity&scope=history"),
         ("/api/people/person/votes", "scope=history"),
     ]
+
+
+@pytest.mark.parametrize("failed_path", ["/panorama", "/api/political-dashboard"])
+def test_dashboard_failure_blocks_release_with_working_people_routes(monkeypatch, failed_path):
+    configure_release_environment(monkeypatch)
+
+    def application(environ, start_response):
+        status = "503 Service Unavailable" if environ["PATH_INFO"] == failed_path else "200 OK"
+        start_response(status, [])
+        return [json.dumps({"items": [{"person_id": "person"}]}).encode()]
+
+    with pytest.raises(DeploymentValidationError, match="PUBLIC_DASHBOARD_HTTP_503"):
+        check_public_deployment(application)
 
 
 def test_empty_database_cannot_claim_activity_was_validated():
@@ -109,7 +125,8 @@ def test_release_probes_both_rendered_results_and_filtered_json(monkeypatch):
 
     assert check_public_search(available)["status"] == "passed"
     assert observed == [
-        ("/pessoas", "limit=4"), ("/api/people", "limit=4"),
+        ("/pessoas", "limit=4"),
+        ("/api/people", "limit=4"),
         ("/api/people", "q=Brasil&limit=4"),
     ]
 
@@ -139,3 +156,18 @@ def test_favicon_is_local_svg_available_without_database(monkeypatch):
     application = PublicPortalWSGI()
     assert probe_wsgi(application, "/assets/brazil-flag.svg", "")["status"] == 200
     assert probe_wsgi(application, "/favicon.ico", "")["status"] == 200
+
+
+def test_municipal_schema_failure_cannot_hide_behind_working_federal_dashboard(monkeypatch):
+    configure_release_environment(monkeypatch)
+
+    def application(environ, start_response):
+        failed = (
+            environ["PATH_INFO"] == "/api/political-dashboard"
+            and environ["QUERY_STRING"] == "level=municipal&uf=SP"
+        )
+        start_response("503 Service Unavailable" if failed else "200 OK", [])
+        return [json.dumps({"items": [{"person_id": "person"}]}).encode()]
+
+    with pytest.raises(DeploymentValidationError, match="PUBLIC_DASHBOARD_HTTP_503"):
+        check_public_deployment(application)

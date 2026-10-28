@@ -3,7 +3,10 @@
 from datetime import date, timedelta
 from tempfile import TemporaryDirectory
 
-from service.analytical_datasets.public_voting_timeline import PUBLIC_TIMELINE_COLUMNS
+from service.analytical_datasets.public_voting_timeline import (
+    LEGACY_PUBLIC_TIMELINE_COLUMNS,
+    PUBLIC_TIMELINE_COLUMNS,
+)
 from service.analytical_datasets.storage import connect_analytical_engine
 from service.daily_voting_dataset.contracts import DailyVotingPartition
 from service.dataset_storage.read import DatasetReadError
@@ -45,7 +48,9 @@ def validate_public_parquet(engine, path, manifest):
         row[0]: row[1]
         for row in engine.execute("DESCRIBE SELECT * FROM read_parquet(?)", [str(path)]).fetchall()
     }
-    if fields != PUBLIC_TIMELINE_COLUMNS:
+    expected = (PUBLIC_TIMELINE_COLUMNS if manifest["schema_version"].endswith(".v2")
+                else LEGACY_PUBLIC_TIMELINE_COLUMNS)
+    if fields != expected:
         raise DatasetReadError("DATASET_PUBLIC_SCHEMA_INVALID")
     invalid = engine.execute(
         "SELECT count(*),count(*) FILTER (WHERE institution_code IS DISTINCT FROM ? "
@@ -85,12 +90,22 @@ def query_snapshot(reader, snapshot, query, cursor, exercises):
         if cursor:
             parameters.extend([cursor["date"], cursor["id"]])
         parameters.append(query.limit + 1)
-        columns = ",".join(PUBLIC_TIMELINE_COLUMNS)
+        columns = compatible_timeline_selection(engine, paths)
         result = engine.execute(
-            f"SELECT {columns} FROM read_parquet(?) WHERE person_id=? "
+            f"SELECT {columns} FROM read_parquet(?, union_by_name=true) WHERE person_id=? "
             f"AND occurred_on BETWEEN ? AND ? AND {office_sql} {cursor_sql} "
             "ORDER BY occurred_on DESC,voting_id DESC LIMIT ?",
             parameters,
         )
         names = [column[0] for column in result.description]
         return [dict(zip(names, row, strict=True)) for row in result.fetchall()]
+
+
+def compatible_timeline_selection(engine, paths):
+    available = {row[0] for row in engine.execute(
+        "DESCRIBE SELECT * FROM read_parquet(?, union_by_name=true)", [paths]
+    ).fetchall()}
+    return ",".join(
+        f"NULL::VARCHAR AS {column}" if column not in available else column
+        for column in PUBLIC_TIMELINE_COLUMNS
+    )

@@ -18,6 +18,7 @@ def render_public_navigation(active):
     for key, label, url in (
         ("about", "Sobre", "/sobre"),
         ("people", "Consulta de pessoas", "/pessoas"),
+        ("panorama", "Panorama político", "/panorama"),
         ("guide", "Entenda os cargos", "/como-funciona"),
     ):
         selected = ' class="selected" aria-current="page"' if active == key else ""

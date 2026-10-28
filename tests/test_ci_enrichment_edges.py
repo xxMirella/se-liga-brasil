@@ -296,13 +296,17 @@ def test_requested_configuration_deduplicates_people_years_and_requested_resourc
     from crawlers.tse import requested_data
 
     monkeypatch.setattr(requested_data, "load_requested_personal_scope", Mock(return_value={}))
+    monkeypatch.setattr(requested_data, "load_requested_election_scope", Mock(return_value=[
+        {"person_id": "one", "election_year": 2024, "represented_uf": "AC"},
+    ]))
     targets = [
         {"person_id": "one", "election_year": 2024, "fields": ["birth_date"]},
         {"person_id": "one", "election_year": 2024, "fields": ["declared_wealth"]},
     ]
     config = enrichment.build_requested_configuration(Mock(), tmp_path, targets)
     assert config.target_person_ids == ("one",) and config.years == (2024,)
-    assert config.kinds == ("candidate", "asset")
+    assert config.kinds == ("candidate", "complement", "asset")
+    assert config.ufs == ("AC",)
     connection = Mock()
     connection.execute.return_value.fetchall.return_value = [{"reason_code": "CONFLICT"}]
     assert enrichment.find_declaration_conflicts(connection, ["one"]) == [

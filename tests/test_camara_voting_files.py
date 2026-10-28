@@ -139,7 +139,9 @@ def test_shared_discovery_two_events_one_profile_one_matter_and_one_identity_que
     assert acquisition.calls.count("proposicoes/100") == 1
     assert {row["voting_id"] for row in rows} == {"camara:voting:100-1", "camara:voting:100-2"}
     assert all(
-        set(row) == VOTE_COLUMNS | MATTER_INPUT_COLUMNS | {"source_observed_at"} for row in rows
+        set(row) == VOTE_COLUMNS | MATTER_INPUT_COLUMNS | {
+            "source_observed_at", "matter_document_url", "matter_text_url"
+        } for row in rows
     )
     projected = project_public_voting_timeline(
         {key: value for key, value in rows[0].items() if key != "source_observed_at"},
