@@ -77,11 +77,14 @@ def test_card_and_timeline_visibly_qualify_majority_and_sensitivity():
     html = render_composition(composition, "Senado Federal", "Brasil",
                               "https://www25.senado.leg.br",
                               view="political_orientation", year=2026)
-    assert "Maioria de direita pela referência acadêmica de 2022" in html
-    assert "não medição acadêmica de 2026" in html
-    assert "40/81" in html
-    assert "direita 53/81 com MDB no centro" in html
-    assert "direita 49/81 com MDB no centro" in html
+    assert "Direita: 63/81 cadeiras" in html
+    assert '/fontes-dos-dados#senado-2026' in html
+    from service.data_sources.page import render_data_sources
+
+    sources = render_data_sources()
+    assert "direita 53/81 com MDB no centro" in sources
+    assert "direita 49/81 com MDB no centro" in sources
+    assert "40/81" in sources
     assert html.count("<circle ") == 81
     assert "<span>Direita</span><strong>63<small>77,8%</small></strong>" in html
     assert "Não há classificação documentada para este ano" not in html

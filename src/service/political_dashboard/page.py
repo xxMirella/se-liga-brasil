@@ -7,7 +7,6 @@ from uuid import UUID
 from service.political_dashboard.composition_charts import render_party_bars
 from service.political_dashboard.composition_presentation import composition_presentation
 from service.political_dashboard.contracts import STATE_NAMES
-from service.political_dashboard.executive_context import render_government_context_observations
 from service.political_dashboard.orientation_composition import (
     orientation_composition,
     render_orientation_composition_note,
@@ -26,6 +25,7 @@ from service.political_dashboard.view_filter import (
 )
 from service.public_profile_web.layout import render_layout
 from service.public_profile_web.security import official_url, person_path, text
+from service.public_profile_web.static_text import read_static_text
 
 POLITICAL_PARTY_QUALIFIERS = {
     "verified_party_official_dated_government_statement": (
@@ -56,7 +56,7 @@ POLITICAL_PARTY_QUALIFIERS = {
 
 
 def dashboard_stylesheet():
-    return (Path(__file__).parent / "panorama.css").read_text(encoding="utf-8")
+    return read_static_text(Path(__file__).parent / "panorama.css")
 
 
 def render_state_options(selected, *, national=False):
@@ -171,7 +171,10 @@ def composition_chart_presentation(composition, title, view, year, reference_on)
 
     presentation = orientation_composition(presentation, selected_year)
     note = render_orientation_composition_note(composition, selected_year, reference_on)
-    return presentation, note + render_senate_orientation_summary(presentation)
+    from service.political_dashboard.camara_orientation import render_chamber_orientation_summary
+
+    return presentation, (note + render_senate_orientation_summary(presentation)
+                          + render_chamber_orientation_summary(composition, selected_year))
 
 
 def render_composition(composition, title, eyebrow, official_link, *,
@@ -419,74 +422,19 @@ def render_executive(executive, title, eyebrow, *, view="political_party", year=
         render_executive_orientation,
     )
 
-    segments = executive.get("segments", [])
     selected = executive_presentation_record(executive)
-    if selected:
-        details = (
-            f"<h3>{render_person_name(selected)}</h3>"
-            f"<p>{render_executive_political_party(selected)}</p>"
-            + (f'<p>Observação oficial: {text(selected["source_observed_on"])}</p>'
-               if selected.get("source_observed_on") else "")
-            + '<div class="panorama-executive-links">'
-            + render_executive_source(selected)
-            + render_executive_political_party_sources(selected) + '</div>' 
-        )
-    elif segments:
-        details = render_executive_annual_summary(segments)
-    elif executive.get("coverage") == "not_applicable":
-        details = f'<p>{text(executive.get("context_description"))}</p>'
-    else:
-        details = '<div class="panorama-government-status">Histórico em construção</div>'
-        details += "<p>Não há exercício documentado para o ano selecionado neste recorte.</p>"
-    history = "".join(
-        f"<li><strong>{render_person_name(segment)}</strong>"
-        f"{render_executive_political_party(segment)}"
-        f"<span>{render_executive_period(segment)}</span>{render_executive_source(segment)}"
-        f"{render_executive_political_party_sources(segment)}</li>"
-        for segment in segments
+    records = [selected] if selected else executive.get("segments", [])
+    details = "".join(
+        f"<h3>{render_person_name(record)}</h3><p>{text(record.get('political_party'))}</p>"
+        for record in records
     )
-    periods = (
-        ("<details><summary>Períodos documentados</summary><ul>" + history + "</ul></details>")
-        if history
-        else ""
-    )
+    if not details:
+        context = executive.get("context_description") or "Histórico em construção"
+        details = f"<p>{text(context)}</p>"
     return f"""<section class="panorama-government"><p class="eyebrow">{eyebrow}</p>
 <h2>{text(title)}</h2>{details}{render_executive_orientation(executive, view, year)}
-<a href="#panorama-history">Consultar cobertura histórica ↓</a>
-{periods}{render_executive_party_periods(executive)}
-{render_executive_observations(executive)}
-{render_government_context_observations(executive.get("government_context_observations"))}
+<p><a href="/fontes-dos-dados#presidencia">Para saber mais, veja as fontes dos dados ↗</a></p>
 </section>"""
-
-
-
-
-def render_executive_party_periods(executive):
-    periods = [period for segment in executive.get("segments", [])
-               for period in segment.get("political_party_periods", [])]
-    if not periods:
-        periods = (executive.get("current") or {}).get("political_party_periods", [])
-    if not periods:
-        return ""
-    rows = []
-    for period in periods:
-        end = period.get("ends_before")
-        last_day = date.fromisoformat(end) - timedelta(days=1) if end else None
-        interval = f"{text(period.get('starts_on'))} a {text(last_day, 'fim não documentado')}"
-        if period.get("date_precision") == "year":
-            start_year = str(period.get("starts_on") or period.get("year_start"))[:4]
-            end_year = str(last_day.year) if last_day else text(period.get("year_end"))
-            interval = f"{text(start_year)}–{text(end_year)} · Classificação anual"
-        rows.append(
-            f'<li><strong>{text(period["political_party"])}</strong><span>{interval}</span>'
-            f'{render_executive_source(period)}</li>'
-        )
-    return (
-        '<details><summary>Partidos e mudanças neste ano</summary>'
-        '<p>Intervalos sem registro permanecem sem comprovação; '
-        'não são preenchidos por inferência.</p>'
-        f'<ul>{"".join(rows)}</ul></details>'
-    )
 
 
 def render_executive_observations(executive):
@@ -625,8 +573,7 @@ def render_dashboard(data, today):
     content = f"""<div class="panorama"><header class="panorama-intro"><div>
 <p class="eyebrow">Quem representa você</p>
 <h1>O poder, em perspectiva.</h1>
-<p>Da Presidência à sua cidade: acompanhe os partidos e quem exerce cada cargo.
-Explore diferentes épocas, do Senado no Império à representação atual.</p></div>
+<p>Da Presidência à sua cidade: acompanhe os partidos e quem exerce cada cargo.</p></div>
 <div class="panorama-stamp">PANORAMA POLÍTICO
 <strong>{text(territory_name)}</strong>
 <span>Ano: {data.get("year", data["as_of"][:4])} · Referência: {data["as_of"]}</span></div></header>
@@ -636,15 +583,7 @@ Explore diferentes épocas, do Senado no Império à representação atual.</p><
 {render_orientation_legend(data)}
 <div class="panorama-grid" id="panorama-results">{render_level_panels(data)}</div>
 {render_history(data)}
-<aside class="panorama-coverage"><details><summary>Fontes e cobertura</summary>
-<p>As contagens usam observações oficiais datadas.
-Uma observação atual não preenche o passado. 
-Suplentes entram apenas quando o exercício está confirmado.
-Partidos informados pela fonte são preservados 
-mesmo quando a filiação ainda não foi reconciliada no cadastro.</p>
-<p>Selecione um estado e depois seus municípios. Cada instituição apresenta apenas
-os dados documentados; a cobertura pode variar conforme o ano e o território.</p>
-</details></aside></div>"""
+</div>"""
     return render_layout(
         "Panorama político",
         content,

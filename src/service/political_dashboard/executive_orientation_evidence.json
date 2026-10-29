@@ -1,6 +1,6 @@
 {
   "schema_version": "executive_orientation_evidence.v1",
-  "version": "2026-10-28.3",
+  "version": "2026-10-28.4",
   "records": [
     {
       "executive_source_id": "br-presidency-jair-bolsonaro-2019-2022",
@@ -589,6 +589,318 @@
         1995,
         2002
       ]
+    },
+    {
+      "institution": "presidency",
+      "territory": "BR",
+      "status": "literature_based_editorial_summary",
+      "evidence_kind": "academic_government_analysis",
+      "scope": "government_orientation_synthesis",
+      "source_terminology": "direita; coalizões e orientações governamentais heterogêneas",
+      "source_url": "https://www.scielo.br/j/op/a/BHXTTx8b7Fk78jfDLRRmr8j/?lang=pt",
+      "source_title": "A reativação da direita no Brasil",
+      "source_authors": [
+        "André Singer"
+      ],
+      "source_publication_year": 2021,
+      "accessed_on": "2026-10-28",
+      "hash_scope": "reviewed_notes_utf8_not_original_document",
+      "supporting_sources": [
+        {
+          "source_url": "https://pesquisa-eaesp.fgv.br/sites/gvpesquisa.fgv.br/files/arquivos/bresser_-_o_governo_collor_e_a_modernidade_em_tempos_incertos.pdf",
+          "source_title": "O governo Collor e a modernidade em tempos incertos",
+          "source_authors": [
+            "Luiz Carlos Bresser-Pereira"
+          ],
+          "source_publication_year": 1991,
+          "evidence_locator": "pp.3,7–9; nota 3"
+        }
+      ],
+      "executive_source_id": "br-presidency-sarney-1985-1990-early",
+      "executive_name": "José Sarney",
+      "exercise_id": "arquivo-nacional-president:198:1985-03-15",
+      "person_id": "arquivo-nacional-president:198",
+      "valid_years": [
+        1985,
+        1986
+      ],
+      "category": "controversial",
+      "label": "Classificação controversa",
+      "period_start": "1985-03-15",
+      "period_end_exclusive": "1990-03-15",
+      "research_corpus_years": [
+        1985,
+        1990
+      ],
+      "evidence_locator": "Singer (2021), introdução e periodização1964–1992; Bresser (1991), pp.7–9 e nota 3",
+      "classification_basis": "Confronto editorial entre interpretações acadêmicas. Singer descreve continuidade da direita e caráter híbrido do governo PMDB/PFL; Bresser diferencia aliança inicial com esquerda e aproximação à direita a partir de 1987.",
+      "coalition_note": "Governo civil de transição democrática, com coalizão PMDB/PFL e orientações heterogêneas; a classificação não o equipara ao regime militar.",
+      "ui_qualifier": "Em1985–1986, as fontes divergem sobre o enquadramento global; preservamos classificação controversa, não centro presumido.",
+      "orientation_change_date_precision": "year",
+      "capacity_segments": [
+        {
+          "starts_on": "1985-03-15",
+          "ends_before": "1985-04-21",
+          "capacity": "vice_president_exercising_presidency"
+        },
+        {
+          "starts_on": "1985-04-21",
+          "ends_before": "1990-03-15",
+          "capacity": "president_by_succession"
+        }
+      ],
+      "official_period_source_url": "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/jose_sarney/copy_of_capa-dados-ex-presidente",
+      "limitations": [
+        "Divergência de interpretação histórica, não medição acadêmica anual.",
+        "O recorte entre1986/1987 é operacional na resolução anual: não afirma mudança em 01/01/1987.",
+        "Não herda classificação do PMDB atual nem transforma coalizão em orientação individual."
+      ],
+      "archive_path": "data/executive-orientation/br-presidency-sarney-1985-1990-early-reviewed-notes.txt",
+      "sha256": "65d0d4d70687ef59b8edc9263edd9f0e83dc95396152ab99eafb7c49443c83d7"
+    },
+    {
+      "institution": "presidency",
+      "territory": "BR",
+      "status": "literature_based_editorial_summary",
+      "evidence_kind": "academic_government_analysis",
+      "scope": "government_orientation_synthesis",
+      "source_terminology": "direita; coalizões e orientações governamentais heterogêneas",
+      "source_url": "https://www.scielo.br/j/op/a/BHXTTx8b7Fk78jfDLRRmr8j/?lang=pt",
+      "source_title": "A reativação da direita no Brasil",
+      "source_authors": [
+        "André Singer"
+      ],
+      "source_publication_year": 2021,
+      "accessed_on": "2026-10-28",
+      "hash_scope": "reviewed_notes_utf8_not_original_document",
+      "supporting_sources": [
+        {
+          "source_url": "https://pesquisa-eaesp.fgv.br/sites/gvpesquisa.fgv.br/files/arquivos/bresser_-_o_governo_collor_e_a_modernidade_em_tempos_incertos.pdf",
+          "source_title": "O governo Collor e a modernidade em tempos incertos",
+          "source_authors": [
+            "Luiz Carlos Bresser-Pereira"
+          ],
+          "source_publication_year": 1991,
+          "evidence_locator": "pp.3,7–9; nota 3"
+        }
+      ],
+      "executive_source_id": "br-presidency-sarney-1985-1990-late",
+      "executive_name": "José Sarney",
+      "exercise_id": "arquivo-nacional-president:198:1985-03-15",
+      "person_id": "arquivo-nacional-president:198",
+      "valid_years": [
+        1987,
+        1988,
+        1989,
+        1990
+      ],
+      "category": "right",
+      "label": "Direita",
+      "period_start": "1985-03-15",
+      "period_end_exclusive": "1990-03-15",
+      "research_corpus_years": [
+        1985,
+        1990
+      ],
+      "evidence_locator": "Singer (2021), introdução e periodização1964–1992; Bresser (1991), pp.7–9 e nota 3",
+      "classification_basis": "Confronto editorial entre interpretações acadêmicas. Singer descreve continuidade da direita e caráter híbrido do governo PMDB/PFL; Bresser diferencia aliança inicial com esquerda e aproximação à direita a partir de 1987.",
+      "coalition_note": "Governo civil de transição democrática, com coalizão PMDB/PFL e orientações heterogêneas; a classificação não o equipara ao regime militar.",
+      "ui_qualifier": "Síntese de direita ampla/centro-direita para 1987–1990; a literatura situa mudança em 1987 sem comprovar dia exato. Não classifica todas as políticas ou integrantes.",
+      "orientation_change_date_precision": "year",
+      "capacity_segments": [
+        {
+          "starts_on": "1985-03-15",
+          "ends_before": "1985-04-21",
+          "capacity": "vice_president_exercising_presidency"
+        },
+        {
+          "starts_on": "1985-04-21",
+          "ends_before": "1990-03-15",
+          "capacity": "president_by_succession"
+        }
+      ],
+      "official_period_source_url": "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/jose_sarney/copy_of_capa-dados-ex-presidente",
+      "limitations": [
+        "Divergência de interpretação histórica, não medição acadêmica anual.",
+        "O recorte entre1986/1987 é operacional na resolução anual: não afirma mudança em 01/01/1987.",
+        "Não herda classificação do PMDB atual nem transforma coalizão em orientação individual."
+      ],
+      "archive_path": "data/executive-orientation/br-presidency-sarney-1985-1990-late-reviewed-notes.txt",
+      "sha256": "33a399fd51ec5e3e7920700c310510f3b1acb5a064b63d9400e6d0bd030f7398"
+    },
+    {
+      "institution": "presidency",
+      "territory": "BR",
+      "status": "literature_based_editorial_summary",
+      "evidence_kind": "academic_government_analysis",
+      "scope": "government_orientation_synthesis",
+      "source_terminology": "direita moderna; reformismo liberal com inspirações e políticas diversas",
+      "source_url": "https://www.scielo.br/j/op/a/BHXTTx8b7Fk78jfDLRRmr8j/?lang=pt",
+      "source_title": "A reativação da direita no Brasil",
+      "source_authors": [
+        "André Singer"
+      ],
+      "source_publication_year": 2021,
+      "accessed_on": "2026-10-28",
+      "hash_scope": "reviewed_notes_utf8_not_original_document",
+      "supporting_sources": [
+        {
+          "source_url": "https://pesquisa-eaesp.fgv.br/sites/gvpesquisa.fgv.br/files/arquivos/bresser_-_o_governo_collor_e_a_modernidade_em_tempos_incertos.pdf",
+          "source_title": "O governo Collor e a modernidade em tempos incertos",
+          "source_authors": [
+            "Luiz Carlos Bresser-Pereira"
+          ],
+          "source_publication_year": 1991,
+          "evidence_locator": "pp.3,7–9; nota 3"
+        },
+        {
+          "source_url": "https://www.scielo.br/j/dados/a/7BMbZ7ST57dTbGbbXvLY6vb/?lang=pt",
+          "source_title": "Governo Collor: o reformismo liberal e a nova orientação da política externa brasileira",
+          "source_authors": [
+            "Brasilio Sallum Jr."
+          ],
+          "source_publication_year": 2011
+        }
+      ],
+      "executive_source_id": "br-presidency-collor-1990-1992",
+      "executive_name": "Fernando Collor",
+      "exercise_id": "arquivo-nacional-president:200:1990-03-15",
+      "person_id": "arquivo-nacional-president:200",
+      "valid_years": [
+        1990,
+        1991,
+        1992
+      ],
+      "category": "right",
+      "label": "Direita",
+      "period_start": "1990-03-15",
+      "period_end_exclusive": "1992-10-02",
+      "formal_mandate_end": "1992-12-29",
+      "research_corpus_years": [
+        1990,
+        1992
+      ],
+      "evidence_locator": "Singer (2021), introdução; Bresser (1991), pp.3 e8–9; Sallum (2011), resumo e discussão do reformismo liberal",
+      "classification_basis": "Síntese editorial de governo de direita, apoiada em interpretação contemporânea e retrospectiva; não inferida apenas do PRN, de uma privatização ou da trajetória individual.",
+      "coalition_note": "Reformismo liberal e coalizão variável. Bresser distingue direita moderna de neoliberalismo; Sallum identifica inspiração neoliberal e integração competitiva, rejeitando rótulo único para todas as políticas.",
+      "ui_qualifier": "Aplica-se ao exercício até 02/10/1992, fim exclusivo. A renúncia em 29/12/1992 não prolonga o exercício de Collor sobre o período já exercido por Itamar.",
+      "official_period_source_url": "https://www12.senado.leg.br/institucional/arquivo/biografia?grupo=ex-presidente-da-republica&id=fernando-collor",
+      "limitations": [
+        "Síntese editorial fundamentada em literatura, não escore anual independente.",
+        "Direita não implica neoliberalismo homogêneo, extrema direita ou identidade ideológica de todos os aliados.",
+        "Preservar Sarney até 15/03/1990 e Itamar desde 02/10/1992; não retroagir eleição de 1989 à posse."
+      ],
+      "archive_path": "data/executive-orientation/br-presidency-collor-1990-1992-reviewed-notes.txt",
+      "sha256": "1318aa462d0d0ed054cab528beac7525cfb80530a0917be8079729ed8548b27a"
+    },
+    {
+      "institution": "presidency",
+      "territory": "BR",
+      "status": "literature_based_editorial_summary",
+      "evidence_kind": "academic_government_analysis",
+      "scope": "government_orientation_synthesis",
+      "source_terminology": "coalizão ampla da esquerda moderada à direita, deslocada ao centro desde meados de 1993; agenda liberalizante com ressalvas",
+      "source_url": "https://www.scielo.br/j/sant/a/6myNQV64TbN7cqwNtYkPBwH/?lang=pt",
+      "source_doi": "https://doi.org/10.1590/2238-38752021v11111",
+      "source_title": "O governo Itamar e a democracia de 1988",
+      "source_authors": [
+        "Brasilio Sallum Jr."
+      ],
+      "source_publication_year": 2021,
+      "accessed_on": "2026-10-28",
+      "hash_scope": "reviewed_notes_utf8_not_original_document",
+      "supporting_sources": [
+        {
+          "source_url": "https://www.scielo.br/j/ln/a/zJXFW8TvZp35jQjQD7psypt/?lang=pt",
+          "source_title": "Políticas Públicas e Estado: o Plano Real",
+          "source_authors": [
+            "Marcus Ianoni"
+          ],
+          "source_publication_year": 2009,
+          "source_doi": "https://doi.org/10.1590/S0102-64452009000300009",
+          "scope": "itamar_coalition_and_real_plan_politics",
+          "finding": "Descreve a coalizão como ampla, mas sem programa consistente, formada sobretudo pelos partidos favoráveis ao impeachment, exceto o PT; registra atores do velho desenvolvimentismo, inclusive Itamar, até meados de 1993, e FHC como quarto ministro da Fazenda em sete meses. Não classifica o governo em uma só categoria.",
+          "evidence_locator": "Seções Origens e sintomas da crise; O processo do Plano Real e sua efetividade"
+        },
+        {
+          "source_url": "https://www.revistasep.org.br/index.php/SEP/article/view/698/334",
+          "source_title": "O neoliberalismo no governo Itamar Franco: uma análise de sua política de privatizações",
+          "source_authors": [
+            "Carlos Henrique Lopes Rodrigues",
+            "Vanessa Follmann Jurgenfeld"
+          ],
+          "source_publication_year": 2021,
+          "scope": "privatizations_1993_1994_and_critique_of_nationalist_reading",
+          "finding": "Sustenta que privatizações siderúrgica, petroquímica e de fertilizantes, venda da Embraer e abertura a 100% de capital estrangeiro indicam agenda neoliberal e afastam a leitura nacionalista. Interpretação crítica focada em privatizações; não classifica coalizão ou política social.",
+          "evidence_locator": "Resumo; seção 3 sobre críticas contemporâneas e ministérios; Considerações finais"
+        },
+        {
+          "source_url": "https://presidentes.an.gov.br/index.php/centro-de-referencia-de-acervos-presidenciais/assuntos/biografias/203-itamar-augusto-cautiero-franco",
+          "source_title": "Itamar Augusto Cautiero Franco — biografia",
+          "source_authors": [
+            "Arquivo Nacional"
+          ],
+          "source_publication_year": null,
+          "scope": "official_chronology_and_government_facts",
+          "finding": "Registra exercício de 02/10/1992 a 01/01/1995, reunião com 19 partidos em janeiro de 1993, IPMF, plebiscito de 1993, FHC na Fazenda, Plano Real e continuidade de privatizações (CSN, Açominas, Cosipa). Fonte cronológica, não classificação ideológica.",
+          "evidence_locator": "Biografia; períodos e atos de governo"
+        },
+        {
+          "source_url": "https://www12.senado.leg.br/noticias/materias/2011/07/02/ex-presidente-itamar-franco-lancou-plano-real-participou-das-diretas-ja-e-da-constituinte",
+          "source_title": "Ex-presidente Itamar Franco lançou Plano Real, participou das Diretas Já e da Constituinte",
+          "source_authors": [
+            "Agência Senado"
+          ],
+          "source_publication_year": 2011,
+          "scope": "official_news_obituary",
+          "finding": "Noticia o Plano Real conduzido pelo ministro FHC e o plebiscito de 1993. Texto jornalístico, usado só como contexto factual."
+        }
+      ],
+      "executive_source_id": "br-presidency-itamar-franco-1992-1994",
+      "executive_name": "Itamar Franco",
+      "exercise_id": "arquivo-nacional-president:203:1992-10-02",
+      "person_id": "arquivo-nacional-president:203",
+      "valid_years": [
+        1992,
+        1993,
+        1994
+      ],
+      "category": "controversial",
+      "label": "Classificação controversa",
+      "period_start": "1992-10-02",
+      "period_end_exclusive": "1995-01-01",
+      "formal_mandate_end": "1994-12-31",
+      "research_corpus_years": [
+        1992,
+        1994
+      ],
+      "evidence_locator": "Sallum Jr. (2021), seções A revalorização do Congresso e da dimensão social da democracia; Liberalização da economia e ortodoxia fiscal; Continuidade na gestão econômica e redefinição da coalizão política; Ianoni (2009); Rodrigues e Jurgenfeld (2021)",
+      "classification_basis": "Confronto editorial entre interpretações acadêmicas. Nenhuma fonte consultada classifica o governo como centro-direita ou direita em bloco: Sallum descreve coalizão da esquerda moderada à direita e deslocada ao centro desde meados de 1993; Ianoni, coalizão sem programa consistente; Rodrigues e Jurgenfeld, agenda neoliberal nas privatizações. Direita não é forçada e centro não é presumido.",
+      "coalition_note": "Coalizão heterogênea (PMDB, PSDB, PFL, PSB, PTB, PDT e PDS, mais ministros sem partido), sem o PT, que se definiu como oposição ativa propositiva. Agenda: estabilização e Plano Real sob FHC, continuidade de privatizações em ritmo mais lento, Consea, plano contra a fome e LOAS, em tensão com a leitura neoliberal.",
+      "ui_qualifier": "Aplica-se ao exercício de 02/10/1992 (interino) a 01/01/1995, fim exclusivo. As fontes divergem; não é centro presumido nem direita. Não depende da filiação de Itamar.",
+      "orientation_change_date_precision": "year",
+      "capacity_segments": [
+        {
+          "starts_on": "1992-10-02",
+          "ends_before": "1992-12-29",
+          "capacity": "vice_president_exercising_presidency"
+        },
+        {
+          "starts_on": "1992-12-29",
+          "ends_before": "1995-01-01",
+          "capacity": "president_by_succession"
+        }
+      ],
+      "official_period_source_url": "https://presidentes.an.gov.br/index.php/centro-de-referencia-de-acervos-presidenciais/assuntos/biografias/203-itamar-augusto-cautiero-franco",
+      "limitations": [
+        "Síntese editorial de divergência acadêmica, não medição anual nem consenso.",
+        "Sallum Jr. descreve o deslocamento ao centro como processo de meados de 1993; o recorte anual não afirma mudança em 01/01/1993 ou 01/01/1994.",
+        "Rodrigues e Jurgenfeld tratam das privatizações de 1993–1994; Ianoni trata sobretudo do Plano Real; nenhuma fonte cobre todas as políticas.",
+        "A filiação de Itamar (PRN, depois PMDB) e a de FHC não classificam o governo.",
+        "Preservar Collor até 02/10/1992 e FHC desde 01/01/1995; a posse em 29/12/1992 não reinicia o exercício."
+      ],
+      "archive_path": "data/executive-orientation/br-presidency-itamar-franco-1992-1994-reviewed-notes.txt",
+      "sha256": "9312b8808355536c14e930b6df0565d686e7810827e73381250f9a2bde0abca6"
     }
   ],
   "regime_records": [

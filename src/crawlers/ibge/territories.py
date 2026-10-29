@@ -65,7 +65,8 @@ def normalize_current_municipalities(payload, states):
             raise IngestionError("IBGE_MUNICIPALITY_STATE_UNKNOWN")
         seen.add(code)
         normalized = {"ibge_code": code, "name": row["nome"], "uf": uf}
-        target = special_districts if uf == "DF" or code in SPECIAL_DISTRICT_CODES else municipalities
+        is_special_district = uf == "DF" or code in SPECIAL_DISTRICT_CODES
+        target = special_districts if is_special_district else municipalities
         target.append(normalized)
     return sorted(municipalities, key=lambda row: (row["uf"], row["name"])), special_districts
 

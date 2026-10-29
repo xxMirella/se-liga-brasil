@@ -34,17 +34,13 @@ def render_search_filters(parameters):
     )
     query = text(parameters.get("q"), "")
     political_party = text(parameters.get("political_party"), "")
-    active_filters = sum(bool(parameters.get(key)) for key in
-                         ("q", "uf", "office_kind", "political_party"))
-    summary = "Filtrar pessoas" + (f" · {active_filters} filtros ativos" if active_filters else "")
-    return f'''<details class="people-filters"><summary>{summary}</summary>
+    return f'''<div class="people-filters">
 <form action="/pessoas" method="get" class="activity-controls">
 <label>Nome<input name="q" value="{query}" type="search" maxlength="120"></label>
 {uf_control}{office_control}
 <label>Partido (sigla)<input name="political_party" value="{political_party}"
 maxlength="40"></label>{page_size_control}<button type="submit">Filtrar pessoas</button></form>
-<p class="explanation">Filtros de cargo e UF usam exercício atual documentado.
-O partido pode ser uma observação histórica; consulte a referência no perfil.</p></details>'''
+</div>'''
 
 
 def render_search_page(query, results):

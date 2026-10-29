@@ -52,7 +52,12 @@ class PublicHandler(BaseHTTPRequestHandler):
             from application.public_portal import dispatch_portal_request
 
             response = dispatch_portal_request(self.application, self.path)
-            self.send_content(response.status, response.body, response.content_type)
+            self.send_content(
+                response.status,
+                response.body,
+                response.content_type,
+                getattr(response, "dataset_version", None),
+            )
             return
         status, response = dispatch_public_request(self.fetch_votes, self.path)
         self.send_json(status, response)
@@ -64,8 +69,10 @@ class PublicHandler(BaseHTTPRequestHandler):
         body = json.dumps(payload, ensure_ascii=False, allow_nan=False).encode("utf-8")
         self.send_content(status, body, "application/json; charset=utf-8")
 
-    def send_content(self, status, body, content_type):
-        status, body, headers = prepare_public_response(self.path, status, body, self.headers)
+    def send_content(self, status, body, content_type, dataset_version=None):
+        status, body, headers = prepare_public_response(
+            self.path, status, body, self.headers, dataset_version
+        )
         self.send_response(status)
         for name, value in headers.items():
             self.send_header(name, value)

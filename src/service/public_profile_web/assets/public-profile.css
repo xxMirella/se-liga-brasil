@@ -151,8 +151,6 @@ footer span { font-size:12px; color:var(--muted); margin-left:20px; }
 .search-result h2 { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; line-height:1.4; }
 .search-result h2 a { white-space:nowrap; }
 .people-filters { margin:12px 0; }
-.people-filters summary { cursor:pointer; color:var(--link); font-weight:700; padding:8px 0; }
-.people-filters[open] { padding-bottom:8px; }
 /* Cabinet payroll history keeps role totals readable on narrow screens. */
 .cabinet-payroll-dialog { width:min(1000px,calc(100vw - 32px)); }
 .cabinet-table-scroll { overflow-x:auto; margin:18px 0; }

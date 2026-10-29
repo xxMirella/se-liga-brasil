@@ -140,7 +140,7 @@ def test_composition_source_links_to_archived_official_roster_when_available():
 
 
 def test_state_party_observation_is_visible_without_claiming_continuous_affiliation():
-    from service.political_dashboard.page import render_executive
+    from service.political_dashboard.page import render_executive, render_executive_observations
 
     html = render_executive({
         "segments": [{"name": "Governadora", "political_party": "Não verificado"}],
@@ -151,7 +151,14 @@ def test_state_party_observation_is_visible_without_claiming_continuous_affiliat
             "official_url": "https://www.gov.br/noticia",
         }],
     }, "Governo", "Estado")
-    primary_card = html.split("<details>")[0]
-    assert 'class="panorama-executive-party">PSD</strong>' in primary_card
-    assert "Observação oficial: 2026-10-04" in primary_card
-    assert "não comprova filiação durante todo o mandato" in primary_card
+    assert "<h3>Governadora</h3><p>PSD</p>" in html
+    assert "filiação" not in html
+    observations = render_executive_observations({"national_observations": [{
+        "name": "Governadora", "political_party": "PSD",
+        "political_party_status": "verified_official_dated_government_observation",
+        "source_observed_on": "2026-10-04",
+        "official_url": "https://www.gov.br/noticia",  # hardcode-ok: URL de fixture da entrada do teste  # noqa: E501
+    }]})
+    assert 'class="panorama-executive-party">PSD</strong>' in observations
+    assert "2026-10-04" in observations
+    assert "sem presumir filiação contínua" in observations

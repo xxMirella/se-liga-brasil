@@ -32,12 +32,15 @@ class PublicResponse:
     status: int
     body: bytes
     content_type: str
+    dataset_version: str | None = None
 
 
-def encode_response(payload, *, status=200, content_type="application/json"):
+def encode_response(payload, *, status=200, content_type="application/json", dataset_version=None):
     if content_type == "application/json":
         payload = json.dumps(payload, ensure_ascii=False, allow_nan=False)
-    return PublicResponse(status, payload.encode("utf-8"), content_type + "; charset=utf-8")
+    return PublicResponse(
+        status, payload.encode("utf-8"), content_type + "; charset=utf-8", dataset_version
+    )
 
 
 def read_parameters(query, allowed):
@@ -68,7 +71,12 @@ def dispatch_portal_request(application, target):
 
 def encode_public_error(target, code, status):
     if (
-        target.startswith(("/pessoas", "/como-funciona", "/sobre", "/panorama"))
+        target.startswith(
+            (
+                "/pessoas", "/como-funciona", "/sobre", "/panorama", "/fontes-dos-dados",
+                "/comparacao-de-classificacoes",
+            )
+        )
         or target.partition("?")[0] == "/"
     ):
         from service.public_profile_web import render_error_page
@@ -84,6 +92,8 @@ def encode_public_error(target, code, status):
                 "Confira o ano, a esfera e o estado. O Distrito Federal não possui "
                 "municípios, prefeitos ou vereadores."
             )
+        if target.startswith("/comparacao-de-classificacoes") and status == 400:
+            message = "Confira o partido informado. Escolha um dos partidos da lista da página."
         return encode_response(
             render_error_page(status, message), status=status, content_type="text/html"
         )
@@ -115,9 +125,10 @@ def route_public_request(application, parsed):
         from pathlib import Path
 
         import service.public_profile_web.search as search_module
+        from service.public_profile_web.static_text import read_static_text
 
         script = Path(search_module.__file__).parent / "assets" / "people-viewport.js"
-        return encode_response(script.read_text(encoding="utf-8"), content_type="text/javascript")
+        return encode_response(read_static_text(script), content_type="text/javascript")
     if parsed.path == "/assets/public-profile.css" and not parsed.query:
         from service.public_profile_web import public_stylesheet
 
@@ -143,14 +154,35 @@ def route_dashboard_request(application, parsed):
         parsed.query, {"uf", "year", "senate_uf", "level", "municipality_ibge", "territory", "view"}
     )
     result = application.fetch_political_dashboard(parameters)
+    version = result.get("dataset_version")
     if parsed.path == "/api/political-dashboard":
-        return encode_response(result)
+        return encode_response(result, dataset_version=version)
     from service.political_dashboard.page import render_dashboard
 
-    return encode_response(render_dashboard(result, application.today()), content_type="text/html")
+    return encode_response(
+        render_dashboard(result, application.today()),
+        content_type="text/html",
+        dataset_version=version,
+    )
 
 
 def route_education_request(parsed):
+    if parsed.path in {"/fontes-dos-dados", "/fontes-dos-dados/"}:
+        from service.data_sources.page import render_data_sources
+
+        read_parameters(parsed.query, set())
+        return encode_response(render_data_sources(), content_type="text/html")
+    if parsed.path in {"/comparacao-de-classificacoes", "/comparacao-de-classificacoes/"}:
+        from service.party_orientation_comparison.page import render_party_comparison_page
+
+        parameters = read_parameters(parsed.query, {"partido"})
+        return encode_response(
+            render_party_comparison_page(parameters.get("partido")), content_type="text/html"
+        )
+    if parsed.path == "/assets/party-comparison.css" and not parsed.query:
+        from service.party_orientation_comparison.page import comparison_stylesheet
+
+        return encode_response(comparison_stylesheet(), content_type="text/css")
     if parsed.path in {"/", "/sobre", "/sobre/"}:
         from service.project_information.page import render_project_information
 
@@ -208,51 +240,22 @@ class PublicPortalApplication:
         from service.public_profile.search_cache import PublicSearchCache
 
         self.people_cache = PublicSearchCache()
-        self.dashboard_cache = PublicSearchCache(
-            ttl_seconds=300, capacity=64, max_bytes=4 * 1024 * 1024
+        from application.political_dashboard_reader import PoliticalDashboardReader
+        from database.public_read_connections import (
+            PublicReadConnectionPool,
+            open_public_read_connection,
+        )
+
+        self.read_connections = PublicReadConnectionPool(
+            lambda: open_public_read_connection(env_file)
         )
         self.today = today or (lambda: datetime.now(ZoneInfo("America/Belem")).date())
+        self.political_dashboard = PoliticalDashboardReader(
+            self.read_connections, lambda: self.today()
+        )
 
     def fetch_political_dashboard(self, parameters):
-        from service.political_dashboard.contracts import DashboardQuery
-
-        query = DashboardQuery.from_parameters(parameters, self.today())
-        return self.dashboard_cache.get_or_load(
-            query, lambda: self._load_political_dashboard(query)
-        )
-
-    def _load_political_dashboard(self, query):
-        from database.operations import connect_database
-        from database.political_dashboard_analytical import AnnualDashboardRepository
-        from service.political_dashboard_dataset.query import (
-            annual_dashboard_payload,
-            selected_territories,
-            validate_municipality_catalog,
-        )
-
-        territories = selected_territories(query)
-        with connect_database(self.env_file) as connection:
-            repository = AnnualDashboardRepository(connection)
-            if not repository.is_available():
-                return annual_dashboard_payload([], [], query, self.today().year)
-            catalog = (
-                repository.fetch_territorial_catalog(query.uf)
-                if query.level in {"state", "municipal"}
-                else None
-            )
-            validate_municipality_catalog(query, catalog)
-            snapshot = repository.fetch_annual_snapshot(
-                query.as_of.year, territories, self.today().year
-            )
-        payload = annual_dashboard_payload(
-            snapshot["partitions"], snapshot["history"], query, self.today().year
-        )
-        if catalog:
-            municipalities = catalog["municipalities"]
-            payload["municipalities"] = municipalities
-            payload["territorial_catalog_scope"] = catalog["temporal_scope"]
-            payload["territorial_catalog_observed_at"] = catalog["observed_at"]
-        return payload
+        return self.political_dashboard.fetch(parameters)
 
     def fetch_people(self, parameters):
         from database.operations import connect_database
@@ -298,11 +301,12 @@ class PublicPortalApplication:
         as_of = self.today()
         with connect_database(self.env_file) as connection:
             repository = PublicPeopleRepository(connection)
-            profile = get_public_person(repository, person_id, as_of)
-            profile["assets"] = get_public_assets(
-                PublicAssetsRepository(connection), person_id, as_of
-            )
+            # One snapshot for the whole profile: inner read_snapshot calls join it.
             with repository.read_snapshot():
+                profile = get_public_person(repository, person_id, as_of)
+                profile["assets"] = get_public_assets(
+                    PublicAssetsRepository(connection), person_id, as_of
+                )
                 profile["historical_activity"] = fetch_person_historical_activity(
                     connection, person_id, as_of
                 )

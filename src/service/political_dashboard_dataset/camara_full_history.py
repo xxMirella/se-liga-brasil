@@ -33,24 +33,26 @@ def historical_source_member(history, status, identities, manifests):
         "source_person_id": identifier, "name": status["nome"],
         "political_party": status.get("siglaPartido") or "Filiação não informada",
         "uf": status["siglaUf"],
+        "political_party_source_uri": status.get("uriPartido"),
+        "status_recorded_at": status["dataHora"],
         "official_url": f"https://dadosabertos.camara.leg.br/api/v2/deputados/{identifier}/historico",
         "evidence_manifest_sha256": manifests[identifier],
     }
 
 
 def historical_universe_partitions(members, year, people_archived, universe_people, manifest):
+    validate_historical_member_identity(members)
     groups = defaultdict(list)
     for member in members:
         groups["BR"].append(member)
         groups[member["uf"]].append(member)
-    if len(groups.get("BR", [])) > 513:
-        raise ValueError("CAMARA_HISTORICAL_STATUS_EXCEEDS_LEGAL_CAPACITY")
     return [historical_universe_partition(
         rows, year, territory, people_archived, universe_people, manifest,
     ) for territory, rows in sorted(groups.items())]
 
 
 def historical_universe_partition(members, year, territory, archived, universe, manifest):
+    validate_historical_member_identity(members)
     partition = build_annual_partition([], year, territory, "camara")
     counts = Counter(row["political_party"] for row in members)
     complete = territory == "BR" and archived == universe and len(members) == 513
@@ -80,3 +82,11 @@ def historical_universe_partition(members, year, territory, archived, universe, 
                                  "proveniência individual identificada por manifesto SHA256"}],
     })
     return partition
+
+
+def validate_historical_member_identity(members):
+    if len(members) > 513:
+        raise ValueError("CAMARA_HISTORICAL_STATUS_EXCEEDS_LEGAL_CAPACITY")
+    identifiers = [row["source_person_id"] for row in members]
+    if len(identifiers) != len(set(identifiers)):
+        raise ValueError("CAMARA_HISTORICAL_DUPLICATE_PROVIDER_IDENTIFIERS")

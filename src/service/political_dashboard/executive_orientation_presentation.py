@@ -11,14 +11,34 @@ def documented_executive_cell(institution, year):
     if institution.get("institution_code") != "presidency":
         return None
     regime = classify_regime_orientation("senado-vcb:16005", year)
-    if regime["category"] != "undetermined":
+    if regime["category"] != "undetermined" and regime["year_coverage"] == "full":
         return regime_cell(regime)
     records = list(institution.get("segments") or [])
     if institution.get("current"):
         records.append(institution["current"])
     observations = executive_record_observations(records, year)
     documented = [row for row in observations if row["category"] != "undetermined"]
+    if regime["category"] != "undetermined":
+        if documented:
+            return transition_regime_government_cell(regime, documented)
+        return regime_cell(regime)
     return government_cell(observations, documented) if documented else None
+
+
+def transition_regime_government_cell(regime, governments):
+    from service.political_dashboard.orientation_timeline import category_cell
+
+    categories = sorted({regime["category"], *(row["category"] for row in governments)})
+    cell = category_cell(categories, "mixed")
+    cell["label"] += " · transição de regime e governo"
+    cell["qualifier"] = "períodos distintos no mesmo ano; governo civil não é ditadura"
+    cell["detail"] = (
+        regime_cell(regime)["detail"]
+        + " "
+        + " ".join(government_description(row) for row in governments)
+    )
+    cell["source_evidence"] = [regime, *governments]
+    return cell
 
 
 def executive_record_identity(record):
@@ -122,6 +142,4 @@ def render_executive_orientation(executive, view, year):
     from service.political_dashboard.orientation_timeline import executive_orientation_cell
 
     cell = executive_orientation_cell(executive, year)
-    return (f'<p><strong>Abordagem do governo: {text(cell["label"])}</strong></p>'
-            '<details><summary>Critério e fontes da classificação</summary>'
-            f'<p>{text(cell["detail"])}</p>{render_orientation_evidence_sources(cell)}</details>')
+    return f"<p><strong>Abordagem do governo: {text(cell['label'])}</strong></p>"

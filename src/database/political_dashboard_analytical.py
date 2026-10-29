@@ -25,6 +25,9 @@ jsonb_build_object(
  'office_kinds',payload->'office_kinds',
  'political_parties',payload->'political_parties','total',payload->'total',
  'coverage',payload->'coverage','snapshot_on',payload->'snapshot_on',
+ 'expected_seats',payload->'expected_seats',
+ 'documented_vacancies',payload->'documented_vacancies',
+ 'orientation_policy_version',payload->'orientation_policy_version',
  'aggregation_basis',payload->'aggregation_basis',
  'government_context_observations',(SELECT coalesce(jsonb_agg(jsonb_build_object(
    'date',context->'date','title',context->'title','organization',context->'organization',
@@ -84,7 +87,14 @@ jsonb_build_object(
 """
 
 
+HISTORY_ROW_LIMIT = 8192
+
+
 class AnnualDashboardRepository(PublicProfileRepository):
+    def __init__(self, connection, *, history_cache=None):
+        super().__init__(connection)
+        self.history_cache = history_cache
+
     def activate_partitions(self, partitions):
         from service.political_dashboard_dataset.storage import encode_partition
 
@@ -103,6 +113,7 @@ class AnnualDashboardRepository(PublicProfileRepository):
                         }
                     )
                 self.connection.execute(PARTITION_UPSERT, (Jsonb(rows),))
+            self.refresh_history({partition["territory_code"] for partition in partitions})
 
     def fetch_current_official_assembly_rosters(self, year):
         return self.connection.execute(
@@ -129,6 +140,42 @@ class AnnualDashboardRepository(PublicProfileRepository):
         return {row["external_id"]: row for row in rows}
 
     def fetch_annual_snapshot(self, year, territories, history_end_year=None):
+        """Selected-year partitions plus the territory histories.
+
+        With the published history table this is one keyed statement and the histories come
+        from the version-checked cache. Without it (before the migration, or a territory not
+        yet published) the history is built from the annual rows, as before.
+        """
+        if self.history_cache is None:
+            return self._fetch_annual_rows(year, territories, history_end_year)
+        published = self._fetch_published_snapshot(year, territories)
+        if published is not None:
+            return published
+        return self._fetch_unpublished_snapshot(year, territories, history_end_year)
+
+    def _fetch_published_snapshot(self, year, territories):
+        from database.political_dashboard_history import (
+            PublishedHistoryReader,
+            assemble_snapshot,
+        )
+
+        reader = PublishedHistoryReader(self.connection, self.history_cache)
+        snapshot = reader.fetch_snapshot(year, territories)
+        return assemble_snapshot(snapshot, self.history_cache) if snapshot else None
+
+    def _fetch_unpublished_snapshot(self, year, territories, history_end_year=None):
+        from service.political_dashboard_dataset.history import (
+            expand_history_row,
+            reduce_history_row,
+        )
+
+        snapshot = self._fetch_annual_rows(year, territories, history_end_year)
+        snapshot["history"] = [
+            expand_history_row(reduce_history_row(row)) for row in snapshot["history"]
+        ]
+        return snapshot
+
+    def _fetch_annual_rows(self, year, territories, history_end_year=None):
         # A single SELECT has one PostgreSQL snapshot even in autocommit mode.
         return self.connection.execute(
             "WITH selected AS (SELECT payload FROM se_liga_brasil.political_dashboard_annual "
@@ -155,7 +202,35 @@ class AnnualDashboardRepository(PublicProfileRepository):
             "WHERE institution_code='camara' AND year BETWEEN 2000 AND 2025"
         ).fetchall()
 
+    def build_history_entries(self, territories):
+        """Publishable history of each territory, built from every annual row it has."""
+        from service.political_dashboard_dataset.history import history_entry
+
+        entries = []
+        for territory in sorted(set(territories)):
+            rows = self.fetch_history([territory], 9999)
+            if len(rows) >= HISTORY_ROW_LIMIT:
+                raise ValueError("HISTORY_SOURCE_ROW_LIMIT_REACHED")
+            entries.append(history_entry(territory, rows))
+        return entries
+
+    def refresh_history(self, territories):
+        """Keep published histories in step with the annual rows; no-op before the migration."""
+        from database.political_dashboard_history import DashboardHistoryTable
+
+        history = DashboardHistoryTable(self.connection)
+        if not history.is_available():
+            return 0
+        return history.upsert(self.build_history_entries(territories))
+
     def remove_replaced_invalid_district_government(self):
+        with self.connection.transaction():
+            removed = self._delete_replaced_invalid_district_government()
+            if removed:
+                self.refresh_history({"DF"})
+        return removed
+
+    def _delete_replaced_invalid_district_government(self):
         return self.connection.execute(
             "DELETE FROM se_liga_brasil.political_dashboard_annual invalid "
             "WHERE invalid.year=2026 AND invalid.territory_code='DF' "
@@ -195,7 +270,7 @@ class AnnualDashboardRepository(PublicProfileRepository):
                 + " "
                 "FROM se_liga_brasil.political_dashboard_annual "
                 "WHERE territory_code=ANY(%s) AND year BETWEEN 1826 AND %s "
-                "ORDER BY year,territory_code,institution_code LIMIT 8192",
+                "ORDER BY year,territory_code,institution_code LIMIT " + str(HISTORY_ROW_LIMIT),
                 (territories, end_year),
             ).fetchall()
 

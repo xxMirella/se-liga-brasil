@@ -155,15 +155,17 @@ def test_viewport_asset_is_local_bounded_and_has_no_resize_requests():
     assert dispatch_portal_request(object(), "/assets/people-viewport.js?x=1").status == 404
 
 
-def test_shell_and_results_keep_filters_collapsed_and_same_measured_header():
+def test_shell_and_results_keep_filters_visible_and_same_measured_header():
     from service.public_profile_web.search import render_search_page, render_search_shell
 
     filters = {"q": "Nome", "uf": "SP"}
     shell = render_search_shell(filters)
     page = render_search_page({**filters, "limit": "3"}, {"items": []})
     for html in (shell, page):
-        assert '<details class="people-filters"><summary>Filtrar pessoas · 2 filtros ativos' in html
-        assert '<details class="people-filters" open' not in html
+        assert '<div class="people-filters">' in html
+        assert '<details class="people-filters"' not in html
+        assert '<summary>Filtrar pessoas' not in html
+        assert 'Filtros de cargo e UF usam exercício atual documentado.' not in html
         assert '<h1>Resultados da busca</h1>' in html
         assert 'Identidade, vínculos e atuação disponíveis nas fontes consultadas.' in html
         assert 'value="Nome"' in html

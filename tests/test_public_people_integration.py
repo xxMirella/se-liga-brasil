@@ -57,6 +57,10 @@ def test_release_checks_activity_with_real_sql_and_authenticated_storage_contrac
     monkeypatch.setattr(
         "database.public_profile.PublicProfileRepository.read_snapshot", lambda _: nullcontext()
     )
+    monkeypatch.setattr(
+        "database.public_read_connections.PublicReadConnectionPool.read",
+        lambda _pool, operation: operation(integration_database),
+    )
     requests = []
 
     def storage_response(request):
@@ -70,7 +74,12 @@ def test_release_checks_activity_with_real_sql_and_authenticated_storage_contrac
         ), tmp_path / "cache")
         monkeypatch.setattr(vercel, "create_dataset_reader", lambda: reader)
         if storage_status == 200:
-            assert len(check_public_deployment(vercel.PublicPortalWSGI())["checks"]) == 5
+            checks = check_public_deployment(vercel.PublicPortalWSGI())["checks"]
+            paths = {item["path"] for item in checks}
+            assert {"/pessoas", "/api/people", "/panorama", "/api/political-dashboard"} <= paths
+            assert any(path.startswith("/pessoas/") for path in paths)
+            assert any(path.endswith("/votes") for path in paths)
+            assert all(item["status"] == 200 for item in checks)
         else:
             with pytest.raises(DeploymentValidationError, match="PUBLIC_ACTIVITY_HTTP_503"):
                 check_public_deployment(vercel.PublicPortalWSGI())

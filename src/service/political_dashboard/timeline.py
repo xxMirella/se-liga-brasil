@@ -65,6 +65,13 @@ def timeline_cell(row, code, kind, view="political_party"):
         absence = documented_legislative_absence(code, row["year"])
         if absence:
             return absence
+        from service.political_dashboard.senate_orientation_1992_1994 import (
+            senate_1992_1994_cell,
+        )
+
+        itamar_snapshot = senate_1992_1994_cell(row["year"]) if code == "senado" else None
+        if itamar_snapshot:
+            return itamar_snapshot
     if row["year"] < 1889 and code == "presidency":
         return {"label": "Monarquia · Presidência ainda não existia",
                 "color": UNKNOWN_COLOR, "state": "not_applicable"}

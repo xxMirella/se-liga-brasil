@@ -1,0 +1,13 @@
+.comparison-grid { display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+.comparison-grid > section { border:1px solid var(--border); padding:12px 16px; }
+.comparison-scroll { overflow-x:auto; margin:18px 0; }
+.comparison-table { width:100%; border-collapse:collapse; font-size:14px; }
+.comparison-table caption { text-align:left; font-weight:700; margin-bottom:10px; }
+.comparison-table th,.comparison-table td { padding:10px; border-bottom:1px solid var(--border);
+  text-align:left; vertical-align:top; }
+.comparison-table td.number { white-space:nowrap; }
+.comparison-filter { display:flex; flex-wrap:wrap; gap:8px; align-items:end; margin:14px 0; }
+.comparison-parties { display:flex; flex-wrap:wrap; gap:6px 12px; padding:0; list-style:none; }
+.comparison-evidence dt { font-weight:700; margin-top:8px; }
+.comparison-evidence dd { margin:2px 0 0 0; }
+.comparison-proposal { font-style:italic; }

@@ -2,6 +2,8 @@
 
 from contextlib import contextmanager
 
+from psycopg.pq import TransactionStatus
+
 
 class PublicProfileRepository:
     def __init__(self, connection):
@@ -9,10 +11,25 @@ class PublicProfileRepository:
 
     @contextmanager
     def read_snapshot(self):
-        with self.connection.transaction():
-            self.connection.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
-            self.connection.execute("SET LOCAL statement_timeout='5s'")
+        """One consistent read-only transaction; nested calls join the open one.
+
+        Joining avoids repeating BEGIN/SET/COMMIT round trips and keeps every fact of a
+        composed response in the same PostgreSQL snapshot.
+        """
+        if self.connection_has_open_transaction():
             yield
+            return
+        with self.connection.transaction():
+            # No parameters: both settings travel in a single round trip.
+            self.connection.execute(
+                "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY; "
+                "SET LOCAL statement_timeout='5s'"
+            )
+            yield
+
+    def connection_has_open_transaction(self):
+        information = getattr(self.connection, "info", None)
+        return information is not None and information.transaction_status != TransactionStatus.IDLE
 
     def fetch_person(self, person_id):
         return self.connection.execute(

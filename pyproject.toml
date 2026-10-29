@@ -13,8 +13,8 @@ dependencies = ["httpx>=0.28,<1", "psycopg[binary]>=3.2,<4", "python-dotenv>=1,<
 entrypoint = "app:app"
 
 [project.optional-dependencies]
-dev = ["pytest>=8,<10", "ruff>=0.14,<1", "coverage[toml]>=7.10,<8"]
-analytical = ["duckdb>=1.4,<2"]
+dev = ["pytest>=8,<10", "ruff>=0.14,<1", "coverage[toml]>=7.10,<8", "numpy>=2,<3"]
+analytical = ["duckdb>=1.4,<2", "numpy>=2,<3"]
 
 [project.scripts]
 se-liga-brasil = "application.cli:main"
@@ -42,6 +42,7 @@ max-complexity = 10
 "service.political_dashboard" = ["*.css", "*.json"]
 "service.public_profile_web" = ["assets/*.css", "assets/*.svg", "assets/*LICENSE.txt", "assets/people-viewport.js"]
 "service.civic_education" = ["assets/*.css", "assets/*.svg"]
+"service.party_orientation_comparison" = ["*.json", "assets/*.css"]
 
 [tool.coverage.run]
 branch = true

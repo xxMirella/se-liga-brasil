@@ -13,6 +13,7 @@ from service.civic_education.simple_offices import SIMPLE_OFFICES
 from service.public_profile.contracts import PublicProfileError
 from service.public_profile_web.layout import render_layout
 from service.public_profile_web.security import text
+from service.public_profile_web.static_text import read_static_text
 
 SPHERES = {"municipal": "Cidade", "estadual": "Estado", "federal": "País", "distrital": "DF"}
 MAP_ROWS = (
@@ -35,7 +36,7 @@ MAP_ROWS = (
 
 
 def civic_stylesheet():
-    return (Path(__file__).parent / "assets" / "civic-education.css").read_text(encoding="utf-8")
+    return read_static_text(Path(__file__).parent / "assets" / "civic-education.css")
 
 
 def source_link(source, reference=""):

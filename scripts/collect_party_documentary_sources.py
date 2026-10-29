@@ -12,12 +12,44 @@ from crawlers.party_documents.links import current_statute_link, parsed_document
 from service.ingestion.contracts import IngestionError
 from storage.files import save_json
 
-DIRECTORY = "https://www.tse.jus.br/partidos/partidos-registrados-no-tse"
-TARGETS = frozenset(name.casefold() for name in (
-    "PL", "PT", "UNIÃO", "PSD", "PP", "REPUBLICANOS", "MDB", "PODE", "PSB", "PSDB",
-    "PSOL", "PCdoB", "PDT", "PV", "AVANTE", "NOVO", "SOLIDARIEDADE", "PRD", "REDE",
-    "CIDADANIA", "DC", "MISSÃO",
-))
+DIRECTORY = (
+    "https://www.tse.jus.br/partidos/partidos-registrados-no-tse"  # hardcode-ok: fonte oficial
+)
+TARGETS = frozenset(
+    name.casefold()
+    for name in (
+        "PL",
+        "PT",
+        "UNIÃO",
+        "PSD",
+        "PP",
+        "REPUBLICANOS",
+        "MDB",
+        "PODE",
+        "PSB",
+        "PSDB",
+        "PSOL",
+        "PCdoB",
+        "PDT",
+        "PV",
+        "AVANTE",
+        "NOVO",
+        "SOLIDARIEDADE",
+        "PRD",
+        "REDE",
+        "CIDADANIA",
+        "DC",
+        "MISSÃO",
+        "AGIR",
+        "MOBILIZA",
+        "PSTU",
+        "PCB",
+        "PRTB",
+        "PCO",
+        "DEMOCRATA",
+        "UP",
+    )
+)
 
 
 def collect_party_source(acquisition, link):
@@ -42,22 +74,34 @@ def main():
     parser.add_argument("--storage", type=Path, default=Path("data/party-documents"))
     options = parser.parse_args()
     with httpx.Client() as client:
-        acquisition = PartyDocumentAcquisition(options.storage, client, {
-            "www.tse.jus.br", "www.justicaeleitoral.jus.br",
-        })
+        acquisition = PartyDocumentAcquisition(
+            options.storage,
+            client,
+            {
+                "www.tse.jus.br",
+                "www.justicaeleitoral.jus.br",
+            },
+        )
         receipt = acquisition.acquire(DIRECTORY)
         links = parsed_document_links(Path(receipt["path"]).read_text(), DIRECTORY)
-        selected = {link["text"].casefold(): link for link in links
-                    if link["text"].casefold() in TARGETS
-                    and urlsplit(link["url"]).hostname == "www.tse.jus.br"}
+        selected = {
+            link["text"].casefold(): link
+            for link in links
+            if link["text"].casefold() in TARGETS
+            and urlsplit(link["url"]).hostname == "www.tse.jus.br"
+        }
         results = []
         for label, link in sorted(selected.items()):
             results.append(collect_party_source(acquisition, link))
-            save_json(options.storage / "tse-source-inventory.json", {
-                "schema_version": "party_documentary_source_inventory.v1",
-                "directory_archive": receipt, "sources": results,
-                "not_located_in_directory": sorted(TARGETS - set(selected)),
-            })
+            save_json(
+                options.storage / "tse-source-inventory.json",
+                {
+                    "schema_version": "party_documentary_source_inventory.v1",
+                    "directory_archive": receipt,
+                    "sources": results,
+                    "not_located_in_directory": sorted(TARGETS - set(selected)),
+                },
+            )
             progress = {"political_party": label, "status": results[-1]["status"]}
             print(json.dumps(progress), flush=True)
 

@@ -4,14 +4,15 @@ from pathlib import Path
 
 from service.civic_education.health_cooperation import render_ubs_example
 from service.civic_education.proposal_roles import render_proposal_roles
+from service.public_profile_web.static_text import read_static_text
 
 ASSETS = Path(__file__).parent / "assets"
 
 
 def render_circle_section():
-    offices = (ASSETS / "office-reach.svg").read_text(encoding="utf-8")
-    responsibilities = (ASSETS / "shared-responsibilities.svg").read_text(encoding="utf-8")
-    proposals = (ASSETS / "proposal-decisions.svg").read_text(encoding="utf-8")
+    offices = read_static_text(ASSETS / "office-reach.svg")
+    responsibilities = read_static_text(ASSETS / "shared-responsibilities.svg")
+    proposals = read_static_text(ASSETS / "proposal-decisions.svg")
     return f"""<section id="circulos" aria-labelledby="circle-title">
 <h2 id="circle-title">O que cada cargo pode fazer?</h2>
 <p>Veja <strong>quem atua</strong>, <strong>quem precisa trabalhar junto</strong>

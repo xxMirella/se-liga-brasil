@@ -21,12 +21,19 @@ ORIENTATION_LABELS = {
 def orientation_cell(institution, year, kind):
     if kind == "executive":
         return executive_orientation_cell(institution, year)
+    from service.political_dashboard.camara_orientation import (
+        chamber_orientation_cell,
+        chamber_orientation_summary,
+    )
     from service.political_dashboard.orientation_composition import group_orientation_category
     from service.political_dashboard.senate_orientation_2026 import (
         senate_orientation_cell,
         senate_orientation_summary,
     )
 
+    chamber_summary = chamber_orientation_summary(institution, year)
+    if chamber_summary:
+        return chamber_orientation_cell(chamber_summary)
     counts = Counter()
     for group in institution.get("political_parties", []):
         category = group_orientation_category(group, year, institution.get("institution_code"))

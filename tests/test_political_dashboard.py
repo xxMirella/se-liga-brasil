@@ -90,7 +90,7 @@ def test_html_escapes_names_links_sources_and_uses_real_counts():
     assert 'target="_blank" rel="noopener noreferrer"' in html
     assert 'name="territory"' in html
     assert 'name="senate_uf"' not in html
-    assert "Histórico em construção" in html
+    assert 'href="/fontes-dos-dados#presidencia"' in html
     assert "Prévia visual" not in html
     assert 'aria-current="page">Panorama político' in html
     assert "<script" not in html
@@ -116,10 +116,13 @@ def test_route_rejects_duplicate_or_unknown_query_parameters_before_database():
 
 
 def test_public_request_uses_selected_preaggregated_partitions(monkeypatch):
-    from contextlib import nullcontext
+    from test_request_optimizations import idle_connection_stub
 
     calls = []
-    monkeypatch.setattr("database.operations.connect_database", lambda _: nullcontext(None))
+    monkeypatch.setattr(
+        "database.public_read_connections.open_public_read_connection",
+        lambda _env: idle_connection_stub(),
+    )
     monkeypatch.setattr(
         "database.political_dashboard_analytical.AnnualDashboardRepository.fetch_annual_snapshot",
         lambda _self, *args: calls.append(args) or {"partitions": [], "history": []},
@@ -183,41 +186,6 @@ def test_district_history_does_not_retroproject_brasilia():
     assert 'name="date"' not in html
 
 
-def test_executive_year_precision_keeps_each_person_without_invented_days():
-    data = build_dashboard([], DashboardQuery("SP", date(1891, 12, 31)))
-    data["presidency"] = {
-        "coverage": "observed_partial",
-        "current": None,
-        "segments": [
-            {
-                "name": "Pessoa histórica A",
-                "person_id": "chronology:one",
-                "political_party": "Filiação histórica não verificada",
-                "year_start": 1889,
-                "year_end": 1891,
-                "date_precision": "year",
-                "evidence": [{"url": "https://www.camara.leg.br/historia/"}],
-            },
-            {
-                "name": "Pessoa histórica B",
-                "person_id": None,
-                "political_party": "Não verificada",
-                "year_start": 1891,
-                "year_end": 1894,
-                "date_precision": "year",
-            },
-        ],
-    }
-    html = render_dashboard(data, TODAY)
-    assert "Exerceram neste ano" in html
-    assert "Pessoa histórica A" in html and "Pessoa histórica B" in html
-    assert "1889–1891" in html
-    assert "Datas precisas ainda não verificadas" in html
-    assert 'href="/pessoas/chronology' not in html
-    assert "https://www.camara.leg.br/historia/" in html
-    assert "1889-01-01" not in html
-
-
 def test_annual_people_count_is_not_rendered_as_simultaneous_seats():
     data = build_dashboard([], DashboardQuery("SP", TODAY))
     composition = data["senate"]
@@ -257,28 +225,6 @@ def test_annual_route_does_not_accept_a_daily_reference():
     assert response.status == 400
 
 
-def test_verified_historical_affiliation_has_its_own_official_evidence_link():
-    data = build_dashboard([], DashboardQuery("SP", date(1923, 12, 31)))
-    data["presidency"] = {
-        "coverage": "observed_partial",
-        "segments": [
-            {
-                "name": "Pessoa histórica",
-                "person_id": None,
-                "political_party": "Partido documentado",
-                "year_start": 1922,
-                "year_end": 1926,
-                "date_precision": "year",
-                "political_party_evidence": [{"url": "https://www.camara.leg.br/historia/partido"}],
-            }
-        ],
-    }
-    html = render_dashboard(data, TODAY)
-    assert 'aria-label="Fonte da filiação"' in html
-    assert "https://www.camara.leg.br/historia/partido" in html
-    assert 'target="_blank" rel="noopener noreferrer"' in html
-
-
 def test_timeline_links_to_documented_year_instead_of_empty_decade_end():
     from service.political_dashboard.timeline import render_timeline_bands
 
@@ -302,21 +248,6 @@ def test_history_without_data_does_not_offer_empty_navigation():
         "level": "federal", "as_of": "1940-12-31"})
     assert 'href="/panorama?' not in html
     assert "Sem dados" in html
-
-
-def test_qualified_presidential_party_is_not_labelled_continuous_affiliation():
-    from service.political_dashboard.page import render_executive
-
-    html = render_executive({"segments": [{
-        "name": "Presidente", "political_party": "PT", "year_start": 2023, "year_end": 2026,
-        "date_precision": "year",
-        "political_party_status": "verified_official_presidential_term_party",
-        "political_party_evidence": [{"url": "https://www.camara.leg.br/deputados/1"}],
-    }]}, "Presidência", "Executivo")
-    assert "Partido informado para o mandato" in html
-    assert 'class="panorama-executive-party">PT</strong>' in html
-    assert "não comprova filiação contínua" in html
-    assert "Fonte do partido informado para o mandato" in html
 
 
 def test_official_source_host_exceptions_do_not_allow_similar_external_hosts():

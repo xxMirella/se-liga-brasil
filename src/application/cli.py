@@ -64,6 +64,9 @@ def create_argument_parser() -> argparse.ArgumentParser:
             "run-voting-pipeline",
             "enqueue-voting-history",
             "voting-worker",
+            "load-senate-history-1992-1994",
+            "classify-political-parties",
+            "build-party-orientation-evidence",
         ),
     )
     add_execution_arguments(parser)
@@ -130,11 +133,23 @@ def add_historical_arguments(parser):
     parser.add_argument("--port", type=int, default=8779)
     parser.add_argument("--output-directory", type=Path, default=Path("dist/public"))
     parser.add_argument("--backend-origin", help="Origem HTTPS pública da pesquisa e dos perfis")
+    parser.add_argument("--party", help="Siglas separadas por vírgula (classify-political-parties)")
+    parser.add_argument("--period", help="Período 'AAAA-AAAA', 'AAAA' ou id da rubrica")
+    parser.add_argument("--all", action="store_true", help="Todos os partidos com evidência")
+    parser.add_argument("--model-directory", type=Path, help="Diretório party-model de entrada")
+    parser.add_argument("--comparison-report", type=Path, help="Grava o relatório do catálogo")
     parser.add_argument("--local-only", action="store_true")
     parser.add_argument("--cached-only", action="store_true")
     parser.add_argument("--daemon", action="store_true")
     parser.add_argument("--max-jobs", type=int, default=4)
     parser.add_argument("--poll-seconds", type=int, default=30)
+    parser.add_argument(
+        "--apply",
+        action="store_true",
+        help="Grava de verdade a carga do Senado 1992-1994; sem esta opção é só simulação",
+    )
+    parser.add_argument("--source-directory", type=Path, help="Respostas arquivadas do Senado")
+    parser.add_argument("--report-file", type=Path, help="Relatório JSON da carga do Senado")
 
 
 def parse_scope_overrides(arguments) -> dict:
@@ -197,7 +212,23 @@ def execute_crawler_command(arguments) -> dict:
             )
 
 
+def execute_model_command(arguments) -> dict:
+    from application.party_orientation import execute_party_orientation_command
+
+    return execute_party_orientation_command(arguments)
+
+
+def execute_evidence_command(arguments) -> dict:
+    from application.party_orientation_evidence import execute_party_orientation_evidence_command
+
+    return execute_party_orientation_evidence_command(arguments)
+
+
 def execute_command(arguments) -> dict:
+    if arguments.command == "classify-political-parties":
+        return execute_model_command(arguments)
+    if arguments.command == "build-party-orientation-evidence":
+        return execute_evidence_command(arguments)
     service_result = execute_data_service_command(arguments)
     if service_result is not None:
         return service_result
@@ -298,11 +329,19 @@ def execute_reported_command(arguments, reporter=None) -> int:
     return 0
 
 
-def execute_data_service_command(arguments):
-    if arguments.command == "collect-senado-payroll":
-        from application.senado_payroll import execute_senado_payroll_command
+def execute_senado_command(arguments):
+    if arguments.command == "load-senate-history-1992-1994":
+        from application.senado_history import execute_senado_history_command
 
-        return execute_senado_payroll_command(arguments)
+        return execute_senado_history_command(arguments)
+    from application.senado_payroll import execute_senado_payroll_command
+
+    return execute_senado_payroll_command(arguments)
+
+
+def execute_data_service_command(arguments):
+    if arguments.command in {"collect-senado-payroll", "load-senate-history-1992-1994"}:
+        return execute_senado_command(arguments)
     if arguments.command == "collect-cabinet-payroll":
         from application.cabinet_payroll import execute_cabinet_payroll_command
 

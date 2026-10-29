@@ -1,0 +1,4320 @@
+{
+ "schema_version": "senate_orientation_1992_1994.v1",
+ "version": "2026-10-28.2",
+ "reviewed_on": "2026-10-28",
+ "institution_code": "senado",
+ "total_seats": 81,
+ "majority_threshold": 41,
+ "period": {
+  "starts_on": "1992-10-02",
+  "ends_on": "1995-01-01",
+  "note": "Governo Itamar Franco; fotografias de 31/12 de 1992, 1993 e 1994 (48ª e 49ª legislaturas)"
+ },
+ "classification_source": {
+  "citation": "Zucco, Cesar; Power, Timothy J. The Ideology of Brazilian Parties and Presidents: A Research Note on Coalitional Presidentialism under Stress. Latin American Politics and Society, 2024. Material suplementar, Tabela C1.",
+  "source_url": "https://doi.org/10.7910/DVN/6KVTUV",
+  "supplement_url": "https://static.cambridge.org/content/id/urn:cambridge.org:id:article:S1531426X23000249/resource/name/S1531426X23000249sup001.pdf",
+  "local_archive": "data/political-orientation/zucco-power-sources/S1531426X23000249sup001.pdf",
+  "supplement_sha256": "148a7d16b0e8dd66db4553fdef2d7b5e68871b76ba7fb431258b14c6e944ff69",
+  "wave": 1993,
+  "scale": "-1 (esquerda) a +1 (direita); estimativa bayesiana a partir do Brazilian Legislative Survey",
+  "wave_application": "A onda de 1993 pesquisou a legislatura de 1991–1995 e é aplicada às três fotografias; não há interpolação nem uso das ondas de 2018/2022 do catálogo do projeto. O arquivo de dados de 2009 (Dataverse hdl:1902.1/11567) confirma que a pesquisa de 1993 teve 185 respondentes e avaliou os itens PPR e PP separadamente; o PDS não foi avaliado em 1993.",
+  "threshold_rule": "Esquerda < -0,1; centro de -0,1 a +0,1 inclusive; direita > +0,1. Regra editorial do Se Liga, Brasil: mesma largura proporcional das faixas usadas na escala 0–10 do catálogo (4,5 e 5,5), não categorias dos autores.",
+  "threshold": 0.1,
+  "alternative_threshold": 0.25,
+  "party_evidence_file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+  "party_evidence_sources_dir": "data/political-orientation/party-sources-1992-1994/ (manifest.json com sha256)",
+  "independent_cross_checks": [
+   "Coppedge (1997), Working Paper 244, Apêndice A: classificação categórica por Ames, Fleischer, Mainwaring e Power; concorda no lado de todos os partidos com cadeiras exceto o PRN (personalista).",
+   "Mainwaring, Meneguello e Power (1999), Working Paper 264: PFL, PDS, PPR, PL, PRN e PRONA na direita; PDC, PTB, PP, PSC, PST, PTR e PMN na centro-direita; PMDB e PSDB não conservadores. A Tabela 9 (valores por onda) vem em branco no PDF obtido.",
+   "Lucas e Samuels (2010), Tabela 1: ordenação convencional baseada em Power e Zucco (2009); fonte secundária."
+  ],
+  "autodeclaration_policy": "Autodeclaração (manifesto, estatuto, programa) é registrada à parte nos arquivos de evidência e nunca altera a pontuação; só estimativas numéricas de pesquisas com parlamentares definem os grupos."
+ },
+ "parties": {
+  "MDB": {
+   "source_column": "MDB",
+   "score": -0.022,
+   "standard_error": 0.034,
+   "identity": "PMDB (rótulo MDB pela API; coluna MDB de Zucco e Power, mesmo partido)",
+   "mapping_kind": "same_party",
+   "self_identification_summary": "assumiu a posição de centro no espectro político-partidário (CPDOC, relato secundário)",
+   "categorical_cross_check": {
+    "source": "Coppedge (1997), Apendice A, Brasil 1945-94",
+    "code": "SC",
+    "side": "center",
+    "role": "checagem categorica independente; nao altera a pontuacao"
+   },
+   "evidence_record": {
+    "file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+    "abbreviation": "PMDB"
+   }
+  },
+  "PFL": {
+   "source_column": "DEM",
+   "score": 0.671,
+   "standard_error": 0.038,
+   "identity": "os autores identificam o DEM como o PFL fundado em 1985, renomeado em 2007",
+   "mapping_kind": "same_party",
+   "self_identification_summary": "partido liberal; 'liberalismo social' (programa e estatuto de 1999, posteriores ao recorte)",
+   "categorical_cross_check": {
+    "source": "Coppedge (1997), Apendice A, Brasil 1945-94",
+    "code": "SR",
+    "side": "right",
+    "role": "checagem categorica independente; nao altera a pontuacao"
+   },
+   "evidence_record": {
+    "file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+    "abbreviation": "PFL"
+   }
+  },
+  "PSDB": {
+   "source_column": "PSDB",
+   "score": -0.225,
+   "standard_error": 0.033,
+   "identity": "mesmo partido",
+   "mapping_kind": "same_party",
+   "self_identification_summary": "manifesto de 1988: confluência de liberais-progressistas, democratas-cristãos, sociais-democratas e socialistas-democráticos (via CPDOC)",
+   "categorical_cross_check": {
+    "source": "Coppedge (1997), Apendice A, Brasil 1945-94",
+    "code": "SCL",
+    "side": "left",
+    "role": "checagem categorica independente; nao altera a pontuacao"
+   },
+   "evidence_record": {
+    "file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+    "abbreviation": "PSDB"
+   }
+  },
+  "PDT": {
+   "source_column": "PDT",
+   "score": -0.447,
+   "standard_error": 0.035,
+   "identity": "mesmo partido",
+   "mapping_kind": "same_party",
+   "self_identification_summary": "trabalhista e socialista: 'defesa da democracia, do nacionalismo e do socialismo' (manifesto, via CPDOC)",
+   "categorical_cross_check": {
+    "source": "Coppedge (1997), Apendice A, Brasil 1945-94",
+    "code": "SCL",
+    "side": "left",
+    "role": "checagem categorica independente; nao altera a pontuacao"
+   },
+   "evidence_record": {
+    "file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+    "abbreviation": "PDT"
+   }
+  },
+  "PT": {
+   "source_column": "PT",
+   "score": -0.83,
+   "standard_error": 0.039,
+   "identity": "mesmo partido",
+   "mapping_kind": "same_party",
+   "self_identification_summary": "socialista e democrático (CPDOC sobre o manifesto de 1980)",
+   "categorical_cross_check": {
+    "source": "Coppedge (1997), Apendice A, Brasil 1945-94",
+    "code": "SL",
+    "side": "left",
+    "role": "checagem categorica independente; nao altera a pontuacao"
+   },
+   "evidence_record": {
+    "file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+    "abbreviation": "PT"
+   }
+  },
+  "PSB": {
+   "source_column": "PSB",
+   "score": -0.746,
+   "standard_error": 0.037,
+   "identity": "mesmo partido",
+   "mapping_kind": "same_party",
+   "self_identification_summary": "'aspirações socialistas do povo brasileiro' (manifesto de 1985, via CPDOC)",
+   "categorical_cross_check": {
+    "source": "Coppedge (1997), Apendice A, Brasil 1945-94",
+    "code": "SL",
+    "side": "left",
+    "role": "checagem categorica independente; nao altera a pontuacao"
+   },
+   "evidence_record": {
+    "file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+    "abbreviation": "PSB"
+   }
+  },
+  "PTB": {
+   "source_column": "PTB",
+   "score": 0.482,
+   "standard_error": 0.036,
+   "identity": "mesmo partido",
+   "mapping_kind": "same_party",
+   "self_identification_summary": "oposição 'patriótica e não demagógica', aberta ao empresariado nacional (1979-80, via CPDOC); sem rótulo ideológico",
+   "categorical_cross_check": {
+    "source": "Coppedge (1997), Apendice A, Brasil 1945-94",
+    "code": "SCR",
+    "side": "right",
+    "role": "checagem categorica independente; nao altera a pontuacao"
+   },
+   "evidence_record": {
+    "file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+    "abbreviation": "PTB"
+   }
+  },
+  "PRN": {
+   "source_column": "PRN",
+   "score": 0.869,
+   "standard_error": 0.042,
+   "identity": "mesmo partido",
+   "mapping_kind": "same_party",
+   "self_identification_summary": "liberal democrático (programa de 1989, via CPDOC)",
+   "evidence_record": {
+    "file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+    "abbreviation": "PRN"
+   },
+   "categorical_cross_check": {
+    "source": "Coppedge (1997), Apendice A, Brasil 1945-94",
+    "code": "P",
+    "side": null,
+    "role": "classificado como personalista, sem posição esquerda-direita; divergência registrada"
+   }
+  },
+  "PDS": {
+   "source_column": "PP",
+   "score": 0.734,
+   "standard_error": 0.04,
+   "identity": "PDS (extinto em abril de 1993). A onda de 1993 não o avaliou; avaliou o PPR (item LRPPR, 162 avaliadores). A coluna 'PP' da Tabela C1 é, por inferência do projeto (mesma ordem relativa da linha PPB de 2009, que usa o item PPR em 1993), a série ARENA/PDS-PPR-PPB. O PDS foi avaliado diretamente em 1990 (0,881; 213 avaliadores)",
+   "mapping_kind": "successor_series_inferred",
+   "self_identification_summary": "'partido da reforma e da transformação' e 'democracia social' (manifesto de 1980, via CPDOC)",
+   "categorical_cross_check": {
+    "source": "Coppedge (1997), Apendice A, Brasil 1945-94",
+    "code": "SR",
+    "side": "right",
+    "role": "checagem categorica independente; nao altera a pontuacao"
+   },
+   "evidence_record": {
+    "file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+    "abbreviation": "PDS"
+   },
+   "direct_1990_wave": {
+    "score": 0.881,
+    "standard_error": 0.039
+   }
+  },
+  "PPR": {
+   "source_column": "PP",
+   "score": 0.734,
+   "standard_error": 0.04,
+   "identity": "PPR (PDS + PDC, abril de 1993 a 1995). Item LRPPR avaliado diretamente na pesquisa de 1993 (media bruta 7,75; 162 avaliadores); associação com a coluna 'PP' da Tabela C1 é inferência do projeto, não afirmação dos autores",
+   "mapping_kind": "successor_series_inferred",
+   "self_identification_summary": "Maluf em 1993: 'um grande partido progressista, de centro, e comprometido com as reformas' (via CPDOC)",
+   "categorical_cross_check": {
+    "source": "Coppedge (1997), Apendice A, Brasil 1945-94",
+    "code": "SR",
+    "side": "right",
+    "role": "checagem categorica independente; nao altera a pontuacao"
+   },
+   "evidence_record": {
+    "file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+    "abbreviation": "PPR"
+   }
+  },
+  "PP": {
+   "source_column": "PP (old)",
+   "score": 0.339,
+   "standard_error": 0.035,
+   "identity": "Partido Popular de 1993 (PST + PTR), absorvido em 1995; os rótulos PP de 1993–1994 na API são anteriores ao PP contemporâneo; TSE 39; PST + PTR em fevereiro de 1993",
+   "mapping_kind": "same_party_by_dates",
+   "self_identification_summary": "buscou imagem de 'socialdemocrata' (CPDOC)",
+   "categorical_cross_check": {
+    "source": "Coppedge (1997), Apendice A, Brasil 1945-94",
+    "code": "SCR",
+    "side": "right",
+    "role": "checagem categorica independente; nao altera a pontuacao"
+   },
+   "evidence_record": {
+    "file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+    "abbreviation": "PP"
+   }
+  },
+  "PL": {
+   "source_column": "PL",
+   "score": 0.643,
+   "standard_error": 0.037,
+   "identity": "Partido Liberal de 1985 (PR de 2006 a 2019); mapeamento direto",
+   "mapping_kind": "same_party_by_dates",
+   "evidence_record": {
+    "file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+    "abbreviation": "PL"
+   },
+   "note": "Sem cadeiras identificadas nas fotografias atuais; incluído para rótulos que a reconciliação com o banco encontrar.",
+   "categorical_cross_check": {
+    "source": "Coppedge (1997), Apendice A, Brasil 1945-94",
+    "code": "SR",
+    "side": "right",
+    "role": "checagem categorica independente; nao altera a pontuacao"
+   }
+  },
+  "PCdoB": {
+   "source_column": "PCDOB",
+   "score": -0.946,
+   "standard_error": 0.04,
+   "identity": "Partido Comunista do Brasil (TSE 65); mapeamento direto",
+   "mapping_kind": "same_party_by_dates",
+   "evidence_record": {
+    "file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+    "abbreviation": "PCdoB"
+   },
+   "note": "Sem cadeiras identificadas nas fotografias atuais; incluído para rótulos que a reconciliação com o banco encontrar.",
+   "categorical_cross_check": {
+    "source": "Coppedge (1997), Apendice A, Brasil 1945-94",
+    "code": "SL",
+    "side": "left",
+    "role": "checagem categorica independente; nao altera a pontuacao"
+   }
+  },
+  "PPS": {
+   "source_column": "CID",
+   "score": -0.597,
+   "standard_error": 0.036,
+   "identity": "PPS, sucessor do PCB desde 1992 (coluna CID, hoje Cidadania); mapeamento direto",
+   "mapping_kind": "same_party_by_dates",
+   "evidence_record": {
+    "file": "data/political-orientation/party-orientation-evidence-1992-1994.json",
+    "abbreviation": "PPS"
+   },
+   "note": "Sem cadeiras identificadas nas fotografias atuais; incluído para rótulos que a reconciliação com o banco encontrar.",
+   "categorical_cross_check": {
+    "source": "Coppedge (1997), 'Popular Socialista 1994'",
+    "code": "SL",
+    "side": "left",
+    "role": "checagem categorica independente; nao altera a pontuacao"
+   }
+  }
+ },
+ "unclassified_parties": {
+  "PDC": "Sem estimativa na onda de 1993: a tabela só traz o PDC em 1990 (0,622; 205 avaliadores), legislatura anterior, e o partido se fundiu ao PDS em abril de 1993 para formar o PPR. Coppedge (1997) o classifica como centro-direita secular (SCR, 1986-90) e Mainwaring, Meneguello e Power (1999) como centro-direita; nenhuma fonte cobre a legislatura de 1991-95, então segue sem classificação e aparece só na sensibilidade. Autodeclaração (1985): 'terceira via política' entre liberalismo e marxismo.",
+  "PSC": "Sem estimativa numérica em 1993 (Zucco e Power só trazem o PSC a partir de 2013). Coppedge: centro cristão (XC, 3/5); Mainwaring et al.: centro-direita. Fontes divergem em grau, nenhuma é escala numérica.",
+  "PTR": "Sem estimativa antes da fusão com o PST (fevereiro de 1993). A estimativa de PP (old) vale para o partido fundido, não para o PTR de 1992. Coppedge: centro-direita secular.",
+  "PST": "Sem estimativa antes da fusão com o PTR. Coppedge: centro-direita secular (nota xii: o rascunho o colocava na esquerda).",
+  "PRONA": "Sem estimativa por survey. Coppedge: direita secular; Mainwaring et al.: extrema direita liderada por figura personalista.",
+  "PSD": "PSD de 1987, não o de 2011 (coluna PSD de Zucco e Power começa em 2009-2013). Coppedge e Mainwaring et al. concordam em direita, sem escala numérica.",
+  "PMN": "Sem estimativa por survey. Mainwaring et al.: centro-direita; programa de 1985 era nacionalista e terceiro-mundista. Divergência não resolvida."
+ },
+ "unaffiliated_labels": [
+  "S/Partido"
+ ],
+ "sensitivity_scenarios": [
+  {
+   "id": "printed_text_claims_excluded",
+   "description": "Exclui partidos obtidos apenas de cabeçalhos e listas impressas nos Diários (leitura OCR); ficam só filiações e rótulos de votos da API do Senado",
+   "exclude_source_kinds": [
+    "printed_anais_heading_same_year",
+    "printed_diario_party_leadership_listing"
+   ]
+  },
+  {
+   "id": "psdb_to_center",
+   "description": "PSDB (−0,225) lido como centro, por exemplo com corte de ±0,25",
+   "moves": {
+    "PSDB": "center"
+   }
+  },
+  {
+   "id": "mdb_to_right",
+   "description": "MDB (−0,022, praticamente no zero da escala) contado na direita: limite superior da direita",
+   "moves": {
+    "MDB": "right"
+   }
+  },
+  {
+   "id": "mdb_to_left",
+   "description": "MDB contado na esquerda: limite superior da esquerda",
+   "moves": {
+    "MDB": "left"
+   }
+  },
+  {
+   "id": "pdc_wave_1990_to_right",
+   "description": "PDC lido pela onda de 1990 (0,622), direita",
+   "moves": {
+    "PDC": "right"
+   }
+  },
+  {
+   "id": "prn_personalist_unclassified",
+   "description": "PRN sem classificação: Coppedge (1997) o trata como personalista, sem posição esquerda-direita",
+   "moves": {
+    "PRN": "undetermined"
+   }
+  },
+  {
+   "id": "descendant_series_unclassified",
+   "description": "PDS e PPR sem classificação (a ligação entre o item PPR de 1993 e a coluna PP da Tabela C1 é inferência do projeto)",
+   "moves": {
+    "PDS": "undetermined",
+    "PPR": "undetermined"
+   }
+  },
+  {
+   "id": "all_gaps_to_right",
+   "description": "Todas as cadeiras sem partido identificado contadas na direita (limite máximo)",
+   "gaps_to": "right"
+  },
+  {
+   "id": "all_gaps_to_left",
+   "description": "Todas as cadeiras sem partido identificado contadas na esquerda (limite máximo)",
+   "gaps_to": "left"
+  }
+ ],
+ "documentary_sources": [
+  {
+   "source_url": "https://doi.org/10.7910/DVN/6KVTUV",
+   "source_title": "Zucco e Power (2024), Tabela C1, onda de 1993: classificação ideológica dos partidos",
+   "source_publication_year": 2024
+  },
+  {
+   "source_url": "https://legis.senado.leg.br/dadosabertos/senador/lista/legislatura/49",
+   "source_title": "API de dados abertos do Senado: senadores da 49ª legislatura, mandatos, filiações e votações nominais (arquivo local de 28/10/2026)",
+   "source_publication_year": 2026
+  },
+  {
+   "source_url": "https://www.scielo.br/j/dados/a/GHp9LFMHsn5jVdctyW6dDvN/?format=html&lang=pt",
+   "source_title": "Izumi (2016), Governo e Oposição no Senado Brasileiro (1989–2010): contexto, sem classificação de partidos",
+   "source_publication_year": 2016
+  },
+  {
+   "source_url": "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/itamar-augusto-cautiero-franco/ministerios-itamar-franco-1.pdf",
+   "source_title": "Presidência da República: Governo Itamar Franco, ministérios (períodos de afastamento de senadores)",
+   "source_publication_year": null
+  },
+  {
+   "source_url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/11567",
+   "source_title": "Power e Zucco (2009), dados e estimativas por onda (1990, 1993, 1997, 2001, 2005) e respostas individuais; arquivadas localmente com sha256",
+   "source_publication_year": 2009
+  },
+  {
+   "source_url": "https://kellogg.nd.edu/publications/workingpapers/WPS/244.pdf",
+   "source_title": "Coppedge (1997), A Classification of Latin American Political Parties, Apêndice A: classificação categórica do Brasil",
+   "source_publication_year": 1997
+  },
+  {
+   "source_url": "https://kellogg.nd.edu/publications/workingpapers/WPS/264.pdf",
+   "source_title": "Mainwaring, Meneguello e Power (1999), Conservative Parties, Democracy, and Economic Reform in Contemporary Brazil",
+   "source_publication_year": 1999
+  },
+  {
+   "source_url": "https://www18.fgv.br/cpdoc/acervo/dicionarios/verbete-tematico/",
+   "source_title": "CPDOC/FGV, Dicionário Histórico-Biográfico Brasileiro: verbetes dos partidos (manifestos e programas, autodeclaração)",
+   "source_publication_year": null
+  }
+ ],
+ "limitation": "Síntese editorial: fotografias reconstruídas a partir de mandatos, chapas, votos nominais e documentos dispersos, sem relatório oficial de composição das 81 cadeiras nas datas; classificação partidária da onda de 1993 aplicada às três datas. Não mede ideologia individual, base governista ou presença em sessão. Autodeclaração partidária e estimativa de pesquisas são registradas separadas em party-orientation-evidence-1992-1994.json; PDC, PSC, PTR, PST, PRONA, PSD e PMN seguem sem escala numérica para a legislatura.",
+ "snapshots": [
+  {
+   "snapshot_on": "1992-12-31",
+   "seats": [
+    {
+     "uf": "AC",
+     "seat": "Aluízio Bezerra",
+     "occupant_source_id": "222",
+     "occupant_name": "Aluízio Bezerra",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/222/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "1995-01-31"
+     }
+    },
+    {
+     "uf": "AC",
+     "seat": "Flaviano Melo",
+     "occupant_source_id": "24",
+     "occupant_name": "Flaviano Melo",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/24/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "AC",
+     "seat": "Nabor Júnior",
+     "occupant_source_id": "62",
+     "occupant_name": "Nabor Júnior",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/62/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "AL",
+     "seat": "Divaldo Suruagy",
+     "occupant_source_id": "1581",
+     "occupant_name": "Divaldo Suruagy",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1581/mandatos.json",
+      "valid_from": "1991-03-26",
+      "valid_until_inclusive": "1994-12-15"
+     }
+    },
+    {
+     "uf": "AL",
+     "seat": "Guilherme Palmeira",
+     "occupant_source_id": "31",
+     "occupant_name": "Guilherme Palmeira",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/31/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "AL",
+     "seat": "Teotonio Vilela Filho",
+     "occupant_source_id": "78",
+     "occupant_name": "Teotonio Vilela Filho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/78/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "1995-01-31"
+     }
+    },
+    {
+     "uf": "AM",
+     "seat": "Amazonino Mendes",
+     "occupant_source_id": "29",
+     "occupant_name": "Gilberto Miranda",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/29/mandatos.json",
+      "valid_from": "1992-12-31",
+      "valid_until_inclusive": "1996-12-17"
+     }
+    },
+    {
+     "uf": "AM",
+     "seat": "Fábio Lucena",
+     "occupant_source_id": "1503",
+     "occupant_name": "Aureo Mello",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PRN",
+      "party_key": "PRN",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1503/mandatos.json",
+      "valid_from": "1991-01-31",
+      "valid_until_inclusive": "2001-06-08"
+     }
+    },
+    {
+     "uf": "AM",
+     "seat": "Carlos De' Carli",
+     "occupant_source_id": "1537",
+     "occupant_name": "Carlos De' Carli",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1537/mandatos.json",
+      "valid_from": "1988-05-08",
+      "valid_until_inclusive": "1993-06-16"
+     }
+    },
+    {
+     "uf": "AP",
+     "seat": "Henrique Almeida",
+     "occupant_source_id": "1737",
+     "occupant_name": "Henrique Almeida",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1992-book-20"
+     }
+    },
+    {
+     "uf": "AP",
+     "seat": "Jonas Pinheiro",
+     "occupant_source_id": "1869",
+     "occupant_name": "Jonas Pinheiro",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1869/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "AP",
+     "seat": "José Sarney",
+     "occupant_source_id": "47",
+     "occupant_name": "José Sarney",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/47/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "BA",
+     "seat": "Josaphat Marinho",
+     "occupant_source_id": "39",
+     "occupant_name": "Josaphat Marinho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/39/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "BA",
+     "seat": "Jutahy Magalhães",
+     "occupant_source_id": "1999",
+     "occupant_name": "Jutahy Magalhães",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1992-book-20"
+     }
+    },
+    {
+     "uf": "BA",
+     "seat": "Ruy Bacelar",
+     "occupant_source_id": "1864",
+     "occupant_name": "Ruy Bacelar",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1864/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "CE",
+     "seat": "Beni Veras",
+     "occupant_source_id": "8",
+     "occupant_name": "Beni Veras",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/8/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1998-12-31"
+     }
+    },
+    {
+     "uf": "CE",
+     "seat": "Cid Sabóia de Carvalho",
+     "occupant_source_id": "1562",
+     "occupant_name": "Cid Sabóia de Carvalho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1562/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "CE",
+     "seat": "Mauro Benevides",
+     "occupant_source_id": "1244",
+     "occupant_name": "Mauro Benevides",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1244/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "2003-01-31"
+     }
+    },
+    {
+     "uf": "DF",
+     "seat": "Maurício Corrêa",
+     "occupant_source_id": "2190",
+     "occupant_name": "Pedro Teixeira",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDT",
+      "party_key": "PDT",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1992-book-20"
+     }
+    },
+    {
+     "uf": "DF",
+     "seat": "Meira Filho",
+     "occupant_source_id": "1781",
+     "occupant_name": "Meira Filho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1781/mandatos.json",
+      "valid_from": "1990-12-11",
+      "valid_until_inclusive": "1993-03-04"
+     }
+    },
+    {
+     "uf": "DF",
+     "seat": "Valmir Campelo",
+     "occupant_source_id": "79",
+     "occupant_name": "Valmir Campelo",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/79/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1997-11-12"
+     }
+    },
+    {
+     "uf": "ES",
+     "seat": "Elcio Alvares",
+     "occupant_source_id": "18",
+     "occupant_name": "Elcio Alvares",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/18/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "ES",
+     "seat": "Gerson Camata",
+     "occupant_source_id": "28",
+     "occupant_name": "Gerson Camata",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDC",
+      "party_key": "PDC",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1992-book-20"
+     }
+    },
+    {
+     "uf": "ES",
+     "seat": "João Calmon",
+     "occupant_source_id": "1799",
+     "occupant_name": "João Calmon",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1992-book-20"
+     }
+    },
+    {
+     "uf": "GO",
+     "seat": "Iram Saraiva",
+     "occupant_source_id": "1748",
+     "occupant_name": "Iram Saraiva",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1748/mandatos.json",
+      "valid_from": "1991-06-26",
+      "valid_until_inclusive": "1994-08-17"
+     }
+    },
+    {
+     "uf": "GO",
+     "seat": "Irapuan Costa Júnior",
+     "occupant_source_id": "1749",
+     "occupant_name": "Irapuan Costa Júnior",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1749/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "1993-02-04"
+     }
+    },
+    {
+     "uf": "GO",
+     "seat": "Onofre Quinan",
+     "occupant_source_id": "65",
+     "occupant_name": "Onofre Quinan",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/65/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1998-01-14"
+     }
+    },
+    {
+     "uf": "MA",
+     "seat": "Alexandre Costa",
+     "occupant_source_id": "185",
+     "occupant_name": "Bello Parga",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1992-book-20"
+     }
+    },
+    {
+     "uf": "MA",
+     "seat": "Edison Lobão",
+     "occupant_source_id": "1552",
+     "occupant_name": "Magno Bacelar",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDT",
+      "party_key": "PDT",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1992-book-20"
+     }
+    },
+    {
+     "uf": "MA",
+     "seat": "Epitácio Cafeteira",
+     "occupant_source_id": "20",
+     "occupant_name": "Epitácio Cafeteira",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDC",
+      "party_key": "PDC",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/20/mandatos.json",
+      "valid_from": "1992-12-29",
+      "valid_until_inclusive": "1993-06-15"
+     }
+    },
+    {
+     "uf": "MG",
+     "seat": "Alfredo Campos",
+     "occupant_source_id": "1383",
+     "occupant_name": "Alfredo Campos",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "MG",
+     "seat": "Junia Marise",
+     "occupant_source_id": "51",
+     "occupant_name": "Junia Marise",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PRN",
+      "party_key": "PRN",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/51/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1994-02-20"
+     }
+    },
+    {
+     "uf": "MG",
+     "seat": "Ronan Tito",
+     "occupant_source_id": "2224",
+     "occupant_name": "Ronan Tito",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2224/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "MS",
+     "seat": "Saldanha Derzi",
+     "occupant_source_id": "2203",
+     "occupant_name": "Saldanha Derzi",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PRN",
+      "party_key": "PRN",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2203/mandatos.json",
+      "valid_from": "1990-11-21",
+      "valid_until_inclusive": "1994-01-02"
+     }
+    },
+    {
+     "uf": "MS",
+     "seat": "Levy Dias",
+     "occupant_source_id": "54",
+     "occupant_name": "Levy Dias",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/54/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1993-03-31"
+     }
+    },
+    {
+     "uf": "MS",
+     "seat": "Wilson Martins",
+     "occupant_source_id": "2282",
+     "occupant_name": "Wilson Martins",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2282/mandatos.json",
+      "valid_from": "1991-08-01",
+      "valid_until_inclusive": "1994-12-31"
+     }
+    },
+    {
+     "uf": "MT",
+     "seat": "Júlio Campos",
+     "occupant_source_id": "50",
+     "occupant_name": "Júlio Campos",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/50/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "MT",
+     "seat": "Louremberg Nunes",
+     "occupant_source_id": "2017",
+     "occupant_name": "Louremberg Nunes",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2017/mandatos.json",
+      "valid_from": "1988-04-27",
+      "valid_until_inclusive": "1993-04-01"
+     }
+    },
+    {
+     "uf": "MT",
+     "seat": "Márcio Lacerda",
+     "occupant_source_id": "1952",
+     "occupant_name": "Márcio Lacerda",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1952/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "PA",
+     "seat": "Almir Gabriel",
+     "occupant_source_id": "1387",
+     "occupant_name": "Almir Gabriel",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1387/mandatos.json",
+      "valid_from": "1989-07-07",
+      "valid_until_inclusive": "1994-12-15"
+     }
+    },
+    {
+     "uf": "PA",
+     "seat": "Coutinho Jorge",
+     "occupant_source_id": "136",
+     "occupant_name": "Juvêncio Dias",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "PA",
+     "seat": "Jarbas Passarinho",
+     "occupant_source_id": "1764",
+     "occupant_name": "Jarbas Passarinho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDS",
+      "party_key": "PDS",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1992-book-20"
+     }
+    },
+    {
+     "uf": "PB",
+     "seat": "Antonio Mariz",
+     "occupant_source_id": "84",
+     "occupant_name": "Antonio Mariz",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/84/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1994-12-31"
+     }
+    },
+    {
+     "uf": "PB",
+     "seat": "Humberto Lucena",
+     "occupant_source_id": "33",
+     "occupant_name": "Humberto Lucena",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/33/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "1998-04-13"
+     }
+    },
+    {
+     "uf": "PB",
+     "seat": "Raimundo Lira",
+     "occupant_source_id": "2207",
+     "occupant_name": "Raimundo Lira",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "S/Partido",
+      "party_key": "S/Partido",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2207/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "2011-02-02"
+     }
+    },
+    {
+     "uf": "PE",
+     "seat": "Mansueto de Lavor",
+     "occupant_source_id": "2194",
+     "occupant_name": "Mansueto de Lavor",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "PE",
+     "seat": "Marco Maciel",
+     "occupant_source_id": "86",
+     "occupant_name": "Marco Maciel",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/86/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1994-12-31"
+     }
+    },
+    {
+     "uf": "PE",
+     "seat": "Antônio Farias",
+     "occupant_source_id": "2144",
+     "occupant_name": "Ney Maranhão",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PRN",
+      "party_key": "PRN",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2144/mandatos.json",
+      "valid_from": "1990-03-11",
+      "valid_until_inclusive": "2001-06-08"
+     }
+    },
+    {
+     "uf": "PI",
+     "seat": "Chagas Rodrigues",
+     "occupant_source_id": "1657",
+     "occupant_name": "Chagas Rodrigues",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1657/mandatos.json",
+      "valid_from": "1988-06-29",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "PI",
+     "seat": "Hugo Napoleão",
+     "occupant_source_id": "1398",
+     "occupant_name": "Álvaro Pacheco",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "PI",
+     "seat": "Lucídio Portella",
+     "occupant_source_id": "55",
+     "occupant_name": "Lucídio Portella",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDS",
+      "party_key": "PDS",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/55/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1993-06-15"
+     }
+    },
+    {
+     "uf": "PR",
+     "seat": "Affonso Camargo",
+     "occupant_source_id": "346",
+     "occupant_name": "Affonso Camargo",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/346/mandatos.json",
+      "valid_from": "1987-11-12",
+      "valid_until_inclusive": "1993-03-19"
+     }
+    },
+    {
+     "uf": "PR",
+     "seat": "José Eduardo",
+     "occupant_source_id": "56",
+     "occupant_name": "Luís Alberto de Oliveira",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/56/mandatos.json",
+      "valid_from": "1992-10-21",
+      "valid_until_inclusive": "1993-12-22"
+     }
+    },
+    {
+     "uf": "PR",
+     "seat": "José Richa",
+     "occupant_source_id": "1974",
+     "occupant_name": "José Richa",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "RJ",
+     "seat": "Darcy Ribeiro",
+     "occupant_source_id": "15",
+     "occupant_name": "Darcy Ribeiro",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDT",
+      "party_key": "PDT",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/15/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1997-02-17"
+     }
+    },
+    {
+     "uf": "RJ",
+     "seat": "Nelson Carneiro",
+     "occupant_source_id": "2137",
+     "occupant_name": "Nelson Carneiro",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1992-book-20"
+     }
+    },
+    {
+     "uf": "RJ",
+     "seat": "Affonso Arinos",
+     "occupant_source_id": "1746",
+     "occupant_name": "Hydekel Freitas",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1746/mandatos.json",
+      "valid_from": "1990-09-13",
+      "valid_until_inclusive": "1993-10-25"
+     }
+    },
+    {
+     "uf": "RN",
+     "seat": "Garibaldi Alves Filho",
+     "occupant_source_id": "87",
+     "occupant_name": "Garibaldi Alves Filho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/87/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1994-12-19"
+     }
+    },
+    {
+     "uf": "RN",
+     "seat": "Lavoisier Maia",
+     "occupant_source_id": "799",
+     "occupant_name": "Lavoisier Maia",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "S/Partido",
+      "party_key": "S/Partido",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/799/mandatos.json",
+      "valid_from": "1989-03-22",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "RN",
+     "seat": "José Agripino",
+     "occupant_source_id": "1572",
+     "occupant_name": "Dario Pereira",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "RO",
+     "seat": "Odacir Soares",
+     "occupant_source_id": "64",
+     "occupant_name": "Odacir Soares",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/64/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1997-08-19"
+     }
+    },
+    {
+     "uf": "RO",
+     "seat": "Ronaldo Aragão",
+     "occupant_source_id": "1978",
+     "occupant_name": "Ronaldo Aragão",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1992-book-20"
+     }
+    },
+    {
+     "uf": "RO",
+     "seat": "Amir Lando",
+     "occupant_source_id": "1025",
+     "occupant_name": "Amir Lando",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1025/filiacoes.json",
+      "valid_from": "1991-02-21",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "RR",
+     "seat": "César Dias",
+     "occupant_source_id": "88",
+     "occupant_name": "César Dias",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/88/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "RR",
+     "seat": "Marluce Pinto",
+     "occupant_source_id": "60",
+     "occupant_name": "Marluce Pinto",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/60/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1995-05-31"
+     }
+    },
+    {
+     "uf": "RR",
+     "seat": "Hélio Campos",
+     "occupant_source_id": "48",
+     "occupant_name": "João França",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDS",
+      "party_key": "PDS",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/48/mandatos.json",
+      "valid_from": "1991-04-30",
+      "valid_until_inclusive": "1993-03-04"
+     }
+    },
+    {
+     "uf": "RS",
+     "seat": "José Fogaça",
+     "occupant_source_id": "44",
+     "occupant_name": "José Fogaça",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/44/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "2001-10-04"
+     }
+    },
+    {
+     "uf": "RS",
+     "seat": "Paulo Bisol",
+     "occupant_source_id": "1967",
+     "occupant_name": "Paulo Bisol",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSB",
+      "party_key": "PSB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1967/mandatos.json",
+      "valid_from": "1989-07-04",
+      "valid_until_inclusive": "1994-10-11"
+     }
+    },
+    {
+     "uf": "RS",
+     "seat": "Pedro Simon",
+     "occupant_source_id": "68",
+     "occupant_name": "Pedro Simon",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/68/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "SC",
+     "seat": "Dirceu Carneiro",
+     "occupant_source_id": "1579",
+     "occupant_name": "Dirceu Carneiro",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1579/mandatos.json",
+      "valid_from": "1989-04-20",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "SC",
+     "seat": "Esperidião Amin",
+     "occupant_source_id": "22",
+     "occupant_name": "Esperidião Amin",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDS",
+      "party_key": "PDS",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/22/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1993-06-15"
+     }
+    },
+    {
+     "uf": "SC",
+     "seat": "Nelson Wedekin",
+     "occupant_source_id": "2139",
+     "occupant_name": "Nelson Wedekin",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDT",
+      "party_key": "PDT",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2139/mandatos.json",
+      "valid_from": "1990-03-07",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "SE",
+     "seat": "Albano Franco",
+     "occupant_source_id": "89",
+     "occupant_name": "Albano Franco",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PRN",
+      "party_key": "PRN",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/89/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1993-11-24"
+     }
+    },
+    {
+     "uf": "SE",
+     "seat": "Francisco Rollemberg",
+     "occupant_source_id": "1687",
+     "occupant_name": "Francisco Rollemberg",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1992-book-20"
+     }
+    },
+    {
+     "uf": "SE",
+     "seat": "Lourival Baptista",
+     "occupant_source_id": "2019",
+     "occupant_name": "Lourival Baptista",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1992-book-20"
+     }
+    },
+    {
+     "uf": "SP",
+     "seat": "Eduardo Suplicy",
+     "occupant_source_id": "17",
+     "occupant_name": "Eduardo Suplicy",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PT",
+      "party_key": "PT",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/17/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "SP",
+     "seat": "Mário Covas",
+     "occupant_source_id": "2108",
+     "occupant_name": "Mário Covas",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1992-book-20"
+     }
+    },
+    {
+     "uf": "SP",
+     "seat": "Fernando Henrique Cardoso",
+     "occupant_source_id": "1618",
+     "occupant_name": "Eva Blay",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "TO",
+     "seat": "Carlos Patrocínio",
+     "occupant_source_id": "11",
+     "occupant_name": "Carlos Patrocínio",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/11/mandatos.json",
+      "valid_from": "1991-01-31",
+      "valid_until_inclusive": "2001-07-30"
+     }
+    },
+    {
+     "uf": "TO",
+     "seat": "João Rocha",
+     "occupant_source_id": "49",
+     "occupant_name": "João Rocha",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/49/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "TO",
+     "seat": "Moisés Abrão",
+     "occupant_source_id": "2131",
+     "occupant_name": "Moisés Abrão",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDC",
+      "party_key": "PDC",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2131/mandatos.json",
+      "valid_from": "1989-01-02",
+      "valid_until_inclusive": "1993-06-16"
+     }
+    }
+   ]
+  },
+  {
+   "snapshot_on": "1993-12-31",
+   "seats": [
+    {
+     "uf": "AC",
+     "seat": "Aluízio Bezerra",
+     "occupant_source_id": "222",
+     "occupant_name": "Aluízio Bezerra",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/222/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "1995-01-31"
+     }
+    },
+    {
+     "uf": "AC",
+     "seat": "Flaviano Melo",
+     "occupant_source_id": "24",
+     "occupant_name": "Flaviano Melo",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/24/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "AC",
+     "seat": "Nabor Júnior",
+     "occupant_source_id": "62",
+     "occupant_name": "Nabor Júnior",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/62/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "AL",
+     "seat": "Divaldo Suruagy",
+     "occupant_source_id": "1581",
+     "occupant_name": "Divaldo Suruagy",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1581/mandatos.json",
+      "valid_from": "1991-03-26",
+      "valid_until_inclusive": "1994-12-15"
+     }
+    },
+    {
+     "uf": "AL",
+     "seat": "Guilherme Palmeira",
+     "occupant_source_id": "31",
+     "occupant_name": "Guilherme Palmeira",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/31/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "AL",
+     "seat": "Teotonio Vilela Filho",
+     "occupant_source_id": "78",
+     "occupant_name": "Teotonio Vilela Filho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/78/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "1995-01-31"
+     }
+    },
+    {
+     "uf": "AM",
+     "seat": "Amazonino Mendes",
+     "occupant_source_id": "29",
+     "occupant_name": "Gilberto Miranda",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/29/mandatos.json",
+      "valid_from": "1992-12-31",
+      "valid_until_inclusive": "1996-12-17"
+     }
+    },
+    {
+     "uf": "AM",
+     "seat": "Fábio Lucena",
+     "occupant_source_id": "1503",
+     "occupant_name": "Aureo Mello",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PRN",
+      "party_key": "PRN",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1503/mandatos.json",
+      "valid_from": "1991-01-31",
+      "valid_until_inclusive": "2001-06-08"
+     }
+    },
+    {
+     "uf": "AM",
+     "seat": "Carlos De' Carli",
+     "occupant_source_id": "1537",
+     "occupant_name": "Carlos De' Carli",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "AP",
+     "seat": "Henrique Almeida",
+     "occupant_source_id": "1737",
+     "occupant_name": "Henrique Almeida",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "AP",
+     "seat": "Jonas Pinheiro",
+     "occupant_source_id": "1869",
+     "occupant_name": "Jonas Pinheiro",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1869/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "AP",
+     "seat": "José Sarney",
+     "occupant_source_id": "47",
+     "occupant_name": "José Sarney",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/47/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "BA",
+     "seat": "Josaphat Marinho",
+     "occupant_source_id": "39",
+     "occupant_name": "Josaphat Marinho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/39/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "BA",
+     "seat": "Jutahy Magalhães",
+     "occupant_source_id": "1999",
+     "occupant_name": "Jutahy Magalhães",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1993-book-4"
+     }
+    },
+    {
+     "uf": "BA",
+     "seat": "Ruy Bacelar",
+     "occupant_source_id": "1864",
+     "occupant_name": "Ruy Bacelar",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1864/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "CE",
+     "seat": "Beni Veras",
+     "occupant_source_id": "8",
+     "occupant_name": "Beni Veras",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/8/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1998-12-31"
+     }
+    },
+    {
+     "uf": "CE",
+     "seat": "Cid Sabóia de Carvalho",
+     "occupant_source_id": "1562",
+     "occupant_name": "Cid Sabóia de Carvalho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1562/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "CE",
+     "seat": "Mauro Benevides",
+     "occupant_source_id": "1244",
+     "occupant_name": "Mauro Benevides",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1244/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "2003-01-31"
+     }
+    },
+    {
+     "uf": "DF",
+     "seat": "Maurício Corrêa",
+     "occupant_source_id": "2190",
+     "occupant_name": "Pedro Teixeira",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "DF",
+     "seat": "Meira Filho",
+     "occupant_source_id": "1781",
+     "occupant_name": "Meira Filho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "DF",
+     "seat": "Valmir Campelo",
+     "occupant_source_id": "79",
+     "occupant_name": "Valmir Campelo",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/79/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1997-11-12"
+     }
+    },
+    {
+     "uf": "ES",
+     "seat": "Elcio Alvares",
+     "occupant_source_id": "18",
+     "occupant_name": "Elcio Alvares",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/18/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "ES",
+     "seat": "Gerson Camata",
+     "occupant_source_id": "28",
+     "occupant_name": "Gerson Camata",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "ES",
+     "seat": "João Calmon",
+     "occupant_source_id": "1799",
+     "occupant_name": "João Calmon",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1993-book-4"
+     }
+    },
+    {
+     "uf": "GO",
+     "seat": "Iram Saraiva",
+     "occupant_source_id": "1748",
+     "occupant_name": "Iram Saraiva",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1748/mandatos.json",
+      "valid_from": "1991-06-26",
+      "valid_until_inclusive": "1994-08-17"
+     }
+    },
+    {
+     "uf": "GO",
+     "seat": "Irapuan Costa Júnior",
+     "occupant_source_id": "1749",
+     "occupant_name": "Irapuan Costa Júnior",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "GO",
+     "seat": "Onofre Quinan",
+     "occupant_source_id": "65",
+     "occupant_name": "Onofre Quinan",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/65/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1998-01-14"
+     }
+    },
+    {
+     "uf": "MA",
+     "seat": "Alexandre Costa",
+     "occupant_source_id": "2",
+     "occupant_name": "Alexandre Costa",
+     "occupant_role": "titular_retorno_provavel_nao_comprovado",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "MA",
+     "seat": "Edison Lobão",
+     "occupant_source_id": "1552",
+     "occupant_name": "Magno Bacelar",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDT",
+      "party_key": "PDT",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1993-book-4"
+     }
+    },
+    {
+     "uf": "MA",
+     "seat": "Epitácio Cafeteira",
+     "occupant_source_id": "20",
+     "occupant_name": "Epitácio Cafeteira",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PPR",
+      "party_key": "PPR",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/20/mandatos.json",
+      "valid_from": "1993-06-16",
+      "valid_until_inclusive": "1995-10-24"
+     }
+    },
+    {
+     "uf": "MG",
+     "seat": "Alfredo Campos",
+     "occupant_source_id": "1383",
+     "occupant_name": "Alfredo Campos",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1993-book-4"
+     }
+    },
+    {
+     "uf": "MG",
+     "seat": "Junia Marise",
+     "occupant_source_id": "51",
+     "occupant_name": "Junia Marise",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PRN",
+      "party_key": "PRN",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/51/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1994-02-20"
+     }
+    },
+    {
+     "uf": "MG",
+     "seat": "Ronan Tito",
+     "occupant_source_id": "2224",
+     "occupant_name": "Ronan Tito",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2224/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "MS",
+     "seat": "Saldanha Derzi",
+     "occupant_source_id": "2203",
+     "occupant_name": "Saldanha Derzi",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PRN",
+      "party_key": "PRN",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2203/mandatos.json",
+      "valid_from": "1990-11-21",
+      "valid_until_inclusive": "1994-01-02"
+     }
+    },
+    {
+     "uf": "MS",
+     "seat": "Levy Dias",
+     "occupant_source_id": "54",
+     "occupant_name": "Levy Dias",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PPR",
+      "party_key": "PPR",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/54/mandatos.json",
+      "valid_from": "1993-06-16",
+      "valid_until_inclusive": "1995-10-24"
+     }
+    },
+    {
+     "uf": "MS",
+     "seat": "Wilson Martins",
+     "occupant_source_id": "2282",
+     "occupant_name": "Wilson Martins",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2282/mandatos.json",
+      "valid_from": "1991-08-01",
+      "valid_until_inclusive": "1994-12-31"
+     }
+    },
+    {
+     "uf": "MT",
+     "seat": "Júlio Campos",
+     "occupant_source_id": "50",
+     "occupant_name": "Júlio Campos",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/50/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "MT",
+     "seat": "Louremberg Nunes",
+     "occupant_source_id": "2017",
+     "occupant_name": "Louremberg Nunes",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1993-book-4"
+     }
+    },
+    {
+     "uf": "MT",
+     "seat": "Márcio Lacerda",
+     "occupant_source_id": "1952",
+     "occupant_name": "Márcio Lacerda",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1952/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "PA",
+     "seat": "Almir Gabriel",
+     "occupant_source_id": "1387",
+     "occupant_name": "Almir Gabriel",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1387/mandatos.json",
+      "valid_from": "1989-07-07",
+      "valid_until_inclusive": "1994-12-15"
+     }
+    },
+    {
+     "uf": "PA",
+     "seat": "Coutinho Jorge",
+     "occupant_source_id": "14",
+     "occupant_name": "Coutinho Jorge",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/14/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1995-11-06"
+     }
+    },
+    {
+     "uf": "PA",
+     "seat": "Jarbas Passarinho",
+     "occupant_source_id": "1764",
+     "occupant_name": "Jarbas Passarinho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "PB",
+     "seat": "Antonio Mariz",
+     "occupant_source_id": "84",
+     "occupant_name": "Antonio Mariz",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/84/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1994-12-31"
+     }
+    },
+    {
+     "uf": "PB",
+     "seat": "Humberto Lucena",
+     "occupant_source_id": "33",
+     "occupant_name": "Humberto Lucena",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/33/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "1998-04-13"
+     }
+    },
+    {
+     "uf": "PB",
+     "seat": "Raimundo Lira",
+     "occupant_source_id": "2207",
+     "occupant_name": "Raimundo Lira",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "S/Partido",
+      "party_key": "S/Partido",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2207/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "2011-02-02"
+     }
+    },
+    {
+     "uf": "PE",
+     "seat": "Mansueto de Lavor",
+     "occupant_source_id": "2194",
+     "occupant_name": "Mansueto de Lavor",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "PE",
+     "seat": "Marco Maciel",
+     "occupant_source_id": "86",
+     "occupant_name": "Marco Maciel",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/86/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1994-12-31"
+     }
+    },
+    {
+     "uf": "PE",
+     "seat": "Antônio Farias",
+     "occupant_source_id": "2144",
+     "occupant_name": "Ney Maranhão",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PRN",
+      "party_key": "PRN",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2144/mandatos.json",
+      "valid_from": "1990-03-11",
+      "valid_until_inclusive": "2001-06-08"
+     }
+    },
+    {
+     "uf": "PI",
+     "seat": "Chagas Rodrigues",
+     "occupant_source_id": "1657",
+     "occupant_name": "Chagas Rodrigues",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1657/mandatos.json",
+      "valid_from": "1988-06-29",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "PI",
+     "seat": "Hugo Napoleão",
+     "occupant_source_id": "32",
+     "occupant_name": "Hugo Napoleão",
+     "occupant_role": "titular_retorno_provavel_nao_comprovado",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/32/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "2007-08-01"
+     }
+    },
+    {
+     "uf": "PI",
+     "seat": "Lucídio Portella",
+     "occupant_source_id": "55",
+     "occupant_name": "Lucídio Portella",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PPR",
+      "party_key": "PPR",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/55/mandatos.json",
+      "valid_from": "1993-06-16",
+      "valid_until_inclusive": "1995-10-24"
+     }
+    },
+    {
+     "uf": "PR",
+     "seat": "Affonso Camargo",
+     "occupant_source_id": "346",
+     "occupant_name": "Affonso Camargo",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PPR",
+      "party_key": "PPR",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/346/mandatos.json",
+      "valid_from": "1993-06-17",
+      "valid_until_inclusive": "1994-12-31"
+     }
+    },
+    {
+     "uf": "PR",
+     "seat": "José Eduardo",
+     "occupant_source_id": "85",
+     "occupant_name": "José Eduardo",
+     "occupant_role": "titular_retorno_provavel_nao_comprovado",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/85/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "PR",
+     "seat": "José Richa",
+     "occupant_source_id": "1974",
+     "occupant_name": "José Richa",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "RJ",
+     "seat": "Darcy Ribeiro",
+     "occupant_source_id": "15",
+     "occupant_name": "Darcy Ribeiro",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "PDT",
+      "party_key": "PDT",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/15/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1997-02-17"
+     }
+    },
+    {
+     "uf": "RJ",
+     "seat": "Nelson Carneiro",
+     "occupant_source_id": "2137",
+     "occupant_name": "Nelson Carneiro",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1993-book-4"
+     }
+    },
+    {
+     "uf": "RJ",
+     "seat": "Affonso Arinos",
+     "occupant_source_id": "1746",
+     "occupant_name": "Hydekel Freitas",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_nominal_vote_party_label",
+      "observed_on": "1993-10-05",
+      "days_from_snapshot": 87,
+      "source_url": "https://www12.senado.leg.br/dados-abertos/legislativo/plenario/votacoes-nominais/lista-de-votacoes-nominais-de-1993"
+     }
+    },
+    {
+     "uf": "RN",
+     "seat": "Garibaldi Alves Filho",
+     "occupant_source_id": "87",
+     "occupant_name": "Garibaldi Alves Filho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/87/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1994-12-19"
+     }
+    },
+    {
+     "uf": "RN",
+     "seat": "Lavoisier Maia",
+     "occupant_source_id": "799",
+     "occupant_name": "Lavoisier Maia",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "S/Partido",
+      "party_key": "S/Partido",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/799/mandatos.json",
+      "valid_from": "1989-03-22",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "RN",
+     "seat": "José Agripino",
+     "occupant_source_id": "1572",
+     "occupant_name": "Dario Pereira",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "RO",
+     "seat": "Odacir Soares",
+     "occupant_source_id": "64",
+     "occupant_name": "Odacir Soares",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/64/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1997-08-19"
+     }
+    },
+    {
+     "uf": "RO",
+     "seat": "Ronaldo Aragão",
+     "occupant_source_id": "1978",
+     "occupant_name": "Ronaldo Aragão",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1993-book-4"
+     }
+    },
+    {
+     "uf": "RO",
+     "seat": "Amir Lando",
+     "occupant_source_id": "1025",
+     "occupant_name": "Amir Lando",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1025/filiacoes.json",
+      "valid_from": "1991-02-21",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "RR",
+     "seat": "César Dias",
+     "occupant_source_id": "88",
+     "occupant_name": "César Dias",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/88/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "RR",
+     "seat": "Marluce Pinto",
+     "occupant_source_id": "60",
+     "occupant_name": "Marluce Pinto",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/60/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1995-05-31"
+     }
+    },
+    {
+     "uf": "RR",
+     "seat": "Hélio Campos",
+     "occupant_source_id": "48",
+     "occupant_name": "João França",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PP",
+      "party_key": "PP",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/48/mandatos.json",
+      "valid_from": "1993-03-05",
+      "valid_until_inclusive": "1995-10-24"
+     }
+    },
+    {
+     "uf": "RS",
+     "seat": "José Fogaça",
+     "occupant_source_id": "44",
+     "occupant_name": "José Fogaça",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/44/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "2001-10-04"
+     }
+    },
+    {
+     "uf": "RS",
+     "seat": "Paulo Bisol",
+     "occupant_source_id": "1967",
+     "occupant_name": "Paulo Bisol",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSB",
+      "party_key": "PSB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1967/mandatos.json",
+      "valid_from": "1989-07-04",
+      "valid_until_inclusive": "1994-10-11"
+     }
+    },
+    {
+     "uf": "RS",
+     "seat": "Pedro Simon",
+     "occupant_source_id": "68",
+     "occupant_name": "Pedro Simon",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/68/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "SC",
+     "seat": "Dirceu Carneiro",
+     "occupant_source_id": "1579",
+     "occupant_name": "Dirceu Carneiro",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1579/mandatos.json",
+      "valid_from": "1989-04-20",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "SC",
+     "seat": "Esperidião Amin",
+     "occupant_source_id": "22",
+     "occupant_name": "Esperidião Amin",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PPR",
+      "party_key": "PPR",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/22/mandatos.json",
+      "valid_from": "1993-06-16",
+      "valid_until_inclusive": "1995-10-24"
+     }
+    },
+    {
+     "uf": "SC",
+     "seat": "Nelson Wedekin",
+     "occupant_source_id": "2139",
+     "occupant_name": "Nelson Wedekin",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDT",
+      "party_key": "PDT",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2139/mandatos.json",
+      "valid_from": "1990-03-07",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "SE",
+     "seat": "Albano Franco",
+     "occupant_source_id": "89",
+     "occupant_name": "Albano Franco",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "S/Partido",
+      "party_key": "S/Partido",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/89/mandatos.json",
+      "valid_from": "1993-11-25",
+      "valid_until_inclusive": "1994-01-05"
+     }
+    },
+    {
+     "uf": "SE",
+     "seat": "Francisco Rollemberg",
+     "occupant_source_id": "1687",
+     "occupant_name": "Francisco Rollemberg",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1993-book-4"
+     }
+    },
+    {
+     "uf": "SE",
+     "seat": "Lourival Baptista",
+     "occupant_source_id": "2019",
+     "occupant_name": "Lourival Baptista",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1993-book-4"
+     }
+    },
+    {
+     "uf": "SP",
+     "seat": "Eduardo Suplicy",
+     "occupant_source_id": "17",
+     "occupant_name": "Eduardo Suplicy",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PT",
+      "party_key": "PT",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/17/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "SP",
+     "seat": "Mário Covas",
+     "occupant_source_id": "2108",
+     "occupant_name": "Mário Covas",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1993-book-4"
+     }
+    },
+    {
+     "uf": "SP",
+     "seat": "Fernando Henrique Cardoso",
+     "occupant_source_id": "1618",
+     "occupant_name": "Eva Blay",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "TO",
+     "seat": "Carlos Patrocínio",
+     "occupant_source_id": "11",
+     "occupant_name": "Carlos Patrocínio",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/11/mandatos.json",
+      "valid_from": "1991-01-31",
+      "valid_until_inclusive": "2001-07-30"
+     }
+    },
+    {
+     "uf": "TO",
+     "seat": "João Rocha",
+     "occupant_source_id": "49",
+     "occupant_name": "João Rocha",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/49/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "TO",
+     "seat": "Moisés Abrão",
+     "occupant_source_id": "2131",
+     "occupant_name": "Moisés Abrão",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    }
+   ]
+  },
+  {
+   "snapshot_on": "1994-12-31",
+   "seats": [
+    {
+     "uf": "AC",
+     "seat": "Aluízio Bezerra",
+     "occupant_source_id": "222",
+     "occupant_name": "Aluízio Bezerra",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/222/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "1995-01-31"
+     }
+    },
+    {
+     "uf": "AC",
+     "seat": "Flaviano Melo",
+     "occupant_source_id": "24",
+     "occupant_name": "Flaviano Melo",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/24/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "AC",
+     "seat": "Nabor Júnior",
+     "occupant_source_id": "62",
+     "occupant_name": "Nabor Júnior",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/62/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "AL",
+     "seat": "Divaldo Suruagy",
+     "occupant_source_id": "1581",
+     "occupant_name": "Divaldo Suruagy",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "S/Partido",
+      "party_key": "S/Partido",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1581/mandatos.json",
+      "valid_from": "1994-12-16",
+      "valid_until_inclusive": "2001-01-01"
+     }
+    },
+    {
+     "uf": "AL",
+     "seat": "Guilherme Palmeira",
+     "occupant_source_id": "31",
+     "occupant_name": "Guilherme Palmeira",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/31/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "AL",
+     "seat": "Teotonio Vilela Filho",
+     "occupant_source_id": "78",
+     "occupant_name": "Teotonio Vilela Filho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/78/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "1995-01-31"
+     }
+    },
+    {
+     "uf": "AM",
+     "seat": "Amazonino Mendes",
+     "occupant_source_id": "29",
+     "occupant_name": "Gilberto Miranda",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/29/mandatos.json",
+      "valid_from": "1992-12-31",
+      "valid_until_inclusive": "1996-12-17"
+     }
+    },
+    {
+     "uf": "AM",
+     "seat": "Fábio Lucena",
+     "occupant_source_id": "1503",
+     "occupant_name": "Aureo Mello",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PRN",
+      "party_key": "PRN",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1503/mandatos.json",
+      "valid_from": "1991-01-31",
+      "valid_until_inclusive": "2001-06-08"
+     }
+    },
+    {
+     "uf": "AM",
+     "seat": "Carlos De' Carli",
+     "occupant_source_id": "1537",
+     "occupant_name": "Carlos De' Carli",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "AP",
+     "seat": "Henrique Almeida",
+     "occupant_source_id": "1737",
+     "occupant_name": "Henrique Almeida",
+     "occupant_role": "ocupante_ambiguo_titular_ou_suplente",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1994-book-6"
+     },
+     "alternative_occupant": {
+      "source_id": "3233",
+      "name": "Airton Oliveira",
+      "party": {
+       "raw_label": null,
+       "party_key": null,
+       "source_kind": "gap_no_party_claim_for_date"
+      }
+     }
+    },
+    {
+     "uf": "AP",
+     "seat": "Jonas Pinheiro",
+     "occupant_source_id": "1869",
+     "occupant_name": "Jonas Pinheiro",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1869/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "AP",
+     "seat": "José Sarney",
+     "occupant_source_id": "47",
+     "occupant_name": "José Sarney",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/47/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "BA",
+     "seat": "Josaphat Marinho",
+     "occupant_source_id": "39",
+     "occupant_name": "Josaphat Marinho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/39/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "BA",
+     "seat": "Jutahy Magalhães",
+     "occupant_source_id": "1999",
+     "occupant_name": "Jutahy Magalhães",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "printed_diario_party_leadership_listing",
+      "observed_on": "1994-04-12",
+      "days_from_snapshot": 263,
+      "source_document": "anais-1994-book-6"
+     }
+    },
+    {
+     "uf": "BA",
+     "seat": "Ruy Bacelar",
+     "occupant_source_id": "1864",
+     "occupant_name": "Ruy Bacelar",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1864/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "CE",
+     "seat": "Beni Veras",
+     "occupant_source_id": "139",
+     "occupant_name": "Reginaldo Duarte",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/139/mandatos.json",
+      "valid_from": "1994-03-09",
+      "valid_until_inclusive": "1995-01-01"
+     }
+    },
+    {
+     "uf": "CE",
+     "seat": "Cid Sabóia de Carvalho",
+     "occupant_source_id": "1562",
+     "occupant_name": "Cid Sabóia de Carvalho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1562/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "CE",
+     "seat": "Mauro Benevides",
+     "occupant_source_id": "1244",
+     "occupant_name": "Mauro Benevides",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1244/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "2003-01-31"
+     }
+    },
+    {
+     "uf": "DF",
+     "seat": "Maurício Corrêa",
+     "occupant_source_id": "2117",
+     "occupant_name": "Maurício Corrêa",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "senate_api_nominal_vote_party_label",
+      "observed_on": "1994-10-26",
+      "days_from_snapshot": 66,
+      "source_url": "https://www12.senado.leg.br/dados-abertos/legislativo/plenario/votacoes-nominais/lista-de-votacoes-nominais-de-1994"
+     }
+    },
+    {
+     "uf": "DF",
+     "seat": "Meira Filho",
+     "occupant_source_id": "1781",
+     "occupant_name": "Meira Filho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "DF",
+     "seat": "Valmir Campelo",
+     "occupant_source_id": "79",
+     "occupant_name": "Valmir Campelo",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/79/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1997-11-12"
+     }
+    },
+    {
+     "uf": "ES",
+     "seat": "Elcio Alvares",
+     "occupant_source_id": "161",
+     "occupant_name": "Jonice Tristão",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/161/mandatos.json",
+      "valid_from": "1994-01-26",
+      "valid_until_inclusive": "1995-01-01"
+     }
+    },
+    {
+     "uf": "ES",
+     "seat": "Gerson Camata",
+     "occupant_source_id": "3272",
+     "occupant_name": "Joaquim Beato",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/3272/mandatos.json",
+      "valid_from": "1994-09-29",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "ES",
+     "seat": "João Calmon",
+     "occupant_source_id": "1799",
+     "occupant_name": "João Calmon",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "GO",
+     "seat": "Iram Saraiva",
+     "occupant_source_id": "2937",
+     "occupant_name": "Jacques Silva",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2937/mandatos.json",
+      "valid_from": "1994-08-17",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "GO",
+     "seat": "Irapuan Costa Júnior",
+     "occupant_source_id": "1749",
+     "occupant_name": "Irapuan Costa Júnior",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "PP",
+      "party_key": "PP",
+      "source_kind": "printed_diario_party_leadership_listing",
+      "observed_on": "1994-04-12",
+      "days_from_snapshot": 263,
+      "source_document": "anais-1994-book-6"
+     }
+    },
+    {
+     "uf": "GO",
+     "seat": "Onofre Quinan",
+     "occupant_source_id": "65",
+     "occupant_name": "Onofre Quinan",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/65/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1998-01-14"
+     }
+    },
+    {
+     "uf": "MA",
+     "seat": "Alexandre Costa",
+     "occupant_source_id": "2",
+     "occupant_name": "Alexandre Costa",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "MA",
+     "seat": "Edison Lobão",
+     "occupant_source_id": "1552",
+     "occupant_name": "Magno Bacelar",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDT",
+      "party_key": "PDT",
+      "source_kind": "printed_diario_party_leadership_listing",
+      "observed_on": "1994-04-12",
+      "days_from_snapshot": 263,
+      "source_document": "anais-1994-book-6"
+     }
+    },
+    {
+     "uf": "MA",
+     "seat": "Epitácio Cafeteira",
+     "occupant_source_id": "20",
+     "occupant_name": "Epitácio Cafeteira",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "PPR",
+      "party_key": "PPR",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/20/mandatos.json",
+      "valid_from": "1993-06-16",
+      "valid_until_inclusive": "1995-10-24"
+     }
+    },
+    {
+     "uf": "MG",
+     "seat": "Alfredo Campos",
+     "occupant_source_id": "1383",
+     "occupant_name": "Alfredo Campos",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "MG",
+     "seat": "Junia Marise",
+     "occupant_source_id": "51",
+     "occupant_name": "Junia Marise",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "PDT",
+      "party_key": "PDT",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/51/mandatos.json",
+      "valid_from": "1994-02-21",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "MG",
+     "seat": "Ronan Tito",
+     "occupant_source_id": "2224",
+     "occupant_name": "Ronan Tito",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2224/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "MS",
+     "seat": "Saldanha Derzi",
+     "occupant_source_id": "2203",
+     "occupant_name": "Saldanha Derzi",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "MS",
+     "seat": "Levy Dias",
+     "occupant_source_id": "54",
+     "occupant_name": "Levy Dias",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PPR",
+      "party_key": "PPR",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/54/mandatos.json",
+      "valid_from": "1993-06-16",
+      "valid_until_inclusive": "1995-10-24"
+     }
+    },
+    {
+     "uf": "MS",
+     "seat": "Wilson Martins",
+     "occupant_source_id": "2282",
+     "occupant_name": "Wilson Martins",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2282/mandatos.json",
+      "valid_from": "1991-08-01",
+      "valid_until_inclusive": "1994-12-31"
+     }
+    },
+    {
+     "uf": "MT",
+     "seat": "Júlio Campos",
+     "occupant_source_id": "50",
+     "occupant_name": "Júlio Campos",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/50/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "MT",
+     "seat": "Louremberg Nunes",
+     "occupant_source_id": "2017",
+     "occupant_name": "Louremberg Nunes",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "MT",
+     "seat": "Márcio Lacerda",
+     "occupant_source_id": "1952",
+     "occupant_name": "Márcio Lacerda",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1952/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "PA",
+     "seat": "Almir Gabriel",
+     "occupant_source_id": "1387",
+     "occupant_name": "Almir Gabriel",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "PA",
+     "seat": "Coutinho Jorge",
+     "occupant_source_id": "14",
+     "occupant_name": "Coutinho Jorge",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/14/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1995-11-06"
+     }
+    },
+    {
+     "uf": "PA",
+     "seat": "Jarbas Passarinho",
+     "occupant_source_id": "1764",
+     "occupant_name": "Jarbas Passarinho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "PB",
+     "seat": "Antonio Mariz",
+     "occupant_source_id": "84",
+     "occupant_name": "Antonio Mariz",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/84/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1994-12-31"
+     }
+    },
+    {
+     "uf": "PB",
+     "seat": "Humberto Lucena",
+     "occupant_source_id": "33",
+     "occupant_name": "Humberto Lucena",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/33/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "1998-04-13"
+     }
+    },
+    {
+     "uf": "PB",
+     "seat": "Raimundo Lira",
+     "occupant_source_id": "2207",
+     "occupant_name": "Raimundo Lira",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "S/Partido",
+      "party_key": "S/Partido",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2207/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "2011-02-02"
+     }
+    },
+    {
+     "uf": "PE",
+     "seat": "Mansueto de Lavor",
+     "occupant_source_id": "2194",
+     "occupant_name": "Mansueto de Lavor",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PMDB",
+      "party_key": "MDB",
+      "source_kind": "printed_diario_party_leadership_listing",
+      "observed_on": "1994-04-12",
+      "days_from_snapshot": 263,
+      "source_document": "anais-1994-book-6"
+     }
+    },
+    {
+     "uf": "PE",
+     "seat": "Marco Maciel",
+     "occupant_source_id": "86",
+     "occupant_name": "Marco Maciel",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/86/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1994-12-31"
+     }
+    },
+    {
+     "uf": "PE",
+     "seat": "Antônio Farias",
+     "occupant_source_id": "2144",
+     "occupant_name": "Ney Maranhão",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PRN",
+      "party_key": "PRN",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2144/mandatos.json",
+      "valid_from": "1990-03-11",
+      "valid_until_inclusive": "2001-06-08"
+     }
+    },
+    {
+     "uf": "PI",
+     "seat": "Chagas Rodrigues",
+     "occupant_source_id": "1657",
+     "occupant_name": "Chagas Rodrigues",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1657/mandatos.json",
+      "valid_from": "1988-06-29",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "PI",
+     "seat": "Hugo Napoleão",
+     "occupant_source_id": "32",
+     "occupant_name": "Hugo Napoleão",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/32/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "2007-08-01"
+     }
+    },
+    {
+     "uf": "PI",
+     "seat": "Lucídio Portella",
+     "occupant_source_id": "55",
+     "occupant_name": "Lucídio Portella",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PPR",
+      "party_key": "PPR",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/55/mandatos.json",
+      "valid_from": "1993-06-16",
+      "valid_until_inclusive": "1995-10-24"
+     }
+    },
+    {
+     "uf": "PR",
+     "seat": "Affonso Camargo",
+     "occupant_source_id": "346",
+     "occupant_name": "Affonso Camargo",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PPR",
+      "party_key": "PPR",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/346/mandatos.json",
+      "valid_from": "1993-06-17",
+      "valid_until_inclusive": "1994-12-31"
+     }
+    },
+    {
+     "uf": "PR",
+     "seat": "José Eduardo",
+     "occupant_source_id": "85",
+     "occupant_name": "José Eduardo",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/85/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "PR",
+     "seat": "José Richa",
+     "occupant_source_id": "1974",
+     "occupant_name": "José Richa",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "RJ",
+     "seat": "Darcy Ribeiro",
+     "occupant_source_id": "15",
+     "occupant_name": "Darcy Ribeiro",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "PDT",
+      "party_key": "PDT",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/15/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1997-02-17"
+     }
+    },
+    {
+     "uf": "RJ",
+     "seat": "Nelson Carneiro",
+     "occupant_source_id": "2137",
+     "occupant_name": "Nelson Carneiro",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "RJ",
+     "seat": "Affonso Arinos",
+     "occupant_source_id": "1746",
+     "occupant_name": "Hydekel Freitas",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "RN",
+     "seat": "Garibaldi Alves Filho",
+     "occupant_source_id": "87",
+     "occupant_name": "Garibaldi Alves Filho",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "S/Partido",
+      "party_key": "S/Partido",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/87/mandatos.json",
+      "valid_from": "1994-12-20",
+      "valid_until_inclusive": "2003-01-31"
+     }
+    },
+    {
+     "uf": "RN",
+     "seat": "Lavoisier Maia",
+     "occupant_source_id": "799",
+     "occupant_name": "Lavoisier Maia",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "S/Partido",
+      "party_key": "S/Partido",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/799/mandatos.json",
+      "valid_from": "1989-03-22",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "RN",
+     "seat": "José Agripino",
+     "occupant_source_id": "1572",
+     "occupant_name": "Dario Pereira",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1994-book-6"
+     }
+    },
+    {
+     "uf": "RO",
+     "seat": "Odacir Soares",
+     "occupant_source_id": "64",
+     "occupant_name": "Odacir Soares",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/64/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1997-08-19"
+     }
+    },
+    {
+     "uf": "RO",
+     "seat": "Ronaldo Aragão",
+     "occupant_source_id": "1978",
+     "occupant_name": "Ronaldo Aragão",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PMDB",
+      "party_key": "MDB",
+      "source_kind": "printed_diario_party_leadership_listing",
+      "observed_on": "1994-04-12",
+      "days_from_snapshot": 263,
+      "source_document": "anais-1994-book-6"
+     }
+    },
+    {
+     "uf": "RO",
+     "seat": "Amir Lando",
+     "occupant_source_id": "1025",
+     "occupant_name": "Amir Lando",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1025/filiacoes.json",
+      "valid_from": "1991-02-21",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "RR",
+     "seat": "César Dias",
+     "occupant_source_id": "88",
+     "occupant_name": "César Dias",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/88/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "RR",
+     "seat": "Marluce Pinto",
+     "occupant_source_id": "60",
+     "occupant_name": "Marluce Pinto",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PTB",
+      "party_key": "PTB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/60/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1995-05-31"
+     }
+    },
+    {
+     "uf": "RR",
+     "seat": "Hélio Campos",
+     "occupant_source_id": "48",
+     "occupant_name": "João França",
+     "occupant_role": "suplente_em_exercicio",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PP",
+      "party_key": "PP",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/48/mandatos.json",
+      "valid_from": "1993-03-05",
+      "valid_until_inclusive": "1995-10-24"
+     }
+    },
+    {
+     "uf": "RS",
+     "seat": "José Fogaça",
+     "occupant_source_id": "44",
+     "occupant_name": "José Fogaça",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/44/mandatos.json",
+      "valid_from": "1987-02-01",
+      "valid_until_inclusive": "2001-10-04"
+     }
+    },
+    {
+     "uf": "RS",
+     "seat": "Paulo Bisol",
+     "occupant_source_id": "1967",
+     "occupant_name": "Paulo Bisol",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "RS",
+     "seat": "Pedro Simon",
+     "occupant_source_id": "68",
+     "occupant_name": "Pedro Simon",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "MDB",
+      "party_key": "MDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/68/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "SC",
+     "seat": "Dirceu Carneiro",
+     "occupant_source_id": "1579",
+     "occupant_name": "Dirceu Carneiro",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1579/mandatos.json",
+      "valid_from": "1989-04-20",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "SC",
+     "seat": "Esperidião Amin",
+     "occupant_source_id": "22",
+     "occupant_name": "Esperidião Amin",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "PPR",
+      "party_key": "PPR",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/22/mandatos.json",
+      "valid_from": "1993-06-16",
+      "valid_until_inclusive": "1995-10-24"
+     }
+    },
+    {
+     "uf": "SC",
+     "seat": "Nelson Wedekin",
+     "occupant_source_id": "2139",
+     "occupant_name": "Nelson Wedekin",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PDT",
+      "party_key": "PDT",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/2139/mandatos.json",
+      "valid_from": "1990-03-07",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "SE",
+     "seat": "Albano Franco",
+     "occupant_source_id": "89",
+     "occupant_name": "Albano Franco",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/89/mandatos.json",
+      "valid_from": "1994-01-06",
+      "valid_until_inclusive": "1995-01-31"
+     }
+    },
+    {
+     "uf": "SE",
+     "seat": "Francisco Rollemberg",
+     "occupant_source_id": "1687",
+     "occupant_name": "Francisco Rollemberg",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "SE",
+     "seat": "Lourival Baptista",
+     "occupant_source_id": "2019",
+     "occupant_name": "Lourival Baptista",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "printed_anais_heading_same_year",
+      "source_document": "anais-1994-book-6"
+     }
+    },
+    {
+     "uf": "SP",
+     "seat": "Eduardo Suplicy",
+     "occupant_source_id": "17",
+     "occupant_name": "Eduardo Suplicy",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PT",
+      "party_key": "PT",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/17/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": null
+     }
+    },
+    {
+     "uf": "SP",
+     "seat": "Mário Covas",
+     "occupant_source_id": "2108",
+     "occupant_name": "Mário Covas",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PSDB",
+      "party_key": "PSDB",
+      "source_kind": "printed_diario_party_leadership_listing",
+      "observed_on": "1994-04-12",
+      "days_from_snapshot": 263,
+      "source_document": "anais-1994-book-6"
+     }
+    },
+    {
+     "uf": "SP",
+     "seat": "Fernando Henrique Cardoso",
+     "occupant_source_id": "1634",
+     "occupant_name": "Fernando Henrique Cardoso",
+     "occupant_role": "titular_retorno_provavel_nao_comprovado",
+     "nominal_vote_within_120_days": false,
+     "party": {
+      "raw_label": null,
+      "party_key": null,
+      "source_kind": "gap_no_party_claim_for_date"
+     }
+    },
+    {
+     "uf": "TO",
+     "seat": "Carlos Patrocínio",
+     "occupant_source_id": "11",
+     "occupant_name": "Carlos Patrocínio",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/11/mandatos.json",
+      "valid_from": "1991-01-31",
+      "valid_until_inclusive": "2001-07-30"
+     }
+    },
+    {
+     "uf": "TO",
+     "seat": "João Rocha",
+     "occupant_source_id": "49",
+     "occupant_name": "João Rocha",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PFL",
+      "party_key": "PFL",
+      "source_kind": "senate_api_affiliation_interval",
+      "source_url": "https://legis.senado.leg.br/dadosabertos/senador/49/mandatos.json",
+      "valid_from": "1991-02-01",
+      "valid_until_inclusive": "1999-01-31"
+     }
+    },
+    {
+     "uf": "TO",
+     "seat": "Moisés Abrão",
+     "occupant_source_id": "2131",
+     "occupant_name": "Moisés Abrão",
+     "occupant_role": "titular",
+     "nominal_vote_within_120_days": true,
+     "party": {
+      "raw_label": "PPR",
+      "party_key": "PPR",
+      "source_kind": "printed_diario_party_leadership_listing",
+      "observed_on": "1994-04-12",
+      "days_from_snapshot": 263,
+      "source_document": "anais-1994-book-6"
+     }
+    }
+   ]
+  }
+ ],
+ "inventory_sha256": "7010393c44fdf8b005d9e6f18ac51aef3a5b0812ec2832373e623c0e0014e9cc",
+ "seat_events": [
+  {
+   "date": "1992-10-05",
+   "uf": "SP",
+   "titular": "Fernando Henrique Cardoso (1634)",
+   "substitute": "Eva Blay (1618)",
+   "event": "titular_em_ministerio_suplente_em_exercicio",
+   "source_url": "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/itamar-augusto-cautiero-franco/ministerios-itamar-franco-1.pdf",
+   "note": "FHC nas Relações Exteriores (05/10/1992) e na Fazenda até 05/04/1994; votos de Eva Blay desde 28/10/1992. Data de posse da suplente não comprovada por ato.",
+   "proof_level": "ministerial_period_plus_nominal_votes"
+  },
+  {
+   "date": "1992-10-08",
+   "uf": "MA",
+   "titular": "Alexandre Costa (2)",
+   "substitute": "Bello Parga (185)",
+   "event": "titular_em_ministerio_suplente_convocado",
+   "source_url": "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/itamar-augusto-cautiero-franco/ministerios-itamar-franco-1.pdf",
+   "note": "Integração Regional 08/10/1992–23/12/1993; Diário de 10/10/1992, p. 8048, registra convocação de Bello Parga.",
+   "proof_level": "contemporaneous_act_cited_in_inventory"
+  },
+  {
+   "date": "1992-10-19",
+   "uf": "PI",
+   "titular": "Hugo Napoleão (32)",
+   "substitute": "Álvaro Pacheco (1398)",
+   "event": "titular_em_ministerio_suplente_em_exercicio",
+   "source_url": "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/itamar-augusto-cautiero-franco/ministerios-itamar-franco-1.pdf",
+   "note": "Comunicações 19/10/1992–23/12/1993; Álvaro Pacheco declarou reassumir em 19/10/1992 (DCN2 21/10/1992, p. 8281), partido PFL-PI.",
+   "proof_level": "contemporaneous_act_cited_in_inventory"
+  },
+  {
+   "date": "1992-10-19",
+   "uf": "PA",
+   "titular": "Coutinho Jorge (14)",
+   "substitute": "Juvêncio Dias (136)",
+   "event": "titular_em_ministerio_suplente_em_exercicio",
+   "source_url": "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/itamar-augusto-cautiero-franco/ministerios-itamar-franco-1.pdf",
+   "note": "Meio Ambiente 19/10/1992–16/09/1993; votos de Juvêncio de 28/10/1992 a 01/09/1993.",
+   "proof_level": "ministerial_period_plus_nominal_votes"
+  },
+  {
+   "date": "1992-10-19",
+   "uf": "PR",
+   "titular": "José Eduardo (85)",
+   "substitute": "Luís Alberto de Oliveira (56)",
+   "event": "titular_em_ministerio_suplente_em_exercicio",
+   "source_url": "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/itamar-augusto-cautiero-franco/ministerios-itamar-franco-1.pdf",
+   "note": "Indústria, Comércio e Turismo 19/10/1992–23/12/1993; votos do suplente de 28/10/1992 a 05/10/1993.",
+   "proof_level": "ministerial_period_plus_nominal_votes"
+  },
+  {
+   "date": "1992-10-03",
+   "uf": "DF",
+   "titular": "Maurício Corrêa (2117)",
+   "substitute": "Pedro Teixeira (2190)",
+   "event": "titular_em_ministerio_suplente_em_exercicio",
+   "source_url": "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/itamar-augusto-cautiero-franco/ministerios-itamar-franco-1.pdf",
+   "note": "Justiça 03/10/1992–05/04/1994; votos do suplente de 14/10/1992 a 03/03/1994; voto do titular em 13/04/1994.",
+   "proof_level": "ministerial_period_plus_nominal_votes"
+  },
+  {
+   "date": "1992-12-31",
+   "uf": "AM",
+   "titular": "Amazonino Mendes (82)",
+   "substitute": "Gilberto Miranda (29)",
+   "event": "fim_do_exercicio_do_titular_e_inicio_do_suplente",
+   "source_url": "https://legis.senado.leg.br/dadosabertos/senador/82/mandatos.json",
+   "note": "A API declara exercício de Amazonino até 30/12/1992 e de Gilberto Miranda desde 31/12/1992.",
+   "proof_level": "senate_api_exercise_interval"
+  },
+  {
+   "date": "1993-12-23",
+   "uf": "MA/PI/PR",
+   "titular": "Alexandre Costa (2); Hugo Napoleão (32); José Eduardo (85)",
+   "substitute": "Bello Parga (185); Álvaro Pacheco (1398); Luís Alberto de Oliveira (56)",
+   "event": "fim_do_periodo_ministerial_retorno_nao_comprovado",
+   "source_url": "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/itamar-augusto-cautiero-franco/ministerios-itamar-franco-1.pdf",
+   "note": "Os períodos ministeriais terminam em 23/12/1993; as fotografias de 31/12/1993 registram o retorno do titular como provável, sem ato de retomada.",
+   "proof_level": "ministerial_period_only"
+  },
+  {
+   "date": "1994-01-25",
+   "uf": "ES",
+   "titular": "Elcio Alvares (18)",
+   "substitute": "Jonice Tristão (161)",
+   "event": "titular_em_ministerio_suplente_em_exercicio",
+   "source_url": "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/itamar-augusto-cautiero-franco/ministerios-itamar-franco-1.pdf",
+   "note": "Indústria, Comércio e Turismo desde 25/01/1994; votos da suplente de 09/02 a 08/06/1994; a fotografia de 31/12/1994 é inferida sem voto posterior.",
+   "proof_level": "ministerial_period_plus_nominal_votes_inferred_at_snapshot"
+  },
+  {
+   "date": "1994-03-09",
+   "uf": "CE",
+   "titular": "Beni Veras (8)",
+   "substitute": "Reginaldo Duarte (139)",
+   "event": "titular_em_secretaria_de_planejamento_suplente_em_exercicio",
+   "source_url": "https://legis.senado.leg.br/diarios/BuscaPaginasDiario?codDiario=6788&download=true",
+   "note": "Ofício de 09/03/1994 (DCN2 15/03/1994, p. 1183); votos do suplente desde 13/04/1994. Dia da posse não comprovado.",
+   "proof_level": "contemporaneous_act_cited_in_inventory"
+  },
+  {
+   "date": "1994-06-29",
+   "uf": "ES",
+   "titular": "Gerson Camata (28)",
+   "substitute": "Joaquim Beato (3272)",
+   "event": "titular_sem_voto_apos_29_06_1994_suplente_votando",
+   "source_url": "https://legis.senado.leg.br/dadosabertos/senador/3272/mandatos.json",
+   "note": "Beato (1º suplente de Camata) vota em 19 e 26/10/1994; ato de licença/convocação não localizado.",
+   "proof_level": "nominal_votes_only"
+  },
+  {
+   "date": "1994-06-29",
+   "uf": "GO",
+   "titular": "Iram Saraiva (1748)",
+   "substitute": "Jacques Silva (2937)",
+   "event": "titular_no_tcu_suplente_em_exercicio",
+   "source_url": "https://legis.senado.leg.br/diarios/BuscaPaginasDiario?codDiario=6898&download=true",
+   "note": "Discurso contemporâneo identifica Jacques Silva como substituto de Iram Saraiva (TCU); votos desde 19/10/1994; dia da posse em revisão.",
+   "proof_level": "contemporaneous_act_cited_in_inventory"
+  },
+  {
+   "date": "1994-04-05",
+   "uf": "SP",
+   "titular": "Fernando Henrique Cardoso (1634)",
+   "substitute": "Eva Blay (1618)",
+   "event": "fim_do_periodo_ministerial_titular_sem_voto_registrado",
+   "source_url": "https://legis.senado.leg.br/dadosabertos/senador/1634/mandatos.json",
+   "note": "O ministério terminou em 05/04/1994; não há voto nominal de FHC no recorte nem voto de Eva Blay em 1994. Em 31/12/1994 registra-se o titular como retorno provável.",
+   "proof_level": "ministerial_period_only"
+  },
+  {
+   "date": "1994-12-31",
+   "uf": "AP",
+   "titular": "Henrique Almeida (1737)",
+   "substitute": "Airton Oliveira (3233)",
+   "event": "ocupante_ambiguo",
+   "source_url": "https://legis.senado.leg.br/dadosabertos/senador/3233/mandatos.json",
+   "note": "Henrique Almeida não vota após 29/06/1994; Airton Oliveira vota em 19/10/1994 sem relação de chapa na API. Conta-se uma cadeira, com partido PFL em ambos os rótulos impressos.",
+   "proof_level": "ambiguous_not_resolved"
+  }
+ ],
+ "documented_gaps": [
+  "Nenhum relatório ou ata oficial com a composição simultânea das 81 cadeiras em 31/12/1992, 1993 ou 1994 foi obtido; os relatórios anuais integrais retornam falha de acesso.",
+  "O serviço de licenças e afastamentos da API não devolve registros para 1992–1994; titular afastado e suplente em exercício são reconstruídos por períodos ministeriais, atos citados e votos nominais.",
+  "Os votos nominais de 1992 vão de 14/10 a 11/11 e os de 1994 terminam em 26/10; não cobrem 31/12 e não provam exercício contínuo.",
+  "Não houve vaga documentada nas três datas; vaga permanece uma categoria distinta, nunca inferida pela ausência de voto.",
+  "Partidos de várias cadeiras permanecem não identificados: a API registra 'Sem registro' e não se inferiu partido por nome ou por legenda posterior.",
+  "Conflitos mantidos sem escolha silenciosa: Ney Suassuna (PTB-PB em cabeçalho de 11/03/1993 contra MDB na API; não está em exercício nas datas), Júnia Marise e Lavoisier Maia (listas impressas de abril de 1994 divergem da API) e as identidades Carlos De' Carli (1537) e Carlos de Carli (1542).",
+  "O banco PostgreSQL não foi consultado nesta tarefa: não havia DATABASE_URL no ambiente e as credenciais não foram procuradas. Nenhum dado foi gravado.",
+  "A classificação de Zucco e Power não cobre o PDC em 1993 nem o PDS isoladamente; PDS e PPR usam a série PP descendente como leitura editorial."
+ ]
+}

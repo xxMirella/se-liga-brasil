@@ -73,6 +73,7 @@ class PublicPortalWSGI:
                 "Accept-Encoding": environ.get("HTTP_ACCEPT_ENCODING", ""),
                 "If-None-Match": environ.get("HTTP_IF_NONE_MATCH", ""),
             },
+            getattr(response, "dataset_version", None),
         )
         headers = {
             **cache_headers,

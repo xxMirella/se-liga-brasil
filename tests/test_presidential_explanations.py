@@ -146,13 +146,15 @@ def test_1966_support_context_is_visible_without_becoming_presidential_affiliati
     explanation = presidential_year_explanation(row)
     assert explanation["political_party_changes"] == []
     assert executive_cell(institution)["state"] == "unknown"
-    for html in [render_executive(institution, "Presidência", "Poder Executivo"),
-                 render_presidential_explanations({"level": "federal", "history": [row]})]:
-        assert "Registro da organização governista" in html
-        assert "ARENA" in html
-        assert "não comprova a filiação pessoal" in html
-        assert "Apoio ao governo e filiação pessoal são informações diferentes." in html
-        assert 'target="_blank" rel="noopener noreferrer"' in html
+    executive_html = render_executive(institution, "Presidência", "Poder Executivo")
+    assert "ARENA" not in executive_html
+    assert "Filiação histórica não verificada" in executive_html
+    html = render_presidential_explanations({"level": "federal", "history": [row]})
+    assert "Registro da organização governista" in html
+    assert "ARENA" in html
+    assert "não comprova a filiação pessoal" in html
+    assert "Apoio ao governo e filiação pessoal são informações diferentes." in html
+    assert 'target="_blank" rel="noopener noreferrer"' in html
     assert institution == original
     marker = render_presidential_markers([row], [1966], 100, 10, 200)
     assert "contexto partidário documentado" in marker

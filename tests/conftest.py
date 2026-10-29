@@ -93,6 +93,10 @@ class IsolatedSchemaConnection:
             query.replace("se_liga_brasil", self.schema_name), parameters
         )
 
+    @property
+    def info(self):
+        return self.connection.info
+
     def transaction(self):
         return self.connection.transaction()
 

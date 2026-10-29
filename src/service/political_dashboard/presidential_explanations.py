@@ -209,10 +209,7 @@ def render_presidential_explanations(data):
     return ('<section class="panorama-presidential-transitions" '
             'aria-labelledby="presidential-transitions-title">'
             '<h3 id="presidential-transitions-title">Entenda as mudanças na Presidência</h3>'
-            '<p>Os círculos na faixa presidencial indicam anos com transições. '
-            'Abra um ano para ver quem exerceu o cargo, datas e causas documentadas. '
-            'Uma mesma pessoa pode ter mais de um período. As datas seguem os intervalos '
-            'documentados nas fontes; os dias são calculados entre elas.</p>'
+            '<p>Os círculos na faixa presidencial indicam anos com transições.</p>'
             f'{content}</section>')
 
 

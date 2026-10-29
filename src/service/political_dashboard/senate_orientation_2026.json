@@ -275,5 +275,59 @@
     "PSD": "Evidência forte para inclusão na direita ampla, especialmente centro-direita. Preservar autodeclarações de centro e distinguir média bruta de ponderada. Não declarar homogeneidade de toda a bancada.",
     "MDB": "Evidência quantitativa para centro-direita em 2022, com divergência substantiva frente a classificações de centro e programa multidimensional. Não há prova conclusiva de toda a bancada ser de direita em 2026.",
     "senate": "A maioria de direita ampla subsiste nos métodos alternativos consultados com MDB no centro. Métodos são comparados separadamente; não se faz média entre escalas nem se afirma consenso."
+  },
+  "published_audit": {
+    "reference_on": "2026-10-28",
+    "source_url": "https://adm.senado.gov.br/adm-dadosabertos/api/v1/senadores?formato=html",
+    "orientation_summary": {
+      "right_count": 63,
+      "total_seats": 81,
+      "left_count": 17,
+      "center_count": 0,
+      "unaffiliated_count": 1,
+      "unclassified_count": 0,
+      "majority_threshold": 41,
+      "has_absolute_majority": true,
+      "reference_year": 2022,
+      "classification_year": 2026,
+      "evidence_kind": "editorial_application_of_dated_expert_estimate",
+      "disputed_count": 23,
+      "right_excluding_disputed": 40,
+      "comparison_methods": [
+        {
+          "methodology_id": "meneguello_2026_historical_blocs_applied_2026",
+          "label": "Meneguello (2026), classificação histórica aplicada editorialmente",
+          "source_url": "https://www.scielo.br/j/ea/a/dF4xSTxDz4KGTzg9mhMzMRJ/?lang=pt",
+          "counts": {
+            "right": 53,
+            "center": 10,
+            "left": 17,
+            "unaffiliated": 1,
+            "undetermined": 0
+          },
+          "source_publication_year": 2026,
+          "reference_period": "2002–2022; não é survey de 2026",
+          "has_absolute_majority": true,
+          "evidence_kind": "editorial_application_of_historical_classification"
+        },
+        {
+          "methodology_id": "borges_2023_multisource_applied_2026",
+          "label": "Borges (2023), médias históricas aplicadas editorialmente",
+          "source_url": "https://andreborges.org/wp-content/uploads/2023/11/Ideological-classification-of-Brazilian-parties_appendix.pdf",
+          "counts": {
+            "right": 49,
+            "center": 14,
+            "left": 17,
+            "unaffiliated": 1,
+            "undetermined": 0
+          },
+          "source_publication_year": 2023,
+          "reference_period": "1990–2020; não é survey de 2026",
+          "has_absolute_majority": true,
+          "evidence_kind": "editorial_application_of_historical_classification"
+        }
+      ],
+      "snapshot_on": "2026-10-28"
+    }
   }
 }

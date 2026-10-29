@@ -3,9 +3,17 @@ INSERT INTO se_liga_brasil.political_party_affiliation(person_id,political_party
 SELECT (b.normalized_data->>'personId')::uuid,p.id,b.source_generated_at::date,
  b.source_record_id,b.source_generated_at,'institution:senado','administrative'
 FROM ingestion_batch b JOIN (
- SELECT abbreviation,min(id) AS id FROM se_liga_brasil.political_party
+ SELECT abbreviation,min(id) AS id,NULL::date AS observed_from
+ FROM se_liga_brasil.political_party
  GROUP BY abbreviation HAVING count(*)=1
+ UNION ALL
+ -- TSE 0600672-47.2023.6.00.0000, 05/03/2024: Podemos changes 19 to 20.
+ -- Preserve the earlier party ID for electoral and historical observations.
+ SELECT abbreviation,id,DATE '2024-03-05' FROM se_liga_brasil.political_party
+ WHERE abbreviation='PODE' AND code='20'
+ AND (SELECT count(*) FROM se_liga_brasil.political_party WHERE abbreviation='PODE')>1
 ) p ON p.abbreviation=b.normalized_data->>'politicalPartyAbbreviation'
+ AND (p.observed_from IS NULL OR b.source_generated_at::date>=p.observed_from)
 WHERE NOT EXISTS(
  SELECT 1 FROM se_liga_brasil.political_party_affiliation existing
  WHERE existing.person_id=(b.normalized_data->>'personId')::uuid

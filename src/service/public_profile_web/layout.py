@@ -3,14 +3,15 @@
 from pathlib import Path
 
 from service.public_profile_web.security import text
+from service.public_profile_web.static_text import read_static_text
 
 
 def public_stylesheet():
-    return (Path(__file__).parent / "assets" / "public-profile.css").read_text(encoding="utf-8")
+    return read_static_text(Path(__file__).parent / "assets" / "public-profile.css")
 
 
 def public_favicon():
-    return (Path(__file__).parent / "assets" / "brazil-flag.svg").read_text(encoding="utf-8")
+    return read_static_text(Path(__file__).parent / "assets" / "brazil-flag.svg")
 
 
 def render_public_navigation(active):
@@ -20,6 +21,8 @@ def render_public_navigation(active):
         ("people", "Consulta de pessoas", "/pessoas"),
         ("panorama", "Panorama político", "/panorama"),
         ("guide", "Entenda os cargos", "/como-funciona"),
+        ("comparison", "Comparação de classificações", "/comparacao-de-classificacoes"),
+        ("sources", "Fontes dos dados", "/fontes-dos-dados"),
     ):
         selected = ' class="selected" aria-current="page"' if active == key else ""
         links.append(f'<a href="{url}"{selected}>{label}</a>')
