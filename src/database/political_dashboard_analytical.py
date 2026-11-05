@@ -27,6 +27,7 @@ jsonb_build_object(
  'coverage',payload->'coverage','snapshot_on',payload->'snapshot_on',
  'expected_seats',payload->'expected_seats',
  'documented_vacancies',payload->'documented_vacancies',
+ 'documented_exercise_interruptions',payload->'documented_exercise_interruptions',
  'orientation_policy_version',payload->'orientation_policy_version',
  'aggregation_basis',payload->'aggregation_basis',
  'government_context_observations',(SELECT coalesce(jsonb_agg(jsonb_build_object(

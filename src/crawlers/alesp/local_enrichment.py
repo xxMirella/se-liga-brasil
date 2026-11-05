@@ -1,8 +1,13 @@
-"""Enrich requested people from immutable local evidence, without remote calls."""
+"""Enrich requested people from immutable local evidence before any attendance download."""
 
 from dataclasses import asdict
 from pathlib import Path
 
+from crawlers.alesp.attendance import (
+    archived_attendance_exports,
+    attendance_identity_index,
+    committee_attendance_rows,
+)
 from crawlers.alesp.configuration import ALESP_PARSER_VERSION
 from crawlers.alesp.institutional_records import institutional_profiles
 from crawlers.alesp.local_records import authored_propositions
@@ -13,6 +18,7 @@ from service.ingestion.contracts import (
     Resource,
     ValidatedArtifact,
 )
+from service.observability.reporting import describe_error
 from storage.files import (
     create_private_directory,
     hash_content,
@@ -120,7 +126,9 @@ def stage_local_records(storage_directory, kind, rows, references, person_ids):
     )
 
 
-def collect_alesp_local_enrichment(repository, storage_directory, person_ids=None, fields=None):
+def collect_alesp_local_enrichment(
+    repository, storage_directory, person_ids=None, fields=None, *, fetch_attendance=None,
+):
     person_ids = {str(value) for value in person_ids} if person_ids is not None else None
     fields = set(
         fields or {"current_political_party", "current_public_office", "political_activity"}
@@ -150,4 +158,45 @@ def collect_alesp_local_enrichment(repository, storage_directory, person_ids=Non
         )
         result["authorships"] = asdict(repository.ingest_validated_artifact(staged, 500))
         result["staged_authorships"] = staged.summary["valid"]
-    return result | {"status": "completed", "remote_requests": 0}
+    if "attendance" in fields:
+        result["attendance"] = collect_committee_attendance(
+            repository, storage_directory, resolutions, evidence, person_ids, fetch_attendance
+        )
+    attendance = result.get("attendance", {})
+    return result | {
+        "status": "partial" if attendance.get("failures") else "completed",
+        "remote_requests": attendance.get("remote_requests", 0),
+    }
+
+
+def collect_committee_attendance(
+    repository, storage_directory, resolutions, evidence, person_ids, fetch_attendance,
+):
+    identities = attendance_identity_index(resolutions, person_ids)
+    exports = list(archived_attendance_exports(storage_directory)) if identities else []
+    rows = committee_attendance_rows([Path(item["path"]) for item in exports], identities)
+    missing = set(identities.values()) - {row["personId"] for row in rows}
+    failures = []
+    remote_requests = int(bool(missing and fetch_attendance))
+    if remote_requests:
+        try:
+            downloaded = fetch_attendance()
+            remaining = {key: person for key, person in identities.items() if person in missing}
+            rows.extend(committee_attendance_rows([Path(downloaded["path"])], remaining))
+            exports.append(downloaded)
+        except Exception as error:
+            failures.append(describe_error(error))
+    if rows:
+        observed_at = max(item["fetched_at"] for item in exports)
+        for row in rows:
+            row["observedAt"] = observed_at
+        artifact = stage_local_records(
+            storage_directory, "alesp_attendance", rows, exports + evidence, person_ids
+        )
+        repository.ingest_validated_artifact(artifact, 500)
+    return {
+        "people_with_evidence": len({row["personId"] for row in rows}),
+        "person_months": len(rows),
+        "remote_requests": remote_requests,
+        "failures": failures,
+    }

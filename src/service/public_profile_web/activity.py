@@ -3,6 +3,7 @@
 from itertools import islice
 
 from service.public_profile_web.propositions import render_proposition_pagination
+from service.public_profile_web.vote_groups import summarize_activity
 from service.public_profile_web.votes import render_votes_timeline
 
 
@@ -39,21 +40,24 @@ def proposition_activity_items(item):
     return records
 
 
-def render_person_activity(profile, votes, filters=None):
-    filters = filters or {}
+def collect_activity_records(profile, votes, filters):
+    """Votes, authorship, proceedings and historical entries, newest first, plus context."""
     records = [item | {"action_type": "vote"} for item in islice(votes.get("items") or [], 100)]
     projection = profile.get("propositions") or {}
     propositions = list(islice(projection.get("items") or [], 100))
     restricted = bool(filters.get("office_kind") or filters.get("exercise_id"))
+    historical_projection = profile.get("historical_activity") or {}
     if not restricted:
         for item in propositions:
             records.extend(filter_activity_period(proposition_activity_items(item), votes, filters))
-    historical_projection = profile.get("historical_activity") or {}
-    historical = historical_projection.get("items") or []
-    if not restricted:
-        records.extend(filter_activity_period(historical, votes, filters))
+        records.extend(
+            filter_activity_period(historical_projection.get("items") or [], votes, filters)
+        )
     records.sort(key=lambda item: item.get("occurred_on") or "", reverse=True)
-    timeline = render_votes_timeline(votes | {"items": records}, maximum_items=10200)
+    return records, propositions, historical_projection, restricted
+
+
+def render_activity_notes(profile, propositions, historical_projection, restricted):
     limited = any(item.get("events_truncated") for item in propositions)
     notice = (
         '<p>Há mais ações da matéria além do limite de 100 por proposta nesta página.</p>'
@@ -66,12 +70,33 @@ def render_person_activity(profile, votes, filters=None):
             'não são exibidas.</p>'
         )
     return (
-        '<section id="person-propositions"><p class="explanation">'
+        '<div class="ds-profile-note"><p class="explanation">'
         'Ações da mesma matéria e do mesmo mês aparecem juntas. A tramitação da matéria '
         'não significa que cada ação foi realizada pela pessoa. Apresentar uma proposta '
         'não significa aprovação. O histórico reúne os registros disponíveis nesta página.</p>'
-        + timeline + notice + render_proposition_pagination(profile, projection) + '</section>'
+        + notice + '</div>'
     )
+
+
+def build_person_activity(profile, votes, filters=None, after_timeline=""):
+    """Return the activity list markup with its category counts and acronyms present."""
+    filters = filters or {}
+    records, propositions, historical, restricted = collect_activity_records(
+        profile, votes, filters
+    )
+    counts, siglas = summarize_activity(records)
+    timeline = render_votes_timeline(votes | {"items": records}, maximum_items=10200)
+    projection = profile.get("propositions") or {}
+    html = (
+        '<section id="person-propositions" class="ds-profile-feed">' + timeline + after_timeline
+        + render_proposition_pagination(profile, projection)
+        + render_activity_notes(profile, propositions, historical, restricted) + '</section>'
+    )
+    return html, counts, siglas
+
+
+def render_person_activity(profile, votes, filters=None):
+    return build_person_activity(profile, votes, filters)[0]
 
 
 def filter_activity_period(records, votes, filters):

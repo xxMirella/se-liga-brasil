@@ -10,8 +10,8 @@ from service.project_information.page import render_project_information
 from service.public_profile_web.asset_declarations import render_declaration_sources
 from service.public_profile_web.cabinet_payroll import render_cabinet_month
 from service.public_profile_web.office_scopes import render_scope_sources
-from service.public_profile_web.pages import render_tabs
-from service.public_profile_web.profile import render_attendance_history
+from service.public_profile_web.profile_attendance import render_attendance_history
+from service.public_profile_web.profile_navigation import render_section_navigation
 from service.public_profile_web.propositions import render_authorship_card
 from service.public_profile_web.vote_groups import render_activity_history_entry
 
@@ -64,7 +64,17 @@ def test_rendered_official_sources_open_new_tab_with_isolated_opener(component):
 
 
 def test_internal_profile_navigation_stays_in_current_tab():
-    markup = render_tabs("/pessoas/pessoa", {}, "profile") + render_civic_education("todos")
+    markup = render_section_navigation() + render_civic_education("todos")
     links = [link for link in AnchorDocument(markup).links if not urlsplit(link["href"]).scheme]
     assert links
     assert all(link.get("target") in {None, "_self"} for link in links)
+
+
+def test_declaration_sources_show_a_single_tse_link_even_with_several_years():
+    html = render_declaration_sources([
+        {"official_url": "https://cdn.tse.jus.br/estatistica/sead/odsele/bem_candidato/a_2026.zip"},
+        {"official_url": "https://cdn.tse.jus.br/estatistica/sead/odsele/bem_candidato/a_2022.zip"},
+    ])
+
+    assert html.count("TSE ↗") == 1
+    assert "a_2026.zip" in html

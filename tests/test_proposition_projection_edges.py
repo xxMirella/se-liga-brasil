@@ -76,9 +76,14 @@ def test_authorship_history_handles_dated_and_undated_proposals_without_false_ap
     assert "Data não informada" in render_authorship_card({})
 
 
-def test_proposal_pagination_keeps_all_pages_reachable():
+def test_proposal_pagination_offers_only_the_way_back_not_a_next_page_button():
     html = render_proposition_pagination({"person_id": PERSON}, {"page": 2, "truncated": True})
-    assert "proposal_page=1" in html and "proposal_page=3" in html
+    assert "proposal_page=1" in html
+    assert "proposal_page=3" not in html
+    assert "Mais propostas" not in html
+    first = {"page": 1, "truncated": True}
+    first_page = render_proposition_pagination({"person_id": PERSON}, first)
+    assert first_page == ""
 
 
 @pytest.mark.parametrize("principal", [

@@ -1,0 +1,68 @@
+/* Gentle, timed reveal as content scrolls into view. panorama-enhance.js marks each target with
+   `ds-reveal` and, once it is on screen, `ds-is-visible`; without that script nothing is hidden,
+   so the static page is always complete. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .ds-choice, .ds-seats-tabs__tab, .ds-seats-modes__option, .ds-seat-legend__bloc,
+  .ds-timeline-row, .ds-site-nav__link {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  /* In-place update from panorama-enhance.js: the old content dims while the new one loads. */
+  #main.ds-is-updating { opacity: 0.55; transition: opacity 0.15s ease; }
+
+  .ds-reveal-ready .ds-reveal {
+    transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1),
+      background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .ds-reveal-ready .ds-reveal:not(.ds-is-visible) {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  .ds-reveal-ready .ds-reveal-step-1 { transition-delay: 0.08s; }
+  .ds-reveal-ready .ds-reveal-step-2 { transition-delay: 0.16s; }
+  .ds-reveal-ready .ds-reveal-step-3 { transition-delay: 0.24s; }
+  .ds-reveal-ready .ds-reveal-step-4 { transition-delay: 0.32s; }
+  .ds-reveal-ready .ds-reveal-step-5 { transition-delay: 0.4s; }
+
+  /* Data marks grow in after their card has appeared. */
+  .ds-reveal-ready .ds-reveal .ds-stacked-bar {
+    transform-origin: left center;
+    transition: transform 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.25s;
+  }
+
+  .ds-reveal-ready .ds-reveal:not(.ds-is-visible) .ds-stacked-bar { transform: scaleX(0); }
+
+  .ds-reveal-ready .ds-reveal .ds-column-chart__column > span:last-child {
+    transform-origin: center bottom;
+    transition: transform 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.25s;
+  }
+
+  .ds-reveal-ready .ds-reveal:not(.ds-is-visible) .ds-column-chart__column > span:last-child {
+    transform: scaleY(0);
+  }
+
+  .ds-reveal-ready .ds-reveal .ds-profile-month__fill {
+    transform-origin: center bottom;
+    transition: transform 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.25s;
+  }
+
+  .ds-reveal-ready .ds-reveal:not(.ds-is-visible) .ds-profile-month__fill { transform: scaleY(0); }
+
+  .ds-reveal-ready .ds-reveal .ds-profile-bar {
+    transform-origin: left center;
+    transition: transform 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.25s;
+  }
+
+  .ds-reveal-ready .ds-reveal:not(.ds-is-visible) .ds-profile-bar { transform: scaleX(0); }
+
+  .ds-reveal-ready .ds-reveal .ds-dot-grid, .ds-reveal-ready .ds-reveal svg {
+    transition: opacity 1.2s ease 0.3s;
+  }
+
+  .ds-reveal-ready .ds-reveal:not(.ds-is-visible) .ds-dot-grid,
+  .ds-reveal-ready .ds-reveal:not(.ds-is-visible) svg { opacity: 0; }
+}

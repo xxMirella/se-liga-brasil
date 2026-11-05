@@ -88,18 +88,6 @@ def senate_summary_text(summary):
             "Não mede base do governo, presença em sessão ou orientação individual.")
 
 
-def render_senate_orientation_summary(composition):
-    summary = composition.get("orientation_summary")
-    if not summary:
-        return ""
-    count = summary["right_count"]
-    return (
-        '<p class="panorama-leading-group"><strong>'
-        f"Direita: {count}/{summary['total_seats']} cadeiras "
-        "(referência de 2022 aplicada a 2026).</strong> "
-        '<a href="/fontes-dos-dados#senado-2026">Fontes e critérios de classificação</a></p>'
-    )
-
 
 def senate_orientation_cell(summary):
     from service.political_dashboard.orientation_timeline import category_cell

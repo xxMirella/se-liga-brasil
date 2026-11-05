@@ -202,7 +202,7 @@ def test_yearly_public_json_uses_existing_gzip_etag_and_revalidation_contract():
         == 304
     )
     assert prepare_public_response("/api/political-dashboard", 503, payload, {})[2] == {
-        "Cache-Control": "no-store"
+        "Cache-Control": "no-store", "X-Robots-Tag": "noindex, follow",
     }
 
 

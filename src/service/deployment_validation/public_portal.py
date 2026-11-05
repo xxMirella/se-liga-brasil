@@ -33,8 +33,8 @@ def check_public_deployment(application=None):
 def check_public_dashboard(application):
     checks = []
     for path, query in (
-        ("/panorama", "level=federal"),
-        ("/panorama", "level=federal&year=1889"),
+        ("/panorama", ""),
+        ("/panorama", "leg=2019&house=senado"),
         ("/api/political-dashboard", "level=state&uf=SP"),
         ("/api/political-dashboard", "level=municipal&uf=SP"),
     ):

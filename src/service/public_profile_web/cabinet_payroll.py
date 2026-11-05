@@ -1,6 +1,6 @@
 """Cabinet cost card and accessible monthly role history, without client scripts."""
 
-from service.public_profile_web.asset_declarations import format_declared_amount
+from service.public_profile_web.asset_declarations import format_declared_amount, month_label
 from service.public_profile_web.security import official_url, text
 
 
@@ -9,17 +9,16 @@ def render_cabinet_cost(profile):
     latest = payroll.get("latest")
     if not latest:
         return (
-            '<div class="metric"><span>Gastos com gabinete</span>'
-            "<strong>Não disponível</strong><small>Folha da equipe ainda não coletada; "
-            "não representa gasto zero.</small></div>"
+            '<div class="ds-profile-cabinet"><strong>Gastos com gabinete</strong>'
+            "<span>Ainda não coletado. Isso não significa gasto zero.</span></div>"
         )
-    reference = text(latest["period"])
     amount = format_declared_amount(latest["total_amount"])
     return (
-        f'<div class="metric"><span>Gastos com gabinete</span><strong>{amount}</strong>'
-        '<button class="attendance-history-button" commandfor="cabinet-payroll-history" '
-        'command="show-modal">Ver histórico</button>'
-        f"<small>Folha da equipe · {reference} · Última competência coletada</small></div>"
+        '<div class="ds-profile-cabinet"><strong>Gastos com gabinete</strong>'
+        f"<span>{amount} · folha da equipe de {month_label(latest['period'])} · "
+        "Última competência coletada</span>"
+        '<button class="ds-profile-link-button" commandfor="cabinet-payroll-history" '
+        'command="show-modal">Ver histórico</button></div>'
         + render_cabinet_history(payroll)
     )
 

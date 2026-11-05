@@ -6,6 +6,9 @@ class AlespProjectionWriter:
         self.writer = writer
 
     def project_batch(self, parameters: dict, resource_kind: str) -> None:
+        if resource_kind == "alesp_attendance":
+            self.writer.execute_statements(resource_kind, parameters)
+            return
         if resource_kind == "deputy_payroll":
             self.writer.execute_statements("payroll_payments", parameters)
             return

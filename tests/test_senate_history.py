@@ -8,7 +8,6 @@ from crawlers.senado.historical_parsing import (
     parse_exercises,
     parse_legislature_roster,
 )
-from service.political_dashboard.page import render_historical_roster
 from service.senate_history.collection import (
     associate_verified_senators,
     build_senate_history_partitions,
@@ -110,9 +109,6 @@ def test_old_legislature_roll_is_not_transformed_into_simultaneous_seats():
     assert national["political_parties"] == []
     assert national["historical_roster"][0]["name"] == "Nome"
     assert "ATUAL" not in str(partitions)
-    html = render_historical_roster(national)
-    assert "não confirma que todos exerceram simultaneamente" in html
-    assert 'target="_blank"' in html
 
 
 def test_verified_source_bridge_is_required_for_canonical_profile_link():

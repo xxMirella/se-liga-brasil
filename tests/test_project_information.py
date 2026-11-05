@@ -11,6 +11,7 @@ from application.public_cache import prepare_public_response
 from application.public_portal import dispatch_portal_request
 from service.project_information.page import render_project_information
 from service.static_publication.build import build_civic_site
+from web_components import font_file_names
 
 
 class LinkCollector(HTMLParser):
@@ -92,7 +93,7 @@ def test_institutional_page_static_export_is_complete_and_fingerprinted(tmp_path
     path = tmp_path / "sobre/index.html"
     document = path.read_text()
     assert (tmp_path / "index.html").read_bytes() == path.read_bytes()
-    assert result["files"] == 11
+    assert result["files"] == 11 + len(font_file_names())
     assert (tmp_path / "assets/brazil-flag.svg").is_file()
     assert 'href="/sobre/"' in document
     assert 'href="/como-funciona/"' in document
@@ -117,7 +118,9 @@ def test_institutional_cache_revalidates_and_never_caches_errors(route):
         route, 200, body, {"If-None-Match": headers["ETag"], "Accept-Encoding": "gzip"},
     )
     assert (status, empty) == (304, b"")
-    assert prepare_public_response(route, 400, body, {})[2] == {"Cache-Control": "no-store"}
+    error_headers = prepare_public_response(route, 400, body, {})[2]
+    assert error_headers["Cache-Control"] == "no-store"
+    assert error_headers["X-Robots-Tag"] == "noindex, follow"
 
 
 @pytest.mark.parametrize("active", ["about", "people", "guide"])
@@ -133,27 +136,30 @@ def test_header_exposes_about_and_only_selects_active_section(active):
     assert selected[0]["href"] == {
         "about": "/sobre", "people": "/pessoas", "guide": "/como-funciona",
     }[active]
-    assert 'class="brand" href="/"' in header
+    assert 'class="ds-brand" href="/"' in header
     assert 'href="/sobre"' in header
-    assert 'href="/sobre"' not in document.split("<footer>", 1)[1]
+    assert 'href="/sobre"' not in document.split("<footer", 1)[1]
 
 
 def test_search_parameters_still_reach_people_search():
     from types import SimpleNamespace
 
     parameters = []
-    app = SimpleNamespace(fetch_people=lambda values: parameters.append(values) or {"items": []})
+    app = SimpleNamespace(
+        fetch_people=lambda values: parameters.append(values) or {"items": []},
+        fetch_political_party_options=lambda: (),
+    )
     response = dispatch_portal_request(app, "/api/people?q=Pessoa")
     assert response.status == 200
     assert parameters == [{"q": "Pessoa"}]
     response = dispatch_portal_request(app, "/pessoas?q=Pessoa")
     assert response.status == 200
-    assert parameters == [{"q": "Pessoa"}]
-    assert 'data-viewport-page' in response.body.decode()
+    assert parameters == [{"q": "Pessoa"}, {"q": "Pessoa"}]
+    assert '/assets/people-search-enhance.js' in response.body.decode()
     assert 'value="Pessoa"' in response.body.decode()
     response = dispatch_portal_request(app, "/pessoas?q=Pessoa&limit=3")
     assert response.status == 200
-    assert parameters == [{"q": "Pessoa"}, {"q": "Pessoa", "limit": "3"}]
+    assert parameters == [{"q": "Pessoa"}, {"q": "Pessoa"}, {"q": "Pessoa", "limit": "3"}]
 
 
 @pytest.mark.parametrize("route", ["/", "/sobre", "/sobre/"])
@@ -162,19 +168,18 @@ def test_institutional_header_selects_about_menu(route):
     parser = LinkCollector()
     parser.feed(document.split("</header>", 1)[0])
     selected = [link for link in parser.links if link.get("aria-current") == "page"]
-    assert selected == [{"href": "/sobre", "class": "selected", "aria-current": "page"}]
+    assert [link["href"] for link in selected] == ["/sobre"]
 
 
 def test_current_menu_has_semantic_visible_styles_in_static_export(tmp_path):
     from service.public_profile_web.layout import public_stylesheet
 
     stylesheet = public_stylesheet()
-    assert '.profile-tabs a[aria-current="page"]' in stylesheet
-    assert "border-bottom:3px solid var(--green)" in stylesheet
-    assert 'background:var(--accent)' in stylesheet
+    assert '.ds-site-nav__link[aria-current="page"]' in stylesheet
+    assert "font-weight: 600" in stylesheet
     build_civic_site(tmp_path)
     for relative in ("index.html", "sobre/index.html"):
         parser = LinkCollector()
         parser.feed((tmp_path / relative).read_text().split("</header>", 1)[0])
         selected = [link for link in parser.links if link.get("aria-current") == "page"]
-        assert selected == [{"href": "/sobre/", "class": "selected", "aria-current": "page"}]
+        assert [link["href"] for link in selected] == ["/sobre/"]

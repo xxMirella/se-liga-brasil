@@ -8,7 +8,7 @@ import pytest
 
 from application.public_portal import PublicPortalApplication, dispatch_portal_request
 from service.public_profile_web.forms import render_vote_filters
-from service.public_profile_web.pages import render_tabs
+from service.public_profile_web.profile_navigation import activity_history_href
 from service.public_profile_web.security import query_link
 
 PERSON_ID = "00000000-0000-0000-0000-000000000001"
@@ -33,23 +33,11 @@ def portal():
     return PublicPortalApplication(None, None, today=lambda: date(2026, 10, 18))
 
 
-def test_activity_tab_resets_period_office_exercise_and_cursor():
-    stale = {
-        "tab": "activity",
-        "scope": "period",
-        "start_date": "2026-01-01",
-        "end_date": "2026-01-31",
-        "office_kind": "senator",
-        "exercise_id": "9",
-        "cursor": "old-page",
-        "limit": "1",
-    }
-    markup = NavigationMarkup(render_tabs(PERSON_PATH, stale, "activity"))
-    activity = next(link for link in markup.links if link.get("aria-current") == "page")
-    destination = urlsplit(activity["href"])
+def test_activity_history_link_is_stable_and_ignores_stale_filters():
+    destination = urlsplit(activity_history_href(PERSON_ID))
     assert destination.path == PERSON_PATH
     assert parse_qs(destination.query) == {"tab": ["activity"], "scope": ["history"]}
-    assert all(link["href"] != "/como-funciona" for link in markup.links)
+    assert destination.fragment == "atuacao"
 
 
 def test_manual_filters_choose_period_without_redundant_history_link():

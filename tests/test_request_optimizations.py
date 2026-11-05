@@ -49,8 +49,8 @@ def test_stylesheets_and_pages_do_not_reread_files_per_request(monkeypatch):
     )
     app = SimpleNamespace(today=lambda: TODAY)
     targets = [
-        "/assets/public-profile.css", "/assets/panorama.css", "/assets/civic-education.css",
-        "/assets/people-viewport.js", "/favicon.ico", "/sobre", "/como-funciona",
+        "/assets/public-profile.css", "/assets/party-comparison.css", "/assets/civic-education.css",
+        "/assets/people-search-enhance.js", "/favicon.ico", "/sobre", "/como-funciona",
     ]
     for target in targets:
         assert dispatch_portal_request(app, target).status == 200
@@ -124,10 +124,10 @@ def test_dashboard_table_check_is_memoized_only_when_present(monkeypatch):
     assert len(checks) == 2
 
 
-def test_cache_policy_covers_static_pages_and_viewport_script_only_when_ok():
+def test_cache_policy_covers_static_pages_and_people_script_only_when_ok():
     assert "s-maxage=3600" in public_cache_policy("/fontes-dos-dados", 200)
     assert public_cache_policy("/fontes-dos-dados", 503) == "no-store"
-    assert public_cache_policy("/assets/people-viewport.js", 200).endswith("must-revalidate")
+    assert public_cache_policy("/assets/people-search-enhance.js", 200).endswith("must-revalidate")
     assert public_cache_policy("/pessoas/00000000-0000-0000-0000-000000000000", 200) == "no-store"
     assert public_cache_policy("/api/people", 200) == "no-store"
 

@@ -1,0 +1,65 @@
+/* Person profile: career and plenary attendance sections (reference: Perfil v2). */
+.ds-profile-career, .ds-profile-attendance {
+  padding: 44px 0; display: flex; flex-direction: column; gap: 18px;
+  border-bottom: 1px solid var(--color-line);
+}
+.ds-profile-heading {
+  margin: 0; font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(28px, 4vw, 36px); line-height: normal;
+}
+
+/* Trajetória */
+.ds-profile-career__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; max-width: 720px; }
+.ds-profile-career__entry { display: grid; grid-template-columns: 110px 20px minmax(0, 1fr); gap: 12px; align-items: start; }
+.ds-profile-career__period { font-family: var(--font-mono); font-size: 13px; color: var(--color-muted); padding-top: 2px; }
+.ds-profile-career__track { display: flex; flex-direction: column; align-items: center; height: 100%; }
+.ds-profile-career__dot { width: 14px; height: 14px; border-radius: 50%; background: var(--color-brand); flex: none; }
+.ds-profile-career__dot--past { background: #fff; border: 2px solid #9a978e; }
+.ds-profile-career__line { flex: 1; width: 2px; background: var(--color-line-strong); min-height: 40px; }
+.ds-profile-career__body { display: flex; flex-direction: column; gap: 2px; padding-bottom: 20px; }
+.ds-profile-career__entry:last-child .ds-profile-career__body { padding-bottom: 0; }
+.ds-profile-career__title { font-size: 17px; }
+.ds-profile-career__summary { font-size: 15px; color: var(--color-ink-soft); }
+.ds-profile-career__note { margin: 0; font-size: 13px; color: var(--color-muted); }
+
+/* Presença em plenário */
+.ds-profile-years { margin: 0; padding: 0; border: 0; min-width: 0; display: flex; flex-wrap: wrap; gap: 18px 6px; position: relative; }
+.ds-profile-attendance__summary { margin: 0; font-size: 18px; line-height: 1.5; max-width: 720px; }
+.ds-profile-years .ds-profile-attendance__summary { order: 0; flex: 0 0 100%; max-width: none; padding-right: max(0px, calc(100% - 720px)); display: none; }
+.ds-profile-years__label {
+  order: 1; display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px;
+  font-size: 15px; border-radius: var(--radius-pill); cursor: pointer; border: 1px solid var(--color-line-strong);
+  background: #fff; color: var(--color-ink); font-variant-numeric: tabular-nums;
+}
+.ds-profile-years__input:checked + .ds-profile-years__label { background: var(--color-ink); border-color: var(--color-ink); color: #fff; }
+.ds-profile-years__input:focus-visible + .ds-profile-years__label { outline: 3px solid var(--color-brand); outline-offset: 2px; }
+.ds-profile-chart {
+  order: 2; flex: 0 0 100%; display: none; flex-direction: column; gap: 10px;
+  background: #fff; border: 1px solid var(--color-line-strong); border-radius: 14px; padding: 20px;
+}
+.ds-profile-years__input:checked + .ds-profile-years__label + .ds-profile-attendance__summary { display: block; }
+.ds-profile-years__input:checked + .ds-profile-years__label + .ds-profile-attendance__summary + .ds-profile-chart { display: flex; }
+.ds-profile-months, .ds-profile-axis { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 6px; }
+.ds-profile-months { align-items: end; height: 170px; }
+.ds-profile-month { height: 100%; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; align-items: stretch; }
+.ds-profile-month__value { font-size: 11px; font-weight: 600; text-align: center; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ds-profile-month__track { position: relative; display: block; height: 120px; background: var(--color-line-faint); border-radius: 3px; overflow: hidden; }
+.ds-profile-month--empty .ds-profile-month__track { background: transparent; border: 1px dashed #c9c4b9; }
+.ds-profile-month__fill { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--pct-tens, 0%) + var(--pct-ones, 0%)); }
+.ds-profile-month__fill--official { background: oklch(0.5 0.12 155); }
+.ds-profile-month__fill--unofficial { background: repeating-linear-gradient(135deg, oklch(0.5 0.12 155) 0 4px, #fff 4px 7px); }
+.ds-profile-axis__label { text-align: center; font-family: var(--font-mono); font-size: 11px; color: var(--color-muted); }
+.ds-profile-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--color-ink-soft); border-top: 1px solid var(--color-line-faint); padding-top: 10px; }
+.ds-profile-legend__item { display: inline-flex; align-items: center; gap: 6px; }
+.ds-profile-legend__swatch { width: 12px; height: 12px; border-radius: 2px; flex: none; }
+.ds-profile-legend__swatch--official { background: oklch(0.5 0.12 155); }
+.ds-profile-legend__swatch--unofficial { background: repeating-linear-gradient(135deg, oklch(0.5 0.12 155) 0 3px, #fff 3px 5px); }
+.ds-profile-legend__swatch--empty { border: 1px dashed #9a978e; }
+.ds-profile-attendance .ds-disclosure { max-width: 720px; padding: 12px 0; }
+.ds-profile-attendance .ds-disclosure > summary { font-size: 15px; }
+.ds-profile-attendance .ds-disclosure__body p { margin: 0; }
+@media (max-width: 520px) {
+  .ds-profile-month__required { display: none; }
+  .ds-profile-months, .ds-profile-axis { gap: 3px; }
+  .ds-profile-chart { padding: 14px; }
+}

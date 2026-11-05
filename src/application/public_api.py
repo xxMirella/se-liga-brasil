@@ -62,6 +62,9 @@ class PublicHandler(BaseHTTPRequestHandler):
         status, response = dispatch_public_request(self.fetch_votes, self.path)
         self.send_json(status, response)
 
+    def do_HEAD(self):
+        self.do_GET()
+
     def do_POST(self):
         self.send_json(405, {"error": "method_not_allowed"})
 
@@ -82,11 +85,12 @@ class PublicHandler(BaseHTTPRequestHandler):
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header(
             "Content-Security-Policy",
-            "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https:; "
-            "form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+            "default-src 'none'; script-src 'self'; connect-src 'self'; style-src 'self'; "
+            "font-src 'self'; "
+            "img-src 'self' https:; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
         )
         self.end_headers()
-        if status != 304:
+        if status != 304 and self.command != "HEAD":
             self.wfile.write(body)
 
     def log_message(self, *_arguments):

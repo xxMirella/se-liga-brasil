@@ -16,13 +16,12 @@ def test_documented_term_boundary_for_all_offices(office_kind):
     assert duration["total_days"] == 102
     assert duration["last_day"] == "2027-01-31"
     markup = render_remaining_term({"office_kind": office_kind, "remaining_term": duration})
-    assert "3 meses e 10 dias" in markup
-    assert "2027-01-31" in markup
+    assert "Mandato termina em 31/01/2027" in markup
 
 
 def test_unknown_end_never_infers_four_or_eight_years():
     assert remaining_term(None, date(2026, 10, 22))["status"] == "unknown"
-    assert "Término não informado" in render_remaining_term({"office_kind": "senator"})
+    assert "Término do mandato não informado" in render_remaining_term({"office_kind": "senator"})
 
 
 def test_substitute_does_not_claim_exercise_until_mandate_end():
@@ -30,7 +29,7 @@ def test_substitute_does_not_claim_exercise_until_mandate_end():
         "capacity": "substitute",
         "remaining_term": remaining_term(date(2031, 2, 1), date(2026, 10, 22)),
     })
-    assert "exercício de suplência pode terminar antes" in markup
+    assert "a suplência pode terminar antes" in markup
 
 
 @pytest.mark.parametrize("boundary", [date(2026, 10, 22), date(2025, 1, 1)])

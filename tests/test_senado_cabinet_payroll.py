@@ -141,7 +141,7 @@ def test_role_text_is_escaped_and_missing_cost_is_never_zero():
         {"cabinet_payroll": public_cabinet_payroll({"months": [month], "truncated": False})}
     )
     assert "<script>" not in html and "&lt;script&gt;" in html
-    assert "Não disponível" in render_cabinet_cost({})
+    assert "Ainda não coletado" in render_cabinet_cost({})
 
 
 def test_history_query_bounds_months_and_respects_reference_date():

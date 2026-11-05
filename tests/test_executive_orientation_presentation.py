@@ -97,10 +97,6 @@ def test_legacy_projection_uses_exact_person_and_exercise_start_not_name():
 
 
 def test_2016_details_keep_acting_and_definitive_exercises_separate():
-    from service.political_dashboard.executive_orientation_presentation import (
-        render_executive_orientation,
-    )
-
     institution = presidency("arquivo-nacional-president:205:2011-01-01", "PT")
     institution["segments"] += [
         {"exercise_id": "arquivo-nacional-president:201:2016-05-12"},
@@ -114,11 +110,8 @@ def test_2016_details_keep_acting_and_definitive_exercises_separate():
         ("2016-05-12", "2016-08-31"),
         ("2016-08-31", "2017-01-01"),
     ]
-    html = render_executive_orientation(institution, "political_orientation", 2016)
-    assert html == "<p><strong>Abordagem do governo: Esquerda / Direita</strong></p>"
-    assert "2016-05-12" not in html
     # Períodos e exercício interino/definitivo ficam no detalhe da célula,
-    # consumido pela página de fontes, e não no painel enxuto.
+    # consumido pela página de fontes.
     assert "2016-01-01 até 2016-05-12" in cell["detail"]
     assert "2016-05-12 até 2016-08-31" in cell["detail"]
     assert "2016-08-31 até 2017-01-01" in cell["detail"]
@@ -141,14 +134,10 @@ def test_every_fhc_year_is_center_right_government_not_party_inference(year):
 def test_fhc_detail_exposes_academic_documents_and_counterevidence():
     from service.data_sources.page import render_presidency_sources
     from service.political_dashboard.executive_orientation_presentation import (
-        render_executive_orientation,
         render_orientation_evidence_sources,
     )
 
     institution = presidency("arquivo-nacional-president:197:1999-01-01", "PSDB")
-    panel = render_executive_orientation(institution, "political_orientation", 2002)
-    assert panel == "<p><strong>Abordagem do governo: Direita</strong></p>"
-    assert "Bolsa Escola" not in panel and "href" not in panel
     cell = executive_orientation_cell(institution, 2002)
     assert "Bolsa Escola" in cell["detail"]
     assert "não é extrema direita" in cell["detail"]

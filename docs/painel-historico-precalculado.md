@@ -1,3 +1,5 @@
+> **Nota (11/2026).** O histórico pré-calculado continua alimentando `/api/political-dashboard` e o construtor da nova página `/panorama` (nacional por legislatura). As medições abaixo se referem à antiga página territorial `/panorama?year=...`, que deixou de existir.
+
 # Painel: histórico pré-calculado por território
 
 Documento técnico de engenharia (28/10/2026). Não contém credenciais.

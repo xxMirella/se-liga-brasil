@@ -97,6 +97,8 @@ def build_completeness_report(rows, today=None) -> dict:
 
 
 def attendance_completeness(row, threshold):
+    if row.get("has_alesp_historical_attendance"):
+        return "present"
     if row["current_office"] is False:
         return "not_applicable"
     period = row.get("latest_attendance_period")

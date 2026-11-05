@@ -1,9 +1,12 @@
-"""Public header: temporal evidence remains separate from electoral declarations."""
+"""Public identity: portrait, name, office, party and tenure chips (reference: Perfil v2)."""
 
 from itertools import islice
 
-from service.public_profile_web.cabinet_payroll import render_cabinet_cost
+from service.public_profile_web.brazilian_states import UF_NAMES
+from service.public_profile_web.profile_dates import format_full_date, format_month_year
 from service.public_profile_web.security import official_url, text
+
+LOWERCASE_NAME_WORDS = frozenset({"da", "das", "de", "do", "dos", "e"})
 
 OFFICE_LABELS = {
     "federal_deputy": "Deputado(a) federal",
@@ -20,191 +23,122 @@ OFFICE_LABELS = {
 }
 
 
+def title_case_name(value):
+    """Registered names are upper case; display them as 'Erika Hilton' without losing initials."""
+    words = str(value or "").lower().split()
+    return " ".join(
+        word if index and word in LOWERCASE_NAME_WORDS else word.capitalize()
+        for index, word in enumerate(words)
+    )
+
+
 def render_portrait(profile):
     photo = profile.get("photo") or {}
     url = official_url(photo.get("url"))
-    if url:
-        portrait = (
-            f'<img src="{text(url)}" alt="Foto institucional de '
-            f'{text(profile.get("display_name"))}" referrerpolicy="no-referrer">'
+    if not url:
+        return (
+            '<div class="ds-profile-portrait ds-profile-portrait--empty" role="img" '
+            'aria-label="Foto não disponível"><span aria-hidden="true">◯</span></div>'
         )
-    else:
-        portrait = (
-            '<div class="portrait-placeholder" role="img" aria-label="Foto não '
-            'disponível"><span aria-hidden="true">◯</span></div>'
-        )
-    attribution = text(
-        photo.get("attribution"), "Foto institucional" if url else "Foto não disponível"
+    name = text(title_case_name(profile.get("display_name")), "pessoa")
+    attribution = photo.get("attribution")
+    caption = f"<small>{text(attribution)}</small>" if attribution else ""
+    return (
+        f'<div class="ds-profile-portrait"><img src="{text(url)}" '
+        f'alt="Foto institucional de {name}" width="120" height="150" '
+        f'referrerpolicy="no-referrer">{caption}</div>'
     )
-    return f'<div class="portrait">{portrait}<small>{attribution}</small></div>'
 
 
 def render_political_party(profile):
     political_party = profile.get("political_party") or {}
     abbreviation = political_party.get("abbreviation")
-    name = political_party.get("name") or abbreviation
-    return f"""<div class="affiliation"><span class="party-icon">{text(abbreviation, "—")}</span>
-<div><strong>{text(name, "Partido não disponível")}</strong></div></div>"""
+    if not abbreviation:
+        return "Partido não disponível"
+    name = political_party.get("name")
+    full_name = (
+        f' <span>({text(title_case_name(name))})</span>' if name and name != abbreviation else ""
+    )
+    return f"<strong>{text(abbreviation)}</strong>{full_name}"
+
+
+def office_line(office):
+    label = OFFICE_LABELS.get(office.get("office_kind"), "Cargo público")
+    uf_name = UF_NAMES.get(office.get("represented_uf"))
+    if uf_name:
+        return f"{label} por {uf_name}"
+    institution = (office.get("institution") or {}).get("name")
+    return f"{label} · {text(institution)}" if institution else label
 
 
 def render_observed_office(status):
     if status.get("office_kind"):
-        label = OFFICE_LABELS.get(status["office_kind"], "Cargo público")
-        institution = (status.get("institution") or {}).get("name")
         reference = text(status.get("observed_on"))
-        return (
-            f'<p class="role">{label} · {text(institution)}<br>'
-            f"Cargo observado em {reference}; exercício atual não confirmado.</p>"
-        )
-    label = "Sem cargo público atual confirmado"
+        return [
+            f"{office_line(status)}<br>Cargo observado em {reference}; exercício atual não "
+            "confirmado."
+        ]
     if status.get("has_current_public_office") is False and status.get("status") == "observed":
-        label = "Não ocupa cargo público atual, segundo a evidência disponível"
-    return f'<p class="role">{label}</p>'
+        return ["Não ocupa cargo público atual, segundo a evidência disponível"]
+    return ["Sem cargo público atual confirmado"]
 
 
 def render_offices(profile):
+    """One subtitle paragraph per office; the party closes the last one."""
     offices = list(islice(profile.get("current_offices", []), 20))
-    if not offices:
-        return render_observed_office(profile.get("public_office") or {})
-    labels = []
-    for office in offices:
-        label = OFFICE_LABELS.get(office.get("office_kind"), "Cargo público")
-        institution = (office.get("institution") or {}).get("name")
-        labels.append(f"{label} · {text(institution)}")
-    return '<p class="role">' + "<br>".join(labels) + "</p>"
-
-
-def render_metric(label, value, reference, action=""):
-    return (
-        f"<div "
-        f'class="metric"><span>{label}</span><strong>{value}</strong>{action}'
-        f"<small>{reference}</small></div>"
+    lines = [office_line(office) for office in offices] or render_observed_office(
+        profile.get("public_office") or {}
     )
+    lines[-1] += f" · {render_political_party(profile)}"
+    return "".join(f'<p class="ds-profile-identity__office">{line}</p>' for line in lines)
 
 
-def render_tenures(profile):
-    offices = list(islice(profile.get("current_offices", []), 20))
-    metrics = []
-    for office in offices:
-        tenure = office.get("tenure") or {}
-        value = "Início não confirmado"
-        if tenure.get("years") is not None and tenure.get("months") is not None:
-            value = f"{text(tenure['years'])} anos e {text(tenure['months'])} meses"
-        institution = (office.get("institution") or {}).get("name")
-        metrics.append(render_metric("Tempo no exercício atual", value, text(institution)))
-        metrics.append(render_remaining_term(office))
-    return "".join(metrics) or (
-        render_metric("Tempo no exercício", "Não disponível", "Início individual não confirmado")
-        + render_metric(
-            "Tempo restante previsto", "Não disponível", "Sem mandato atual confirmado"
-        )
-    )
+def render_chip(content):
+    return f'<span class="ds-profile-chip">{content}</span>'
 
 
 def render_remaining_term(office):
     remaining = office.get("remaining_term") or {}
-    if remaining.get("status") != "documented_term_boundary":
-        return render_metric(
-            "Tempo restante previsto", "Término não informado", "Sem data final documentada"
-        )
-    value = (
-        f"{text(remaining['years'])} anos, {text(remaining['months'])} meses "
-        f"e {text(remaining['days'])} dias"
-    )
-    reference = f"Mandato previsto até {text(remaining['last_day'])}"
+    last_day = format_full_date(remaining.get("last_day"))
+    if remaining.get("status") != "documented_term_boundary" or not last_day:
+        return render_chip("Término do mandato não informado")
     if office.get("capacity") == "substitute":
-        reference += "; exercício de suplência pode terminar antes"
-    else:
-        reference += "; não garante permanência no cargo"
-    return render_metric("Tempo restante previsto do mandato", value, reference)
+        return render_chip(f"Mandato previsto até {last_day}; a suplência pode terminar antes")
+    return render_chip(f"Mandato termina em {last_day}")
 
 
-def render_payments(profile):
-    payments = list(islice(profile.get("payments", []), 20))
-    if not payments:
-        return render_metric("Remuneração", "Não disponível", "Não representa remuneração zero")
-    metrics = []
-    for payment in payments:
-        gross = payment.get("gross_amount")
-        value = f"R$ {text(gross)}" if gross is not None else "Não disponível"
-        reference = (
-            f"Bruto · Competência {text(payment.get('competence'))} · "
-            f"{text(payment.get('organization_code'))}"
-        )
-        freshness = payment.get("freshness")
-        if freshness != "current_competence":
-            reference += " · Última publicação disponível; não confirma o mês atual"
-        metrics.append(render_metric("Remuneração publicada", value, reference))
-    return "".join(metrics)
+def render_tenure_chip(office):
+    since = format_month_year(office.get("starts_on"))
+    if not since:
+        return ""
+    substitute = office.get("capacity") == "substitute"
+    verb = "Em exercício como suplente" if substitute else "Em exercício"
+    return render_chip(f"{verb} desde {since}")
+
+
+def render_tenures(profile):
+    chips = ""
+    for office in islice(profile.get("current_offices", []), 20):
+        chips += render_tenure_chip(office) + render_remaining_term(office)
+    return chips
+
+
+def render_person_facts(profile):
+    age = (profile.get("age") or {}).get("value")
+    education = profile.get("education_level")
+    facts = [f"{text(age)} anos"] if age is not None else []
+    if education:
+        facts.append(text(str(education).lower()))
+    return render_chip(" · ".join(facts)) if facts else ""
 
 
 def render_profile_header(profile):
-    age = (profile.get("age") or {}).get("value")
-    age_value = f"{text(age)} anos" if age is not None else "Não disponível"
-    metrics = render_metric("Idade", age_value, f"Referência {text(profile.get('as_of'))}")
-    metrics += render_metric(
-        "Escolaridade", text(profile.get("education_level")), "Declarada na fonte"
-    )
-    metrics += render_tenures(profile) + render_attendance(profile) + render_payments(profile)
-    metrics += render_cabinet_cost(profile)
-    return f"""<section class="profile" aria-label="Identificação pública">
-{render_portrait(profile)}<div class="profile-info"><p class="eyebrow">PERFIL PÚBLICO</p>
-<h1>{text(profile.get("display_name"))}</h1>{render_offices(profile)}
-{render_political_party(profile)}</div></section><div class="metrics">{metrics}</div>"""
-
-
-def render_attendance(profile):
-    attendance = profile.get("attendance") or {}
-    months = profile.get("attendance_history", [])
-    action = (
-        '<button class="attendance-history-button" commandfor="attendance-history" '
-        'command="show-modal">Ver histórico</button>'
-        if months
-        else ""
-    )
-    percentage = attendance.get("percentage")
-    if percentage is None:
-        return render_metric(
-            "Presença", "Não disponível", "Sem frequência atual consolidada", action
-        ) + render_attendance_history(months)
-    value = text(str(percentage).replace(".", ",")) + "%"
-    reference = (
-        f"{text(attendance.get('period'))} · {text(attendance.get('present'))} de "
-        f"{text(attendance.get('required'))} dias com sessões deliberativas"
-    )
-    return render_metric(
-        "Presença em plenário", value, reference, action
-    ) + render_attendance_history(months)
-
-
-def render_attendance_history(months):
-    if not months:
-        return ""
-    items = []
-    for month in reversed(months):
-        percentage = month.get("percentage")
-        value = str(percentage).replace(".", ",") + "%" if percentage else "Não disponível"
-        partial = " · parcial" if month.get("partial") else ""
-        source = official_url(month.get("sourceUrl"))
-        link = (
-            f' · <a href="{text(source)}" target="_blank" rel="noopener noreferrer">'
-            'Fonte oficial</a>'
-            if source else ""
-        )
-        items.append(
-            f"<li>{text(month.get('period'))}: {text(value)} · "
-            f"{text(month.get('present'))} de {text(month.get('required'))} dias{partial}"
-            f"{link}</li>"
-        )
+    chips = render_tenures(profile) + render_person_facts(profile)
+    chip_list = f'<div class="ds-profile-chips">{chips}</div>' if chips else ""
+    name = text(title_case_name(profile.get("display_name")), "Perfil público")
     return (
-        '<dialog id="attendance-history" class="attendance-dialog" '
-        'aria-labelledby="attendance-history-title">'
-        '<header><h2 id="attendance-history-title">Histórico mensal de presença</h2>'
-        '<form method="dialog"><button autofocus aria-label="Fechar histórico">'
-        'Fechar</button></form></header><div class="attendance-dialog-content">'
-        "<p>Presença em dias com sessões deliberativas da Câmara dos Deputados. "
-        "Meses sem dados não "
-        "significam falta nem frequência completa.</p><ul>"
-        + "".join(items)
-        + "</ul></div></dialog>"
+        '<section class="ds-profile-identity" aria-label="Identidade">'
+        f'{render_portrait(profile)}<div class="ds-profile-identity__body">'
+        f'<span class="ds-profile-identity__eyebrow">Perfil público</span><h1>{name}</h1>'
+        f"{render_offices(profile)}{chip_list}</div></section>"
     )

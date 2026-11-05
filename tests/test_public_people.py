@@ -37,7 +37,9 @@ class PeopleRepository:
             "cpf": "PRIVATE",
             "civil_name": "PRIVATE",
         }
-        self.rows = [{"person_id": PERSON_ID, "display_name": "Nome público", "slug": "nome"}]
+        self.rows = [
+            {"person_id": PERSON_ID, "display_name": "Nome público", "slug": "nome", "sort_key": ""}
+        ]
 
     def read_snapshot(self):
         return nullcontext()
@@ -135,7 +137,9 @@ def test_search_cursor_is_bound_to_filters_and_reference_date():
     repository.rows *= 2
     page = search_people(repository, PeopleQuery(q="Nome", limit=1), TODAY)
     cursor = page["next_cursor"]
-    assert decode_people_cursor(PeopleQuery(q="Nome", cursor=cursor), TODAY)[1] == PERSON_ID
+    assert decode_people_cursor(PeopleQuery(q="Nome", cursor=cursor), TODAY) == (
+        "", "Nome público", PERSON_ID
+    )
     with pytest.raises(PublicProfileError, match="INVALID_CURSOR"):
         search_people(repository, PeopleQuery(q="Outra", cursor=cursor), TODAY)
     with pytest.raises(PublicProfileError, match="INVALID_CURSOR"):

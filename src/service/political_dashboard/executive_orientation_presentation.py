@@ -134,12 +134,3 @@ def render_orientation_evidence_sources(cell):
         + '</p>'
         for url, row in sources.items()
     )
-
-
-def render_executive_orientation(executive, view, year):
-    if view != "political_orientation" or year is None:
-        return ""
-    from service.political_dashboard.orientation_timeline import executive_orientation_cell
-
-    cell = executive_orientation_cell(executive, year)
-    return f"<p><strong>Abordagem do governo: {text(cell['label'])}</strong></p>"

@@ -1,0 +1,22 @@
+/* Civic guide, Step 4 Revisão (reference: Como Funciona v2). */
+.civic-guide .ds-civic-review { gap: 24px; padding-block: 64px; }
+.ds-civic-review .ds-heading--section { font-size: clamp(30px, 4vw, 42px); line-height: 1.1; }
+.ds-civic-step-label { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-brand); }
+.civic-guide .ds-civic-review > .ds-civic-lead { margin: 0; font-size: 18px; line-height: 1.55; max-width: 680px; color: var(--color-ink-soft); }
+.ds-civic-questions { display: flex; flex-direction: column; border-top: 1px solid var(--color-line-strong); max-width: 780px; }
+.ds-civic-review .ds-civic-question, .ds-civic-check { padding: 16px 0; border-bottom: 1px solid var(--color-line-strong); max-width: none; }
+.ds-civic-review .ds-civic-question > summary, .ds-civic-check__question { margin: 0; font-size: 17px; font-weight: 600; }
+.civic-guide .ds-civic-review .ds-civic-answer { margin: 10px 0 0; font-size: 16px; line-height: 1.6; color: var(--color-ink-soft); }
+.ds-civic-check { display: flex; flex-direction: column; gap: 12px; }
+.ds-civic-check__choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.ds-civic-check .ds-civic-choice { font: inherit; font-size: 15px; min-height: 44px; padding: 0 18px; border: 1px solid var(--color-line-strong); border-radius: var(--radius-small); background: var(--color-surface); color: var(--color-ink); cursor: pointer; }
+.ds-civic-choice[aria-pressed="true"][data-correct="true"] { border-color: var(--color-brand); background: var(--color-brand-tint); }
+.ds-civic-choice[aria-pressed="true"][data-correct="false"] { border-color: var(--color-wrong); background: var(--color-wrong-tint); }
+.ds-civic-feedback { margin: 0; font-size: 15px; line-height: 1.5; }
+.ds-civic-feedback:not(:empty) { padding: 12px 14px; border-radius: var(--radius-small); }
+.ds-civic-feedback[data-correct="true"] { background: var(--color-brand-tint); }
+.ds-civic-feedback[data-correct="false"] { background: var(--color-wrong-tint); }
+.ds-civic-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.ds-civic-action { min-height: 48px; padding: 0 20px; }
+.ds-civic-reset { font: inherit; font-size: 15px; min-height: 48px; padding: 0 16px; border: 0; background: none; color: var(--color-muted); text-decoration: underline; cursor: pointer; }
+.ds-civic-reset[hidden] { display: none; }

@@ -95,24 +95,3 @@ def category_cell(categories, state):
     color = ORIENTATION_COLORS[categories[0]] if len(categories) == 1 else "#9d8ca2"
     qualifier = "mais de uma classificação documentada" if state == "mixed" else "cobertura parcial"
     return {"label": label, "color": color, "state": state, "qualifier": qualifier}
-
-
-def render_orientation_annual_summary(data):
-    if data.get("view") != "political_orientation":
-        return ""
-    from service.political_dashboard.executive_orientation_presentation import (
-        render_orientation_evidence_sources,
-    )
-    from service.political_dashboard.timeline import timeline_cell, timeline_series
-    from service.public_profile_web.security import text
-
-    year = int(data.get("year", data["as_of"][:4]))
-    row = next((row for row in data.get("history", []) if row["year"] == year), {"year": year})
-    items = []
-    for code, label, kind in timeline_series(data):
-        cell = timeline_cell(row, code, kind, "political_orientation")
-        detail = text(cell.get("detail", "Sem classificação datada disponível."))
-        items.append(f'<li><strong>{text(label)}: {text(cell["label"])}</strong>'
-                     f'<p>{detail}</p>{render_orientation_evidence_sources(cell)}</li>')
-    return (f'<details class="panorama-orientation-year" open><summary>'
-            f'Abordagens documentadas em {year}</summary><ul>{"".join(items)}</ul></details>')

@@ -45,11 +45,12 @@ def render_proposition_pagination(profile, projection):
         links.append(
             f'<a href="{path}?proposal_page={page - 1}#person-propositions">← Anteriores</a>'
         )
-    if projection.get("truncated"):
-        links.append(
-            f'<a href="{path}?proposal_page={page + 1}#person-propositions">Mais propostas →</a>'
-        )
-    return '<nav class="pagination" aria-label="Propostas">' + " · ".join(links) + "</nav>"
+    if not links:
+        return ""
+    return (
+        '<nav class="pagination ds-profile-more" aria-label="Propostas">'
+        + " · ".join(links) + "</nav>"
+    )
 
 
 def render_authorship_card(item):

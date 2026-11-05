@@ -107,7 +107,7 @@ def test_portal_search_cache_avoids_connection_on_hit(monkeypatch):
     app.fetch_people({})
     app.fetch_people({})
     assert len(connections) == len(searches) == 1
-    assert searches[0].limit == 6
+    assert searches[0].limit == 24
     app.fetch_people({"uf": "SP"})
     assert len(connections) == len(searches) == 2
 
@@ -122,54 +122,61 @@ def test_sql_fetches_only_page_plus_one_without_offset():
         calls.append((sql, parameters)) or SimpleNamespace(fetchall=lambda: [])
     ))
     PublicPeopleRepository(connection).search_people(PeopleQuery(), date(2026, 10, 19), None)
-    assert calls[0][1][-1] == 7
+    assert calls[0][1]["limit"] == 25
     assert "OFFSET" not in calls[0][0]
-    assert "SELECT p.id::text AS person_id,p.display_name,p.slug" in calls[0][0]
+    assert "SELECT p.id AS id,p.id::text AS person_id,p.display_name,p.slug" in calls[0][0]
 
 
-def test_html_shell_never_queries_database_and_keeps_filter_fallback():
+def test_initial_html_contains_public_people_and_the_enhancement_script():
+    from types import SimpleNamespace
+
     from application.public_portal import dispatch_portal_request
 
-    response = dispatch_portal_request(object(), "/pessoas?q=Nome&uf=SP")
+    calls = []
+    app = SimpleNamespace(fetch_people=lambda parameters: calls.append(parameters) or {
+        "items": [{"person_id": "00000000-0000-0000-0000-000000000001",
+                   "display_name": "Nome público"}],
+    }, fetch_political_party_options=lambda: ())
+    response = dispatch_portal_request(app, "/pessoas?q=Nome&uf=SP")
     assert response.status == 200
     html = response.body.decode()
-    assert 'data-viewport-page' in html
-    assert '/assets/people-viewport.js' in html
-    assert 'q=Nome&amp;uf=SP&amp;limit=6' in html
-    assert 'Carregar 6 pessoas por página' in html
-    assert dispatch_portal_request(object(), "/pessoas?q=x").status == 400
+    assert 'data-viewport-page' not in html
+    assert '<script src="/assets/people-search-enhance.js" defer></script>' in html
+    assert '/pessoas/00000000-0000-0000-0000-000000000001' in html
+    assert 'Nome público' in html
+    assert 'Carregando pessoas' not in html
+    assert calls == [{"q": "Nome", "uf": "SP"}]
 
 
-def test_viewport_asset_is_local_bounded_and_has_no_resize_requests():
+def test_people_search_script_is_local_and_never_injects_markup_strings():
     from application.public_portal import dispatch_portal_request
 
-    response = dispatch_portal_request(object(), "/assets/people-viewport.js")
+    response = dispatch_portal_request(object(), "/assets/people-search-enhance.js")
     assert response.status == 200
     assert response.content_type.startswith("text/javascript")
     script = response.body.decode()
-    assert 'Math.min(24' in script
-    assert 'Math.max(1' in script
-    assert 'getBoundingClientRect().top' in script
-    assert 'location.replace' in script
-    assert 'addEventListener' not in script
-    assert dispatch_portal_request(object(), "/assets/people-viewport.js?x=1").status == 404
+    assert "data-people-more" in script
+    assert "DOMParser" in script
+    for forbidden in ("innerHTML", "document.write", "eval(", "outerHTML"):
+        assert forbidden not in script
+    assert dispatch_portal_request(object(), "/assets/people-search-enhance.js?x=1").status == 404
 
 
-def test_shell_and_results_keep_filters_visible_and_same_measured_header():
-    from service.public_profile_web.search import render_search_page, render_search_shell
+def test_shell_and_results_keep_filters_visible_and_same_header():
+    from service.public_profile_web.search import render_search_page
 
     filters = {"q": "Nome", "uf": "SP"}
-    shell = render_search_shell(filters)
+    shell = render_search_page(filters, {"items": []})
     page = render_search_page({**filters, "limit": "3"}, {"items": []})
     for html in (shell, page):
-        assert '<div class="people-filters">' in html
-        assert '<details class="people-filters"' not in html
+        assert '<form id="people-search" class="ds-people-filters"' in html
+        assert '<details class="ds-people-filters"' not in html
         assert '<summary>Filtrar pessoas' not in html
         assert 'Filtros de cargo e UF usam exercício atual documentado.' not in html
         assert '<h1>Resultados da busca</h1>' in html
         assert 'Identidade, vínculos e atuação disponíveis nas fontes consultadas.' in html
         assert 'value="Nome"' in html
-    default_shell = render_search_shell({})
+    default_shell = render_search_page({}, {"items": []})
     default_page = render_search_page({"limit": "3"}, {"items": []})
     assert '<h1>Conheça as trajetórias públicas</h1>' in default_shell
     assert '<h1>Conheça as trajetórias públicas</h1>' in default_page

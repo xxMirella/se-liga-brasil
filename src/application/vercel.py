@@ -14,8 +14,8 @@ from application.public_portal import (
 from service.public_profile import PublicProfileError
 
 CONTENT_SECURITY_POLICY = (
-    "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https:; "
-    "form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
+    "default-src 'none'; script-src 'self'; connect-src 'self'; style-src 'self'; font-src 'self'; "
+    "img-src 'self' https:; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
 )
 
 

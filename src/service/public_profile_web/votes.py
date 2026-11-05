@@ -84,6 +84,23 @@ def render_event_date(item):
     )
 
 
+def render_item_date(item):
+    """Compact card date: dd/mm/yyyy, or mm/yyyy when only the month is known."""
+    occurred = str(item.get("occurred_on") or "")
+    precision = item.get("date_precision")
+    try:
+        parsed = date.fromisoformat(occurred[:10])
+    except ValueError:
+        return '<span class="ds-profile-item__date">Sem data</span>'
+    if precision in {"day", "instant"}:
+        label = parsed.strftime("%d/%m/%Y")
+    elif precision == "month":
+        label = parsed.strftime("%m/%Y")
+    else:
+        return '<span class="ds-profile-item__date">Data completa não confirmada</span>'
+    return (f'<time class="ds-profile-item__date" datetime="{text(occurred)}">{label}</time>')
+
+
 def render_month_group(month, items):
     from service.public_profile_web.vote_groups import render_monthly_vote_cards
 
@@ -96,7 +113,8 @@ def render_month_group(month, items):
     heading_id = "timeline-month-" + (month or "unknown")
     return (
         f'<section class="timeline-group" aria-labelledby="{heading_id}">'
-        f'<h2 class="month-heading" id="{heading_id}">{label}</h2>{cards}</section>'
+        f'<h3 class="month-heading ds-profile-sr-only" id="{heading_id}">{label}</h3>'
+        f"{cards}</section>"
     )
 
 
@@ -120,7 +138,7 @@ def render_votes_timeline(votes, *, maximum_items=100):
         render_month_group(month, records) for month, records in groups.items() if month
     )
     undated = render_month_group(None, groups[None]) if None in groups else ""
-    return '<div class="timeline activity-timeline">' + dated + undated + "</div>"
+    return '<div class="timeline activity-timeline ds-profile-list">' + dated + undated + "</div>"
 
 
 def render_vote_pagination(path, votes, filters):
@@ -130,6 +148,6 @@ def render_vote_pagination(path, votes, filters):
     parameters = {**filters, "cursor": cursor, "tab": "activity"}
     href = query_link(path, parameters)
     return (
-        f'<nav class="pagination" aria-label="Paginação da atuação"><a '
+        f'<nav class="pagination ds-profile-more" aria-label="Paginação da atuação"><a '
         f'href="{href}">Próximas votações →</a></nav>'
     )

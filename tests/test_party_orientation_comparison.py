@@ -192,7 +192,10 @@ def test_invalid_filters_return_html_400(query):
 def test_stylesheet_navigation_and_cache():
     css = dispatch_portal_request(object(), "/assets/party-comparison.css")
     assert css.status == 200 and ".comparison-table" in css.body.decode()
-    assert 'aria-current="page"' in render_party_comparison_page()
+    page = render_party_comparison_page()
+    assert "Comparação de classificações" in page  # the page still exists at its own address
+    header = page.split("<main", 1)[0]
+    assert 'href="/comparacao-de-classificacoes"' not in header  # not in the menu
     assert "s-maxage=3600" in public_cache_policy("/comparacao-de-classificacoes", 200)
     assert public_cache_policy("/comparacao-de-classificacoes", 400) == "no-store"
     assert public_cache_policy("/assets/party-comparison.css", 200).startswith("public")

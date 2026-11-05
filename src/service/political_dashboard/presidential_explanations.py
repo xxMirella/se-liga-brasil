@@ -2,9 +2,7 @@
 
 from datetime import date
 
-from service.political_dashboard.executive_context import render_government_context_observations
 from service.political_dashboard.presidential_transition_catalog import REVIEWED_TRANSITION_EVENTS
-from service.public_profile_web.security import official_url, text
 
 PRESIDENTIAL_EVENTS = (
     (2018, "2018-05-15", "Renomeação da legenda",
@@ -151,80 +149,3 @@ def presidential_year_label(explanation):
     if explanation["events"] and not labels:
         labels.append("transição documentada")
     return " · ".join(labels)
-
-
-def presidential_source(url, label="Verificar fonte"):
-    safe = official_url(url)
-    return (f'<a href="{text(safe)}" target="_blank" rel="noopener noreferrer">'
-            f'{text(label)} ↗</a>') if safe else ""
-
-
-def render_presidential_record(record):
-    start, end = record.get("starts_on"), record.get("ends_before")
-    period = f'{start or "Início não informado"} → {end or "fim ainda não documentado"}'
-    duration = presidential_duration(record)
-    qualifier = f" · {duration} dias entre as datas documentadas" if duration is not None else ""
-    interim = " · exercício interino" if is_interim(record) else ""
-    capacity_source = presidential_source(
-        record.get("exercise_capacity_source_url"), "Fonte da interinidade"
-    )
-    return (f'<li><strong>{text(record.get("name") or "Nome não informado")}</strong>'
-            f'<p>{text(period + qualifier + interim)}</p>'
-            f'{presidential_source(record.get("source_url"))} '
-            f'{capacity_source}'
-            '</li>')
-
-
-def render_presidential_year(explanation, selected_year=None):
-    year = explanation["year"]
-    records = "".join(render_presidential_record(record) for record in explanation["records"])
-    events = "".join(f'<li><strong>{text(event[1])} · {text(event[2])}</strong>'
-                     f'<p>{text(event[3])}</p>{presidential_source(event[4])}</li>'
-                     for event in explanation["events"])
-    changes = "".join(f'<li>{text(change["date_label"])} · {text(change["before"])} → '
-                      f'{text(change["after"])} <span>{text(change["gap_note"], "")}</span> '
-                      f'{presidential_source(change["source_url"])}</li>'
-                      for change in explanation["political_party_changes"])
-    expanded = " open" if year == selected_year else ""
-    return (f'<details id="presidency-year-{year}" class="panorama-presidential-year"{expanded}>'
-            f'<summary>{year} · {text(presidential_year_label(explanation))}</summary>'
-            f'<ol>{records}</ol>' + (f'<ul>{events + changes}</ul>' if events or changes else "")
-            + render_government_context_observations(explanation.get("government_context"))
-            + '</details>')
-
-
-def render_presidential_explanations(data):
-    if data.get("level") != "federal":
-        return ""
-    explanations = [item for row in data.get("history", [])
-                    if (item := presidential_year_explanation(row))]
-    if not explanations:
-        return ""
-    selected = data.get("year")
-    content = "".join(render_presidential_year(item, selected) for item in explanations)
-    expanded = " open" if any(item["year"] == selected for item in explanations) else ""
-    content = (f'<details class="panorama-presidential-all-years"{expanded}>'
-               f'<summary>Explorar {len(explanations)} anos com transições</summary>'
-               f'{content}</details>')
-    return ('<section class="panorama-presidential-transitions" '
-            'aria-labelledby="presidential-transitions-title">'
-            '<h3 id="presidential-transitions-title">Entenda as mudanças na Presidência</h3>'
-            '<p>Os círculos na faixa presidencial indicam anos com transições.</p>'
-            f'{content}</section>')
-
-
-def render_presidential_markers(history, years, x_start, width, y, view="political_party"):
-    elements = []
-    for row in history:
-        explanation = presidential_year_explanation(row)
-        if not explanation:
-            continue
-        x = x_start + (row["year"] - years[0] + .5) * width
-        label = f'{row["year"]} · {presidential_year_label(explanation)} · Ver explicação abaixo'
-        href = f'/panorama?territory=BR&amp;year={row["year"]}#presidency-year-{row["year"]}'
-        if view == "political_orientation":
-            href = href.replace("#presidency", "&amp;view=political_orientation#presidency")
-        elements.append(f'<a href="{href}" aria-label="{text(label)}">'
-                        f'<title>{text(label)}</title><circle cx="{x:.2f}" cy="{y - 6}" '
-                        'r="4" fill="#183f31" stroke="#fff" stroke-width="1"/></a>')
-    return "".join(elements)

@@ -1,0 +1,63 @@
+/* People search: hero, filters and form controls (reference: Pessoas v2). */
+.ds-people-hero { padding: 16px 0 28px; display: flex; flex-direction: column; gap: 18px; }
+.ds-people-hero h1 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(34px, 5.5vw, 54px); line-height: 1.05; letter-spacing: -.01em; }
+.ds-people-hero__lead { margin: 0; font-size: 18px; line-height: 1.5; color: var(--color-ink-soft); max-width: 620px; }
+.ds-people-search { display: flex; align-items: center; gap: 12px; max-width: 680px; height: 56px; padding: 0 18px; border: 2px solid var(--color-ink); border-radius: var(--radius-medium); background: var(--color-surface); }
+.ds-people-search:focus-within { outline: 3px solid var(--color-brand); outline-offset: 2px; }
+.ds-people-search__icon { width: 16px; height: 16px; border: 2px solid var(--color-ink); border-radius: 50%; flex-shrink: 0; }
+.ds-people-search input { border: 0; background: transparent; font-size: 18px; width: 100%; min-width: 0; min-height: 0; padding: 0; outline: none; color: var(--color-ink); }
+
+.ds-people-panel { background: var(--color-surface); border: 1px solid var(--color-line-strong); border-radius: 14px; padding: 20px 22px; display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; }
+.ds-people-panel__text { display: flex; flex-direction: column; gap: 4px; flex: 1 1 260px; }
+.ds-people-panel h2 { margin: 0; font-family: var(--font-body); font-size: 19px; font-weight: 600; line-height: 1.2; }
+.ds-people-panel p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--color-ink-soft); }
+
+.ds-people-filter-row { padding-top: 28px; display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-end; }
+.ds-people-field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 600; color: var(--color-muted); border: 0; margin: 0; padding: 0; min-width: 0; }
+.ds-people-field legend { padding: 0; margin-bottom: 4px; }
+.ds-people-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.ds-people-pill { position: relative; display: block; }
+.ds-people-pill input { position: absolute; opacity: 0; width: 1px; height: 1px; min-height: 0; margin: 0; }
+.ds-people-pill span { display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border: 1px solid var(--color-line-strong); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-ink); font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer; }
+.ds-people-pill input:checked + span { background: var(--color-ink); border-color: var(--color-ink); color: #fff; }
+.ds-people-pill input:focus-visible + span { outline: 3px solid var(--color-brand); outline-offset: 2px; }
+
+.ds-people-select { height: 40px; min-height: 0; min-width: 160px; padding: 0 16px; border: 1px solid var(--color-line-strong); border-radius: 999px; background: var(--color-surface); color: var(--color-ink); font-size: 15px; font-weight: 400; }
+.ds-people-select--large { height: 48px; padding: 0 20px; border-color: var(--color-ink); font-size: 16px; min-width: 220px; }
+.ds-people-filter-row .ds-button { min-height: 40px; }
+
+/* The opened list is browser UI, square by default. Where customizable selects exist the list is
+   styled to match the closed control; elsewhere the native list is kept. */
+@supports (appearance: base-select) {
+  .ds-people-select, .ds-people-select::picker(select) { appearance: base-select; }
+  .ds-people-select { display: flex; align-items: center; justify-content: space-between; gap: 10px; line-height: 1.2; cursor: pointer; }
+  .ds-people-select::picker(select) {
+    box-sizing: border-box; margin-block: 6px; padding: 6px; max-height: min(320px, 50vh);
+    border: 1px solid var(--color-line-strong); border-radius: 18px;
+    background: var(--color-surface); box-shadow: 0 14px 36px rgb(29 29 27 / 0.16);
+  }
+  .ds-people-select::picker-icon { color: var(--color-muted); transition: rotate 0.2s ease; }
+  .ds-people-select:open::picker-icon { rotate: 180deg; }
+  .ds-people-select option {
+    padding: 10px 14px; border-radius: 12px; font-size: 15px; color: var(--color-ink);
+  }
+  .ds-people-select option:hover, .ds-people-select option:focus-visible {
+    background: var(--color-page);
+  }
+  .ds-people-select option:checked { font-weight: 600; background: var(--color-page); }
+  .ds-people-select option::checkmark { display: none; }
+  .ds-people-select::picker(select)::-webkit-scrollbar { width: 14px; }
+  .ds-people-select::picker(select)::-webkit-scrollbar-track {
+    background: transparent; margin-block: 10px;
+  }
+  .ds-people-select::picker(select)::-webkit-scrollbar-thumb {
+    background: var(--color-line-strong); background-clip: padding-box;
+    border: 4px solid transparent; border-radius: 999px;
+  }
+  .ds-people-select::picker(select)::-webkit-scrollbar-thumb:hover { background: var(--color-muted); background-clip: padding-box; }
+}
+
+@media (max-width: 480px) {
+  .ds-people-panel { padding: 18px 16px; }
+  .ds-people-select--large { width: 100%; }
+}

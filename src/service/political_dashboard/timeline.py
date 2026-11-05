@@ -1,21 +1,12 @@
 """Annual party bands keep geography fixed and never manufacture undocumented majorities."""
 
-from itertools import groupby
-from urllib.parse import urlencode
 
 from service.political_dashboard.composition_charts import is_political_party
-from service.political_dashboard.historical_events import (
-    historical_context_height,
-    render_historical_event_sources,
-    render_historical_events,
-)
 from service.political_dashboard.political_palette import (
     MIXED_COLOR,
     UNKNOWN_COLOR,
     political_party_color,
 )
-from service.political_dashboard.presidential_explanations import render_presidential_markers
-from service.public_profile_web.security import text
 
 TIMELINE_START_YEAR = 1880
 
@@ -33,16 +24,6 @@ def timeline_series(data):
     return [("senado", "Senado · " + data["uf"], "legislative"),
             (government, "Governo estadual", "executive"),
             (assembly, "Assembleia Legislativa", "legislative")]
-
-
-def timeline_year_url(data, year):
-    parameters = {"territory": "BR" if data["level"] == "federal" else data["uf"],
-                  "year": year}
-    if data.get("municipality_ibge"):
-        parameters["municipality_ibge"] = data["municipality_ibge"]
-    if data.get("view") == "political_orientation":
-        parameters["view"] = "political_orientation"
-    return "/panorama?" + urlencode(parameters) + "#panorama-results"
 
 
 def timeline_institution(row, code):
@@ -138,113 +119,3 @@ def executive_cell(institution):
         return {"label": " / ".join(parties), "color": MIXED_COLOR, "state": "mixed"}
     return {"label": parties[0], "color": political_party_color(parties[0]),
             "state": "known" if snapshot else "partial"}
-
-
-def timeline_cell_description(cell, year):
-    coverage = {"partial": "cobertura parcial", "mixed": "mais de um partido no ano",
-                "unknown": "partido não informado", "missing": "sem dados",
-                "not_applicable": "instituição ainda não existente",
-                "suspended": "funcionamento institucional suspenso neste ano"}
-    qualifier = cell.get("qualifier", coverage.get(cell["state"]))
-    description = f"{year} · {cell['label']}" + (f" · {qualifier}" if qualifier else "")
-    return description + (f" · {cell['detail']}" if cell.get("detail") else "")
-
-
-def render_timeline_cell(cell, data, year, x, y, width):
-    description = text(timeline_cell_description(cell, year))
-    rectangle = (f'<rect x="{x:.2f}" y="{y}" width="{width:.2f}" height="32" '
-                 'fill="transparent"/>')
-    if year < TIMELINE_START_YEAR or cell["state"] in {"missing", "not_applicable"}:
-        return ""
-    return (f'<a href="{text(timeline_year_url(data, year))}" '
-            f'aria-label="{description}"><title>{description}</title>{rectangle}</a>')
-
-
-def timeline_band_runs(cells):
-    """Merge consecutive display identities in one pass, independent of coverage flags."""
-    return [list(group) for _, group in groupby(enumerate(cells), key=lambda pair: (
-        pair[1]["label"], pair[1]["color"],
-        pair[1]["state"] in {"missing", "not_applicable"}
-    ))]
-
-
-def render_timeline_run(run, x_start, width, y):
-    cell = run[0][1]
-    run_width = len(run) * width
-    gap = min(3, width * .4)
-    x = x_start + run[0][0] * width + gap / 2
-    fill = "#edf2ee" if cell["state"] == "missing" else cell["color"]
-    rectangle = (f'<rect class="panorama-timeline-band" x="{x:.2f}" y="{y}" '
-                 f'width="{run_width - gap:.2f}" height="32" fill="{fill}" rx="3">'
-                 f'<title>{text(cell["label"])}</title></rect>')
-    label = cell["label"]
-    if run_width - gap < max(50, len(label) * 6):
-        return rectangle
-    midpoint = x_start + (run[0][0] + len(run) / 2) * width
-    return rectangle + (f'<text x="{midpoint:.2f}" y="{y + 16}" text-anchor="middle" '
-                        'dominant-baseline="middle" class="panorama-band-label">'
-                        f'{text(label)}</text>')
-
-
-def render_timeline_row(cells, data, years, x_start, width, y):
-    blocks = "".join(render_timeline_run(run, x_start, width, y)
-                     for run in timeline_band_runs(cells))
-    annual_links = "".join(render_timeline_cell(cell, data, year, x_start + offset * width,
-                                               y, width)
-                           for offset, (year, cell) in enumerate(zip(years, cells, strict=True)))
-    return blocks + annual_links
-
-
-def render_timeline_axis(years, x_start, width):
-    ticks = {years[0], years[-1]} | {year for year in years if year % 20 == 0}
-    return "".join(
-        f'<text x="{x_start + (year - years[0] + .5) * width:.2f}" y="23" '
-        f'text-anchor="middle">{year}</text>' for year in sorted(ticks)
-    )
-
-
-def render_timeline_bands(data):
-    history = [row for row in data.get("history", []) if row["year"] >= TIMELINE_START_YEAR]
-    if not history:
-        return '<p class="panorama-caption">Histórico ainda não disponível neste recorte.</p>'
-    history_by_year = {row["year"]: row for row in history}
-    first_year = TIMELINE_START_YEAR
-    years = list(range(first_year, max(history_by_year) + 1))
-    history = [history_by_year.get(year, {"year": year}) for year in years]
-    series = timeline_series(data)
-    x_start, plot_width = 155, 1015
-    width = plot_width / len(years)
-    elements = [render_timeline_axis(years, x_start, width),
-                render_historical_events(years[0], years[-1], x_start, width)]
-    for index, (code, label, kind) in enumerate(series):
-        y = historical_context_height() + index * 58
-        cells = [timeline_cell(row, code, kind, data.get("view", "political_party"))
-                 for row in history]
-        elements.append(f'<text x="0" y="{y + 20}">{text(label)}</text>')
-        elements.append(render_timeline_row(cells, data, years, x_start, width, y))
-        if code == "presidency":
-            elements.append(render_presidential_markers(
-                history, years, x_start, width, y, data.get("view", "political_party")
-            ))
-    selected = data.get("year", int(data["as_of"][:4]))
-    height = historical_context_height() + len(series) * 58
-    selection = render_timeline_selection(selected, years, x_start, width, height)
-    chart_label = (
-        "Linha do tempo das abordagens políticas por ano"
-        if data.get("view") == "political_orientation"
-        else "Linha do tempo dos partidos por ano"
-    )
-    return f'''<div class="panorama-timeline-scroll"><svg class="panorama-timeline"
-viewBox="0 0 1180 {height}" role="group" aria-label="{chart_label}">
-{"".join(elements)}{selection}</svg></div>
-{render_historical_event_sources()}'''
-
-
-
-def render_timeline_selection(selected, years, x_start, width, height):
-    if not years[0] <= selected <= years[-1]:
-        return ""
-    x = x_start + (selected - years[0] + .5) * width
-    return (f'<path d="M{x:.2f} {historical_context_height() - 10}V{height - 10}" '
-            'stroke="#b89432" stroke-width="2" pointer-events="none"/>'
-            f'<text x="{x:.2f}" y="{height - 2}" text-anchor="middle">{selected}</text>')

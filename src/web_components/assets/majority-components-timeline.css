@@ -1,0 +1,134 @@
+/* Opening and timeline of the majority panorama, ported from the "Panorama v3" prototype.
+   Reusable primitives first (swatch, legend, choice links, dot grid, column chart), then sections. */
+:root {
+  --color-sunken: #f1efe9;
+  --color-rejected-tint: oklch(0.95 0.03 40);
+  --color-unrepresented: oklch(0.55 0.15 320);
+}
+
+/* Bloc scope: --bloc and --bloc-tint for a container that is not itself painted with the bloc. */
+.ds-bloc-scope--left { --bloc: oklch(0.5 0.14 25); --bloc-tint: oklch(0.96 0.03 25); }
+.ds-bloc-scope--center { --bloc: oklch(0.5 0.14 75); --bloc-tint: oklch(0.96 0.03 75); }
+.ds-bloc-scope--right { --bloc: oklch(0.5 0.14 250); --bloc-tint: oklch(0.96 0.03 250); }
+.ds-bloc-scope--far-right { --bloc: oklch(0.5 0.14 295); --bloc-tint: oklch(0.96 0.03 295); }
+.ds-bloc-scope--undetermined { --bloc: #bdb8ad; --bloc-tint: var(--color-sunken); }
+.ds-bloc-scope--controversial { --bloc: #a89fb0; --bloc-tint: var(--color-sunken); }
+.ds-bloc-scope--unaffiliated { --bloc: #d6d1c6; --bloc-tint: var(--color-sunken); }
+
+/* Colors of the didactic population groups (explainer), usable like a bloc. */
+.ds-bloc--chocolate-likes { --bloc: oklch(0.42 0.08 50); }
+.ds-bloc--chocolate-allergic { --bloc: oklch(0.55 0.15 320); }
+.ds-bloc--chocolate-dislikes { --bloc: oklch(0.62 0.08 190); }
+
+/* Swatch and legend */
+.ds-swatch { display: inline-block; flex-shrink: 0; border-radius: 3px; }
+.ds-swatch--sm { width: 12px; height: 12px; }
+.ds-swatch--md { width: 14px; height: 14px; }
+.ds-swatch--round { border-radius: 50%; }
+.ds-legend { display: flex; flex-wrap: wrap; gap: 14px; }
+.ds-legend__item { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; }
+.ds-legend--compact .ds-legend__item { gap: 6px; font-size: 13px; font-weight: 400; color: var(--color-ink-soft); }
+.ds-legend__half-line { width: 14px; border-top: 2px dashed var(--color-ink); }
+
+/* Choice links */
+.ds-choice { font-size: 14px; color: var(--color-ink); text-decoration: none; background: var(--color-surface); }
+.ds-choice-group--segmented { display: flex; width: fit-content; max-width: 100%; border: 1px solid var(--color-line-strong); border-radius: var(--radius-small); overflow: hidden; height: 44px; }
+.ds-choice-group--segmented .ds-choice { display: flex; align-items: center; padding: 0 16px; font-size: 15px; font-weight: 500; white-space: nowrap; }
+.ds-choice-group--segmented .ds-choice[aria-current="true"] { background: var(--color-ink); color: #fff; }
+.ds-choice-group--pill, .ds-choice-group--option, .ds-choice-group--swatch { display: flex; flex-wrap: wrap; gap: 6px; }
+.ds-choice-group--pill .ds-choice, .ds-choice-group--option .ds-choice { display: inline-flex; align-items: center; min-height: 40px; padding: 6px 12px; line-height: 1.25; border: 1px solid var(--color-line-strong); border-radius: var(--radius-pill); }
+.ds-choice-group--pill .ds-choice[aria-current="true"] { background: var(--color-ink); border-color: var(--color-ink); color: #fff; }
+.ds-choice-group--option .ds-choice { border-radius: var(--radius-small); text-align: left; }
+.ds-choice-group--option .ds-choice[aria-current="true"] { background: var(--color-sunken); border-color: var(--color-ink); }
+.ds-choice-group--swatch .ds-choice { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; font-size: 15px; font-weight: 600; border: 2px solid var(--color-line-strong); border-radius: var(--radius-pill); }
+.ds-choice-group--swatch .ds-choice[aria-current="true"] { border-color: var(--bloc, var(--color-ink)); background: var(--bloc-tint, var(--color-sunken)); }
+
+/* Dot grid: 20 columns of equal dots */
+.ds-dot-grid { display: grid; grid-template-columns: repeat(20, 1fr); gap: 3px; max-width: 420px; }
+.ds-dot-grid > span { aspect-ratio: 1; border-radius: 50%; }
+
+/* Column chart: bar height = tens + ones, so any 0-100 value needs no inline style. */
+.ds-pct-tens-0 { --pct-tens: 0%; }
+.ds-pct-tens-1 { --pct-tens: 10%; }
+.ds-pct-tens-2 { --pct-tens: 20%; }
+.ds-pct-tens-3 { --pct-tens: 30%; }
+.ds-pct-tens-4 { --pct-tens: 40%; }
+.ds-pct-tens-5 { --pct-tens: 50%; }
+.ds-pct-tens-6 { --pct-tens: 60%; }
+.ds-pct-tens-7 { --pct-tens: 70%; }
+.ds-pct-tens-8 { --pct-tens: 80%; }
+.ds-pct-tens-9 { --pct-tens: 90%; }
+.ds-pct-tens-10 { --pct-tens: 100%; }
+.ds-pct-ones-0 { --pct-ones: 0%; }
+.ds-pct-ones-1 { --pct-ones: 1%; }
+.ds-pct-ones-2 { --pct-ones: 2%; }
+.ds-pct-ones-3 { --pct-ones: 3%; }
+.ds-pct-ones-4 { --pct-ones: 4%; }
+.ds-pct-ones-5 { --pct-ones: 5%; }
+.ds-pct-ones-6 { --pct-ones: 6%; }
+.ds-pct-ones-7 { --pct-ones: 7%; }
+.ds-pct-ones-8 { --pct-ones: 8%; }
+.ds-pct-ones-9 { --pct-ones: 9%; }
+.ds-column-chart { margin: 0; background: var(--color-surface); border: 1px solid var(--color-line-strong); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+.ds-column-chart__title { font-size: 15px; font-weight: 600; }
+.ds-column-chart__plot { position: relative; height: 180px; display: flex; gap: 4px; align-items: flex-end; border-bottom: 1px solid var(--color-ink); }
+.ds-column-chart__plot::after { content: ""; position: absolute; left: 0; right: 0; bottom: 50%; border-top: 2px dashed var(--color-ink); pointer-events: none; }
+.ds-column-chart__column { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; gap: 3px; color: var(--color-ink); text-decoration: none; }
+.ds-column-chart__value { font-size: 12px; font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+.ds-column-chart__bar { height: calc(var(--pct-tens, 0%) + var(--pct-ones, 0%)); border-radius: 3px 3px 0 0; }
+.ds-column-chart__column[aria-current="true"] .ds-column-chart__bar { outline: 2px solid var(--color-ink); outline-offset: 2px; }
+.ds-column-chart__half { position: absolute; right: 0; bottom: 50%; font-size: 11px; font-weight: 600; background: var(--color-surface); padding: 0 4px; pointer-events: none; }
+.ds-column-chart__axis { display: flex; gap: 4px; }
+.ds-column-chart__axis span { flex: 1; min-width: 0; text-align: center; font-family: var(--font-mono); font-size: 10px; color: var(--color-muted); overflow: hidden; }
+
+/* Opening section */
+.ds-opening { padding: 44px 0 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 32px; align-items: center; border-bottom: 1px solid var(--color-line); }
+.ds-opening__intro { display: flex; flex-direction: column; gap: 14px; }
+.ds-opening__title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(36px, 6vw, 58px); line-height: 1.03; letter-spacing: -.01em; text-wrap: balance; }
+.ds-opening__lead { margin: 0; font-size: 18px; line-height: 1.55; color: var(--color-ink-soft); max-width: 520px; }
+.ds-opening__legend { margin-top: 4px; }
+.ds-rule-card { background: var(--color-surface); border: 1px solid var(--color-line-strong); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 18px; }
+.ds-rule-card__eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-muted); }
+.ds-rule-card__block { display: flex; flex-direction: column; gap: 8px; }
+.ds-rule-card__heading { font-size: 14px; font-weight: 600; }
+.ds-rule-card__groups { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.ds-rule-card__group { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; }
+.ds-rule-card__group span:last-child { white-space: nowrap; }
+.ds-rule-card__seats-text { font-size: 14px; color: var(--color-ink-soft); }
+.ds-rule-card__vote { padding: 12px 14px; border-radius: var(--radius-small); font-size: 15px; line-height: 1.5; }
+.ds-rule-card__vote--approved { background: var(--color-brand-tint); }
+.ds-rule-card__vote--rejected { background: var(--color-rejected-tint); }
+.ds-rule-card__unrepresented { padding: 12px 14px; border-radius: var(--radius-small); border: 1px dashed var(--color-unrepresented); font-size: 15px; line-height: 1.5; }
+
+/* Timeline section */
+.ds-timeline { padding: 48px 0; display: flex; flex-direction: column; gap: 22px; border-bottom: 1px solid var(--color-line); }
+.ds-timeline__header { display: flex; flex-direction: column; gap: 8px; max-width: 760px; }
+.ds-timeline__title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 4vw, 40px); line-height: 1.1; }
+.ds-timeline__lead { margin: 0; font-size: 17px; line-height: 1.55; color: var(--color-ink-soft); }
+.ds-timeline__controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
+.ds-timeline__period-view { display: flex; flex-direction: column; gap: 10px; }
+.ds-timeline__rows { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.ds-timeline__hint { margin: 0; font-size: 13px; color: var(--color-muted); }
+.ds-timeline-row { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; padding: 14px 16px; border-radius: var(--radius-medium); color: var(--color-ink); background: var(--color-surface); border: 2px solid var(--color-line); text-decoration: none; }
+.ds-timeline-row[aria-current="true"] { border-color: var(--color-ink); }
+.ds-timeline-row__period { flex: 0 0 112px; display: flex; flex-direction: column; gap: 2px; }
+.ds-timeline-row__period strong { font-size: 17px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ds-timeline-row__tag { font-size: 12px; color: var(--color-muted); }
+.ds-timeline-row__presidents { flex: 1 1 180px; display: flex; flex-direction: column; gap: 4px; }
+.ds-timeline-row__president { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.ds-timeline-row__houses { flex: 2 1 300px; display: flex; flex-direction: column; gap: 6px; }
+.ds-timeline-row__house { display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 8px; align-items: center; }
+.ds-timeline-row__house-name { font-size: 13px; font-weight: 600; }
+.ds-timeline-row__no-data { margin: 0; font-size: 13px; color: var(--color-muted); }
+.ds-timeline-row .ds-stacked-bar td { border-right: 0; }
+.ds-timeline__bloc-view { display: flex; flex-direction: column; gap: 20px; }
+.ds-timeline__summary { margin: 0; font-size: 19px; line-height: 1.5; max-width: 760px; }
+.ds-timeline__presidents { display: flex; flex-direction: column; gap: 8px; }
+.ds-timeline__presidents-title { font-size: 15px; font-weight: 600; }
+.ds-timeline__chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ds-president-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; min-height: 34px; padding: 0 12px; border-radius: var(--radius-pill); border: 2px solid var(--color-line); background: var(--color-surface); color: var(--color-muted); white-space: nowrap; }
+.ds-president-chip--highlight { border-color: var(--bloc); background: var(--bloc); color: #fff; }
+.ds-timeline__callout { max-width: 780px; display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: var(--color-surface); border: 1px solid var(--color-line); border-radius: 10px; }
+.ds-timeline__callout-mark { font-family: var(--font-display); font-size: 28px; line-height: 1; }
+.ds-timeline__callout p { margin: 0; font-size: 16px; line-height: 1.55; color: var(--color-ink-soft); }
+.ds-timeline__callout strong { color: var(--color-ink); }

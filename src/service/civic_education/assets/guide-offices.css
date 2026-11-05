@@ -1,0 +1,38 @@
+/* Civic guide, Step 2 Cargos (reference: Como Funciona v2). */
+.ds-civic-step { padding-block: 64px; gap: 24px; }
+.ds-civic-step .ds-civic-step__eyebrow { color: var(--color-brand); }
+.ds-civic-step .ds-civic-step__title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(30px, 4vw, 42px); line-height: 1.1; }
+.ds-civic-step > .ds-civic-step__lead { margin: 0; font-size: 18px; line-height: 1.55; max-width: 680px; color: var(--color-ink-soft); }
+.ds-civic-step .ds-civic-step__lead strong { color: var(--color-ink); }
+
+/* Sphere selector: links, so the choice survives a reload and works without scripts */
+.ds-civic-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+.ds-civic-spheres { display: flex; flex-wrap: wrap; gap: 8px; }
+.ds-civic-sphere, .ds-civic-sphere:hover { display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border: 1px solid var(--color-line-strong); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-ink); font-size: 14px; text-decoration: none; }
+.ds-civic-sphere[aria-current="true"], .ds-civic-sphere[aria-current="true"]:hover { border-color: var(--color-ink); background: var(--color-ink); color: var(--color-surface); }
+.ds-civic-toolbar__note { margin: 0; font-size: 13px; color: var(--color-muted); max-width: 360px; }
+
+/* Collapsible blocks */
+.ds-civic-step .ds-civic-intro { max-width: 780px; background: var(--color-surface); border: 1px solid var(--color-line); border-radius: 10px; padding: 14px 18px; }
+.ds-civic-step .ds-civic-intro > .ds-disclosure__body { gap: 10px; margin-top: 10px; font-size: 16px; line-height: 1.6; }
+.ds-civic-step .ds-civic-intro p { margin: 0; line-height: 1.6; }
+.ds-civic-step .ds-civic-rules { border-top: 1px solid var(--color-line); border-bottom: 0; padding: 12px 0 0; max-width: none; }
+.ds-civic-step .ds-civic-rules > summary { font-size: 15px; }
+.ds-civic-step .ds-civic-rules > .ds-disclosure__body { gap: 8px; margin-top: 8px; font-size: 15px; line-height: 1.55; }
+.ds-civic-step .ds-civic-rules p { margin: 0; line-height: 1.55; }
+
+/* Office cards */
+.ds-civic-offices { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; align-items: start; }
+.ds-civic-office { background: var(--color-surface); border: 1px solid var(--color-line-strong); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.ds-civic-office__label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--color-muted); }
+.ds-civic-office__label--executive { color: var(--color-executive); }
+.ds-civic-office__label--legislative { color: var(--color-legislative); }
+.ds-civic-office__name { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 1.1; }
+.ds-civic-step .ds-civic-office__summary { margin: 0; font-size: 17px; line-height: 1.45; }
+.ds-civic-office__rules { margin: 0; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.45; }
+.ds-civic-office__rule { padding: 10px 12px; background: var(--color-page); border-radius: 6px; display: flex; flex-direction: column; gap: 2px; }
+.ds-civic-office__rule dt { font-weight: 600; }
+.ds-civic-office__rule dd { margin: 0; color: var(--color-ink-soft); }
+.ds-civic-office__source { font-size: 13px; color: var(--color-muted); }
+.ds-civic-step .ds-civic-office__source a { overflow-wrap: anywhere; }
+

@@ -1,5 +1,6 @@
 """Presentation tests use isolated fixtures, never database inserts."""
 
+import re
 from html.parser import HTMLParser
 from urllib.parse import parse_qs, urlsplit
 from uuid import UUID
@@ -71,6 +72,13 @@ def vote(**updates):
     return record | updates
 
 
+
+def assert_no_inline_script(markup):
+    """Scripts are allowed only as same-origin files (script-src 'self'); never inline."""
+    assert not re.search(r"<script(?![^>]*\bsrc=)", markup)
+    assert not re.search(r"<script[^>]*\bsrc=\"(?!/assets/)", markup)
+    assert not re.search(r"\son[a-z]+=", markup)
+
 def test_profile_activity_shows_month_and_distinct_vote_result(profile, filters):
     markup = render_person_profile(profile, {"items": [vote()]}, filters)
     assert "Outubro de 2026" in markup
@@ -84,7 +92,7 @@ def test_profile_activity_shows_month_and_distinct_vote_result(profile, filters)
     assert "Não representa remuneração zero" in markup
     assert "Resumo oficial ainda não disponível" not in markup
     document = Document(markup)
-    assert "script" not in document.tags
+    assert_no_inline_script(markup)
     assert document.inputs["start_date"]["value"] == "2026-10-01"
     assert document.inputs["end_date"]["value"] == "2026-10-18"
 
@@ -108,7 +116,7 @@ def test_escaped_sources_cannot_create_script_or_foreign_link(profile, filters):
         filters,
     )
     assert "&lt;script&gt;" in markup
-    assert "script" not in Document(markup).tags
+    assert_no_inline_script(markup)
     assert "javascript:" not in markup
     assert "tracker.example" not in markup
 
@@ -143,9 +151,10 @@ def test_absence_is_not_no_and_undated_votes_have_own_group(profile, filters):
 
 def test_profile_overview_does_not_claim_missing_domains_available(profile):
     markup = render_person_profile(profile, {}, {"tab": "profile"})
-    assert "Informações do perfil" in markup
+    for anchor in ("trajetoria", "presenca", "atuacao", "bens"):
+        assert f'id="{anchor}"' in markup
+        assert f'href="#{anchor}"' in markup
     assert "Declarações de bens ainda não disponíveis neste perfil" in markup
-    assert 'class="activity-controls"' not in markup
 
 
 def test_multiple_payments_and_offices_are_not_summed(profile):
@@ -157,16 +166,16 @@ def test_multiple_payments_and_offices_are_not_summed(profile):
         {
             "office_kind": "senator",
             "institution": {"name": "Órgão A"},
-            "tenure": {"years": 1, "months": 2},
+            "starts_on": "2025-08-01",
         },
         {"office_kind": "other", "institution": {"name": "Órgão B"}, "tenure": {}},
     ]
     markup = render_person_profile(profile, {}, {})
-    assert "R$ 100.00" in markup and "R$ 200.00" in markup
+    assert "R$ 100,00" in markup and "R$ 200,00" in markup
     assert "R$ 300" not in markup
-    assert "2026-09" in markup and "2026-08" in markup
+    assert "setembro de 2026" in markup and "agosto de 2026" in markup
     assert "Órgão A" in markup and "Órgão B" in markup
-    assert "1 anos e 2 meses" in markup
+    assert "Em exercício desde ago/2025" in markup
 
 
 def test_private_fields_are_never_serialized(profile, filters):
@@ -187,7 +196,8 @@ def test_search_projects_only_public_identity_and_escapes_query():
     assert f'href="/pessoas/{PERSON_ID}"' in markup
     assert "Pessoa &lt;A&gt;" in markup
     assert "PRIVATE" not in markup
-    assert "script" not in Document(markup).tags
+    assert "<script>x</script>" not in markup
+    assert "&lt;script&gt;x&lt;/script&gt;" in markup
 
 
 def test_rendering_consumes_at_most_one_page(profile, filters):
@@ -247,7 +257,7 @@ def test_historical_office_observation_is_not_current_confirmation(profile):
     markup = render_person_profile(profile, {}, {})
     assert "Senador(a)" in markup
     assert "Cargo observado em 2024-01-01; exercício atual não confirmado" in markup
-    assert "Início individual não confirmado" in markup
+    assert "Em exercício desde" not in markup
 
 
 def test_current_competence_not_marked_as_stale(profile):
@@ -255,7 +265,7 @@ def test_current_competence_not_marked_as_stale(profile):
         {"gross_amount": "100.00", "competence": "2026-10", "freshness": "current_competence"}
     ]
     markup = render_person_profile(profile, {}, {})
-    assert "R$ 100.00" in markup
+    assert "R$ 100,00" in markup
     assert "Última publicação disponível; não confirma o mês atual" not in markup
 
 

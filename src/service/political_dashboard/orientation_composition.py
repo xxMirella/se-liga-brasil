@@ -8,6 +8,7 @@ from service.public_profile_web.security import text
 
 def orientation_composition(composition, year):
     from service.political_dashboard.camara_orientation import chamber_policy_applies
+    from service.political_dashboard.chamber_party_identity import HISTORICAL_IDENTITY_POLICY
     from service.political_dashboard.orientation_timeline import ORIENTATION_LABELS
 
     chamber_policy = chamber_policy_applies(composition, year)
@@ -15,6 +16,8 @@ def orientation_composition(composition, year):
     for group in composition.get("political_parties", []):
         category = group_orientation_category(
             group, year, composition.get("institution_code"), chamber_policy=chamber_policy,
+            identity_alignment=composition.get("orientation_policy_version")
+            == HISTORICAL_IDENTITY_POLICY,
         )
         counts[category] += group["count"]
     unreported = (composition.get("total") or 0) - sum(counts.values())
@@ -39,7 +42,8 @@ def orientation_composition(composition, year):
     )
 
 
-def group_orientation_category(group, year, institution_code=None, *, chamber_policy=False):
+def group_orientation_category(group, year, institution_code=None, *, chamber_policy=False,
+                               identity_alignment=False):
     if year == 2026 and institution_code == "senado":
         from service.political_dashboard.senate_orientation_2026 import (
             classify_legislative_orientation,
@@ -49,7 +53,7 @@ def group_orientation_category(group, year, institution_code=None, *, chamber_po
     if chamber_policy:
         from service.political_dashboard.camara_orientation import chamber_orientation
 
-        return chamber_orientation(group, year)["category"]
+        return chamber_orientation(group, year, identity_alignment=identity_alignment)["category"]
     category = classify_political_orientation(group.get("abbreviation"), year)["category"]
     if category != "unaffiliated" and group.get("political_party_code") in {
         "unreported",
@@ -92,18 +96,4 @@ def render_orientation_composition_note(composition, year, reference_on):
         + ". Não é contagem de presença em sessão. "
         + limitation
         + " Sem filiação e sem classificação permanecem separados.</p>"
-    )
-
-
-def render_largest_orientation_group(groups):
-    eligible = [g for g in groups if g.get("orientation_category") in {"left", "center", "right"}]
-    if not eligible:
-        return ""
-    maximum = max(g["count"] for g in eligible)
-    leaders = sorted(g["abbreviation"] for g in eligible if g["count"] == maximum)
-    label = "Maior grupo classificado" if len(leaders) == 1 else "Maiores grupos classificados"
-    return (
-        f'<p class="panorama-leading-group"><strong>{label}:</strong> '
-        f"{text(' · '.join(leaders))} · {maximum} integrantes documentados. "
-        "Não representa necessariamente maioria da composição.</p>"
     )

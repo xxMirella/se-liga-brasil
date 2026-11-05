@@ -41,10 +41,11 @@ uma URL PostgreSQL e as credenciais de Storage no ambiente do deploy. Chama a
 aplicação WSGI nas rotas `/pessoas?limit=4`, `/api/people?limit=4` e uma busca JSON
 com nome. Em seguida seleciona uma pessoa da base e abre a aba HTML de atuação
 com `tab=activity&scope=history` e a API `/api/people/{uuid}/votes?scope=history`.
-O panorama acrescenta quatro verificações: HTML federal atual, HTML histórico de
-1889 e API nos recortes estadual e municipal de São Paulo. Isso também detecta
-falhas de leitura do catálogo municipal que não aparecem no painel federal.
-São nove verificações; uma falha do panorama interrompe o build com
+O panorama acrescenta quatro verificações: `/panorama` (legislatura mais recente),
+`/panorama?leg=2019&house=senado` (estado de interação) e a API
+`/api/political-dashboard` nos recortes estadual e municipal de São Paulo. A API
+continua alimentando o construtor do panorama e detecta falhas de leitura do catálogo
+municipal. São nove verificações; uma falha do panorama interrompe o build com
 `PUBLIC_DASHBOARD_HTTP_<status>`.
 As consultas são somente leitura. Uma base vazia impede verificar a atuação e
 interrompe o build com `PUBLIC_ACTIVITY_SAMPLE_PERSON_REQUIRED`.

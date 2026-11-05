@@ -1,0 +1,23 @@
+/* Bloc colors: one custom property per bloc, consumed as background or fill. Generated from
+   service/majority_panorama/blocs.py; keep both in sync. */
+.ds-bloc--left { --bloc: oklch(0.5 0.14 25); }
+.ds-bloc--center { --bloc: oklch(0.5 0.14 75); }
+.ds-bloc--right { --bloc: oklch(0.5 0.14 250); }
+.ds-bloc--far-right { --bloc: oklch(0.5 0.14 295); }
+.ds-bloc--undetermined { --bloc: #bdb8ad; }
+.ds-bloc--controversial { --bloc: #a89fb0; }
+.ds-bloc--unaffiliated { --bloc: #d6d1c6; }
+
+[class*="ds-bloc--"] { background: var(--bloc); }
+.ds-stacked-bar { position: relative; border-radius: 4px; overflow: hidden; }
+.ds-stacked-bar table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.ds-stacked-bar td { padding: 0; text-align: center; color: #fff; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; border-right: 2px solid var(--color-surface); overflow: hidden; white-space: nowrap; }
+.ds-stacked-bar td:last-child { border-right: 0; }
+.ds-stacked-bar--sm td { height: 14px; }
+.ds-stacked-bar--md td { height: 24px; }
+.ds-stacked-bar--lg td { height: 22px; }
+.ds-stacked-bar--half::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; border-left: 2px dashed var(--color-ink); }
+
+/* Choice links keep their ink color on hover (the prototype buttons do not change color); the
+   selected choice has its own, more specific, color. */
+.ds-choice:not([aria-current]):hover { color: var(--color-ink); }

@@ -1,5 +1,7 @@
 # Plano do painel de composição política
 
+> **Substituído (11/2026).** Este plano descreve o painel territorial (SP e RJ, por data) e fica como registro das regras de contagem e história, que continuam valendo para os dados. A página `/panorama` agora é a visão nacional por legislatura descrita em [panorama-maioria-nacional.md](panorama-maioria-nacional.md); a visão por território e ano deixou de existir na página, e os dados territoriais continuam disponíveis em `/api/political-dashboard`.
+
 Proposta de página do Se Liga, Brasil, planejada em 22/10/2026. O planejamento não confirma cobertura histórica já coletada.
 
 ## Objetivo e recorte

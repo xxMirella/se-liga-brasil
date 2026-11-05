@@ -56,9 +56,7 @@ def test_rejected_query_renders_html_error_like_other_pages():
 def test_navigation_marks_only_sources_as_current():
     document = SourcesMarkup(render_data_sources())
     current = [link for link in document.links if link.get("aria-current") == "page"]
-    assert [(link["href"], link.get("class")) for link in current] == [
-        ("/fontes-dos-dados", "selected")
-    ]
+    assert [link["href"] for link in current] == ["/fontes-dos-dados"]
 
 
 def test_anchors_for_presidency_and_senate_exist():

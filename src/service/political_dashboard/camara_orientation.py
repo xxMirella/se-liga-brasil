@@ -76,18 +76,21 @@ def chamber_orientation_summary(composition, year):
     counts = chamber_counts(composition, year)
     total = composition.get("total", 0)
     vacant = len(composition.get("documented_vacancies") or [])
-    if not 0 <= total <= 513 - vacant:
+    interrupted = len(composition.get("documented_exercise_interruptions") or [])
+    if not 0 <= total <= 513 - vacant - interrupted:
         raise ValueError("CHAMBER_OBSERVED_PEOPLE_EXCEED_CAPACITY")
     classified = sum(counts[key] for key in IDEOLOGICAL_CATEGORIES)
     maximum = max((counts[key] for key in IDEOLOGICAL_CATEGORIES), default=0)
     leaders = [key for key in IDEOLOGICAL_CATEGORIES if counts[key] == maximum and maximum]
     majority = next((key for key in IDEOLOGICAL_CATEGORIES if counts[key] >= 257), None)
-    unresolved = 513 - vacant - classified - counts["unaffiliated"]
+    unresolved = 513 - vacant - interrupted - classified - counts["unaffiliated"]
     absence_proven = all(counts[key] + unresolved < 257 for key in IDEOLOGICAL_CATEGORIES)
     return {"policy_version": composition["orientation_policy_version"],
             "reference_year": None if year < 2018 else 2018 if year < 2022 else 2022,
             "counts": dict(counts), "total_seats": 513, "observed_people": total,
-            "unobserved_seats": 513 - total - vacant, "documented_vacant_seats": vacant,
+            "unobserved_seats": 513 - total - vacant - interrupted,
+            "documented_vacant_seats": vacant,
+            "documented_exercise_interruptions": interrupted,
             "classified_people": classified,
             "coverage": composition.get("coverage"), "majority_threshold": 257,
             "largest_groups": leaders, "largest_count": maximum,
@@ -114,7 +117,9 @@ def chamber_summary_text(summary):
             f"{summary['observed_people']}/513 integrantes documentados; "
             f"{summary['classified_people']}/513 com classificação; "
             f"{summary['documented_vacant_seats']} vagas documentadas; "
-            f"{summary['unobserved_seats']} cadeiras sem exercício comprovado. "
+            f"{summary['documented_exercise_interruptions']} interrupções de exercício "
+            "documentadas, sem vacância; "
+            f"{summary['unobserved_seats']} cadeiras não conciliadas. "
             f"Maior grupo classificado: {leaders or 'nenhum'} ({summary['largest_count']}). "
             f"Limiar: 257/513. {distribution}. "
             f"Política: {summary['policy_version']}. {method}"
@@ -198,7 +203,9 @@ def render_chamber_reconciliation(composition):
         return ""
     territories = "".join(
         f"<li>{text(row['uf'])}: {row['observed_people']}/{row['expected_seats']} em exercício; "
-        f"{row['documented_vacancies']} vagas documentadas; {row['unresolved']} pendências</li>"
+        f"{row['documented_vacancies']} vagas documentadas; "
+        f"{row.get('documented_exercise_interruptions', 0)} interrupções documentadas; "
+        f"{row['unresolved']} pendências</li>"
         for row in rows
     )
     pending = "".join(
@@ -207,12 +214,29 @@ def render_chamber_reconciliation(composition):
         f'<a href="{text(row["official_url"])}">histórico oficial</a></li>'
         for row in composition.get("reconciliation_pending", [])
     )
+    pending_note = (
+        '<p>Registros nas UFs com diferenças ainda não conciliadas; não representam '
+        'pareamento de titulares e suplentes nem uma lista de vagas.</p><ul>' + pending + '</ul>'
+        if pending else '<p>Nenhum caso nominal pendente nesta fotografia anual.</p>'
+    )
     return ('<details class="panorama-source-notes"><summary>Reconciliação por UF e casos '
-            'nominais pendentes</summary><ul>' + territories + '</ul><p>Os casos a seguir '
-            'são registros nas UFs com diferenças ainda não conciliadas. Não representam '
-            'um pareamento de titulares e suplentes nem uma lista de vagas. Licença e '
-            'afastamento judicial não são convertidos em vacância.</p><ul>' + pending
-            + '</ul></details>')
+            'nominais</summary><ul>' + territories + '</ul>'
+            + render_reviewed_chamber_cases(composition) + pending_note
+            + '<p>Licença e afastamento judicial não são convertidos em vacância.</p></details>')
+
+
+def render_reviewed_chamber_cases(composition):
+    cases = [*composition.get("documented_exercise_interruptions", []),
+             *[row for row in composition.get("documented_vacancies", [])
+               if row.get("review_version")]]
+    if not cases:
+        return ""
+    items = "".join(
+        '<li>' + text(case["detail"]) + ' ' + ' · '.join(
+            '<a href="' + text(url) + '">Fonte oficial</a>' for url in case["source_urls"]
+        ) + '</li>' for case in cases
+    )
+    return '<p>Casos nominais esclarecidos na fotografia anual:</p><ul>' + items + '</ul>'
 
 
 

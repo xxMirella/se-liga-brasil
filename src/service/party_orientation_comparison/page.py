@@ -16,29 +16,29 @@ from service.political_dashboard.political_orientation_catalog import (
     ORIENTATION_METHODOLOGY_URL,
 )
 from service.public_profile.contracts import PublicProfileError
-from service.public_profile_web.layout import render_layout
 from service.public_profile_web.security import text
-from service.public_profile_web.static_text import read_static_text
+from web_components import render_hero, render_link_button, render_page, render_section
+from web_components.static_text import read_static_text
 
 ROUTE = "/comparacao-de-classificacoes"
 STYLESHEET_ROUTE = "/assets/party-comparison.css"
 EXPLANATION = (
     '<div class="comparison-grid">'
-    "<section><h2>Pesquisa de especialistas</h2>"
+    '<article class="ds-card"><h3 class="ds-card__title">Pesquisa de especialistas</h3>'
     "<p>Mede a <strong>percepção de especialistas</strong> sobre a posição do partido em uma "
     "escala de 0 (esquerda) a 10 (direita). Não é a opinião da população nem a autodeclaração "
     "do partido. Só há estimativas para 2018 e 2022 "
     f'(<a href="{ORIENTATION_METHODOLOGY_URL}" rel="noopener noreferrer">'
     f"{text(ORIENTATION_METHODOLOGY_LABEL)}</a>). O site agrupa a média em esquerda "
-    "(abaixo de 4,5), centro (4,5 a 5,5) e direita (acima de 5,5).</p></section>"
-    "<section><h2>Modelo de atuação</h2>"
+    "(abaixo de 4,5), centro (4,5 a 5,5) e direita (acima de 5,5).</p></article>"
+    '<article class="ds-card"><h3 class="ds-card__title">Modelo de atuação</h3>'
     "<p>Mede <strong>o que o partido faz</strong>: votos nominais, políticas e iniciativas, "
     "com peso menor para declarações. Usa uma escala de −1 (esquerda) a +1 (direita), em duas "
     "dimensões: econômica e sociocultural. Quando faltam evidências, o modelo diz "
-    "&quot;evidência insuficiente&quot; e não preenche a lacuna.</p></section></div>"
+    "&quot;evidência insuficiente&quot; e não preenche a lacuna.</p></article></div>"
 )
-LIMITS = (
-    "<h2>Limites desta comparação</h2><ul>"
+LIMITS_LIST = (
+    '<ul class="prose-list">'
     "<li>A pesquisa cobre só 2018 e 2022; nos demais períodos a comparação não é possível.</li>"
     "<li>Os votos de 2003 a 2014 misturam posição ideológica com ser governo ou oposição; "
     "não valem sozinhos como esquerda ou direita.</li>"
@@ -67,10 +67,10 @@ def render_filter(snapshot, selected):
     )
     return (
         f'<form class="comparison-filter" action="{ROUTE}" method="get">'
-        '<div><label for="comparison-party">Partido</label><br>'
-        f'<select id="comparison-party" name="partido">{options}</select></div>'
-        '<button type="submit">Ver partido</button>'
-        f'<a href="{ROUTE}">Ver todos</a></form>'
+        '<div class="ds-field"><label for="comparison-party">Partido</label>'
+        f'<select class="ds-select" id="comparison-party" name="partido">{options}</select></div>'
+        '<button class="ds-button ds-button--primary" type="submit">Ver partido</button>'
+        f'{render_link_button("Ver todos", ROUTE)}</form>'
     )
 
 
@@ -121,16 +121,21 @@ def render_party_comparison_page(requested_party=None):
         if political_party
         else render_overview(snapshot)
     )
-    content = (
-        "<h1>Comparação entre classificações de partidos</h1>"
-        "<p>Duas formas de classificar cada partido, lado a lado: o que especialistas "
-        "percebem e o que o partido faz. Nenhuma das duas é tratada como a resposta certa.</p>"
-        + EXPLANATION
-        + render_filter(snapshot, political_party)
-        + body
-        + LIMITS
+    hero = render_hero(
+        "Comparação de classificações",
+        "Comparação entre classificações de partidos",
+        "Duas formas de classificar cada partido, lado a lado: o que especialistas "
+        "percebem e o que o partido faz. Nenhuma das duas é tratada como a resposta certa.",
     )
-    return render_layout(
+    content = (
+        hero
+        + '<div class="ds-container comparison-page">'
+        + render_section("metodos", "Dois métodos", EXPLANATION)
+        + render_section("partidos", "Partidos", render_filter(snapshot, political_party) + body)
+        + render_section("limites", "Limites desta comparação", LIMITS_LIST)
+        + "</div>"
+    )
+    return render_page(
         "Comparação de classificações",
         content,
         extra_stylesheet=STYLESHEET_ROUTE,

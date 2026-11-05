@@ -43,6 +43,5 @@ def test_declarations_never_use_file_generation_as_month_of_submission():
         "election_year": 2022, "source_generated_at": "2026-10-19T00:00:00",
         "recorded_total": "10", "items": [],
     }]}})
-    assert 'class="timeline-event"' in html
-    assert "Mês não informado" in html
-    assert "Outubro" not in html
+    assert "2022" in html
+    assert "outubro" not in html.lower()

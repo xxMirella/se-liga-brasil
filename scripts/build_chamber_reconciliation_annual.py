@@ -6,6 +6,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from crawlers.camara.legacy_reconciliation import load_legacy_reconciliation
+from crawlers.camara.reviewed_year_end_evidence import load_reviewed_year_end_cases
 from database.operations import connect_database
 from database.political_dashboard_analytical import AnnualDashboardRepository
 from service.political_dashboard.camara_orientation import chamber_orientation_summary
@@ -24,6 +25,10 @@ from service.political_dashboard_dataset.chamber_reconciliation import (
 from service.political_dashboard_dataset.chamber_reconciliation_audit import (
     nominal_reconciliation_audit,
 )
+from service.political_dashboard_dataset.chamber_reviewed_interruptions import (
+    apply_reviewed_cases,
+    reviewed_snapshot_cases,
+)
 from service.political_dashboard_dataset.storage import store_partition, write_atomic
 
 POLICY_VERSION = "camara_2010_2019.v2"
@@ -40,6 +45,10 @@ def build_reconciled_partitions(options, identities):
     records = load_legacy_reconciliation(
         getattr(options, "evidence_storage", None) or options.storage,
     )
+    reviews = load_reviewed_year_end_cases(
+        Path("config/chamber-reviewed-year-end-cases.json"),
+        getattr(options, "evidence_storage", None) or options.storage,
+    )
     partitions, audits = [], []
     for year in range(2010, 2020):
         members = historical_universe_members(histories, legislatures, identities, manifests, year)
@@ -49,6 +58,8 @@ def build_reconciled_partitions(options, identities):
         vacancies = verified_historical_vacancies(histories, records, legislatures,
                                                  members, SEATS, year)
         reconciliation = reconciliation_by_uf(members, vacancies, SEATS)
+        reviewed = reviewed_snapshot_cases(reviews, histories, members, reconciliation, year)
+        interruptions, reconciliation = apply_reviewed_cases(reviewed, vacancies, reconciliation)
         partition = historical_universe_partition(members, year, "BR", len(histories),
                                                    len(universe["people"]), digest)
         crosswalk, pending = nominal_reconciliation_audit(
@@ -62,6 +73,7 @@ def build_reconciled_partitions(options, identities):
         )} for row in pending]
         partition.update(orientation_policy_version=POLICY_VERSION,
                          documented_vacancies=vacancies,
+                         documented_exercise_interruptions=interruptions,
                          within_year_changes=dated_chamber_changes(
                              histories, year, f"{year}-12-31",
                          ))
@@ -69,12 +81,14 @@ def build_reconciled_partitions(options, identities):
         partition["coverage"] = "observed_complete" if complete else "observed_partial"
         partition["coverage_detail"] = (
             "Exercício datado REST conciliado com períodos legados oficiais; "
-            "vagas só com saída definitiva e vínculo explícito ao sucessor empossado depois. "
+            "Vagas exigem saída definitiva e vínculo explícito ao sucessor; "
+            "licenças, afastamentos e efetivações revisados aparecem separadamente. "
             "Condição eleitoral, função na Mesa e cadeira não são conceitos equivalentes."
         )
         partitions.append(partition)
         audits.append({"year": year, "baseline_people": baseline, "reconciled_cases": cases,
                        "uf_reconciliation": reconciliation, "vacancies": vacancies,
+                       "documented_exercise_interruptions": interruptions,
                        "orientation": chamber_orientation_summary(partition, year)})
     return partitions, audits
 

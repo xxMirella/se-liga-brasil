@@ -1,0 +1,79 @@
+/* "Período selecionado" section and "Como ler": values ported from the Panorama v3 prototype. */
+:root {
+  --color-sunken-pressed: #f1efe9;
+  --color-disabled: #9a978e;
+}
+
+/* Section */
+.ds-period { display: flex; flex-direction: column; gap: 24px; padding: 48px 0; border-bottom: 1px solid var(--color-line); }
+.ds-period__heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; }
+.ds-period__title { display: flex; flex-direction: column; gap: 6px; }
+.ds-period__eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-muted); }
+.ds-period__label { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(32px, 5vw, 46px); line-height: 1.05; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ds-period__steps { display: flex; gap: 6px; }
+.ds-period__step { display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; font-size: 15px; min-height: 44px; padding: 0 14px; border: 1px solid var(--color-line-strong); border-radius: var(--radius-small); background: var(--color-surface); color: var(--color-ink); text-decoration: none; }
+.ds-period__step:hover { color: var(--color-ink); background: var(--color-sunken-pressed); }
+.ds-period__step--disabled, .ds-period__step--disabled:hover { color: var(--color-disabled); background: var(--color-surface); }
+.ds-period__verdict { margin: 0; font-size: 19px; line-height: 1.5; max-width: 760px; }
+
+/* Summary cards */
+.ds-period-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 14px; }
+.ds-period-card { display: flex; flex-direction: column; gap: 10px; padding: 20px; background: var(--color-surface); border: 1px solid var(--color-line-strong); border-radius: var(--radius-medium); }
+.ds-period-card__label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-muted); }
+.ds-period-card__headline { font-size: 17px; line-height: 1.35; }
+.ds-period-card__note { font-size: 14px; line-height: 1.5; color: var(--color-ink-soft); }
+.ds-period-card .ds-stacked-bar--sm { overflow: visible; }
+.ds-period-card .ds-stacked-bar--sm td { border-right: 0; }
+.ds-period-card .ds-stacked-bar--sm td:first-child { border-radius: 3px 0 0 3px; }
+.ds-period-card .ds-stacked-bar--sm td:last-child { border-radius: 0 3px 3px 0; }
+.ds-period-card .ds-stacked-bar--half::after { top: -3px; bottom: -3px; }
+.ds-president { display: flex; gap: 10px; align-items: flex-start; }
+.ds-president__text { display: flex; flex-direction: column; gap: 2px; }
+.ds-president__name { font-family: var(--font-display); font-weight: 400; font-size: 22px; line-height: 1.15; }
+.ds-president__meta { font-size: 14px; color: var(--color-ink-soft); }
+.ds-period-swatch { display: inline-block; flex-shrink: 0; border-radius: 3px; }
+.ds-period-swatch--president { width: 12px; height: 12px; margin-top: 6px; }
+.ds-period-swatch--legend { width: 14px; height: 14px; }
+
+/* Seats card */
+.ds-seats-card { display: flex; flex-direction: column; gap: 20px; padding: 22px; background: var(--color-surface); border: 1px solid var(--color-line-strong); border-radius: 14px; }
+.ds-seats-card__controls { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: center; }
+.ds-seats-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--color-line-strong); }
+.ds-seats-tabs__tab { display: inline-flex; align-items: center; font-size: 15px; font-weight: 600; padding: 10px 14px; min-height: 44px; border-bottom: 3px solid transparent; white-space: nowrap; color: var(--color-muted); text-decoration: none; }
+.ds-seats-tabs__tab:hover { color: var(--color-ink); }
+.ds-seats-tabs__tab[aria-current="page"] { border-bottom-color: var(--color-ink); color: var(--color-ink); }
+.ds-seats-modes { display: flex; height: 40px; border: 1px solid var(--color-line-strong); border-radius: var(--radius-small); overflow: hidden; }
+.ds-seats-modes__option { display: inline-flex; align-items: center; font-size: 14px; padding: 0 14px; white-space: nowrap; background: var(--color-surface); color: var(--color-ink); text-decoration: none; }
+.ds-seats-modes__option[aria-current="true"] { background: var(--color-ink); color: #fff; }
+.ds-seats-modes__option--disabled { color: var(--color-disabled); }
+.ds-seats-card__body { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 28px; align-items: start; }
+.ds-seats-card__chart { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.ds-seats-card__footnote { margin: 0; font-size: 14px; line-height: 1.5; color: var(--color-muted); }
+.ds-seats-card__footnote { font-size: 13px; }
+
+/* Hemicycle: the SVG scales with the width through its viewBox (2 : 1.05) */
+.ds-parliament { position: relative; width: 100%; aspect-ratio: 2 / 1.05; }
+.ds-parliament__seats { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ds-parliament::after { content: ""; position: absolute; left: 50%; top: 4%; bottom: 0; border-left: 2px dashed var(--color-ink); pointer-events: none; }
+.ds-parliament__majority { position: absolute; z-index: 1; left: 50%; bottom: 2%; transform: translateX(-50%); padding: 2px 8px; background: var(--color-surface); font-size: 13px; font-weight: 600; white-space: nowrap; }
+
+/* Legend: bloc rows and party chips are links (`aria-current` marks the highlighted one) */
+.ds-seat-legend { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.ds-seat-legend__group { display: flex; flex-direction: column; gap: 8px; }
+.ds-seat-legend__bloc { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--color-line); border-radius: var(--radius-small); background: var(--color-surface); color: var(--color-ink); text-decoration: none; }
+.ds-seat-legend__name { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; }
+.ds-seat-legend__count { font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ds-seat-legend__parties { display: flex; flex-wrap: wrap; gap: 6px; padding-left: 4px; }
+.ds-seat-legend__party { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; min-height: 32px; padding: 0 10px; border: 1px solid var(--color-line); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-ink); text-decoration: none; }
+.ds-seat-legend__party strong { font-variant-numeric: tabular-nums; }
+.ds-seat-legend__dot { width: 10px; height: 10px; flex-shrink: 0; }
+.ds-seat-legend__bloc:hover, .ds-seat-legend__party:hover { color: var(--color-ink); background: var(--color-sunken-pressed); }
+.ds-seat-legend__bloc[aria-current="true"], .ds-seat-legend__party[aria-current="true"] { border-color: var(--color-ink); background: var(--color-sunken-pressed); }
+
+/* Como ler */
+.ds-reading { display: flex; flex-direction: column; max-width: 780px; padding: 40px 0 64px; }
+.ds-reading .ds-disclosure__body p { margin: 0; }
+@media (max-width: 480px) {
+  .ds-period { padding: 36px 0; }
+  .ds-seats-card { padding: 16px; }
+}

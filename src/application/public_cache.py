@@ -17,8 +17,12 @@ def public_cache_policy(target, status):
     if status != 200:
         return "no-store"
     path = urlsplit(target).path
+    if path == "/robots.txt" or path == "/sitemap.xml" or path.startswith("/sitemaps/"):
+        return "public, max-age=0, s-maxage=60, must-revalidate"
     if path in {"/panorama", "/api/political-dashboard"}:
         return "public, max-age=60, s-maxage=300, stale-while-revalidate=300"
+    if path.startswith("/assets/fonts/"):
+        return "public, max-age=31536000, immutable"
     if path in STATIC_PAGE_PATHS:
         return "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400"
     if path in {
@@ -26,9 +30,13 @@ def public_cache_policy(target, status):
         "/assets/civic-education.css",
         "/assets/brazil-flag.svg",
         "/favicon.ico",
-        "/assets/panorama.css",
         "/assets/party-comparison.css",
-        "/assets/people-viewport.js",
+        "/assets/people-search-enhance.js",
+        "/assets/panorama-enhance.js",
+        "/assets/civic-review.js",
+        "/assets/scroll-reveal.js",
+        "/assets/civic-guide.js",
+        "/assets/profile-activity.js",
     }:
         return "public, max-age=0, must-revalidate"
     return "no-store"
@@ -71,6 +79,11 @@ def matches_etag(header, etag):
 def prepare_public_response(target, status, body, request_headers, dataset_version=None):
     policy = public_cache_policy(target, status)
     headers = {"Cache-Control": policy}
+    from service.search_indexing.configuration import search_indexing_enabled
+
+    path = urlsplit(target).path
+    if status != 200 or path.startswith("/api/") or not search_indexing_enabled():
+        headers["X-Robots-Tag"] = "noindex, follow"
     if policy == "no-store":
         return status, body, headers
     body, etag, compressed = public_representation(

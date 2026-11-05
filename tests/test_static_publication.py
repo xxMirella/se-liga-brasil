@@ -6,6 +6,7 @@ import pytest
 
 from application.public_cache import prepare_public_response
 from service.static_publication.build import build_civic_site
+from web_components import font_file_names
 
 
 def test_export_is_deterministic_and_all_filters_are_static(tmp_path):
@@ -17,12 +18,12 @@ def test_export_is_deterministic_and_all_filters_are_static(tmp_path):
         p.relative_to(output): p.read_bytes() for p in output.rglob("*") if p.is_file()
     }
     manifest = json.loads((output / "manifest.json").read_text())
-    assert len(manifest["files"]) == 11
+    assert len(manifest["files"]) == 11 + len(font_file_names())
     for sphere in ("municipal", "estadual", "federal", "distrital", "todos"):
         path = output / "como-funciona" / sphere / "index.html"
         document = path.read_text()
         assert "?esfera=" not in document
-        assert 'href="/como-funciona/federal/#cargos"' in document
+        assert 'href="/como-funciona/federal/#passo-1"' in document
         assert 'action="https://api.example.org/pessoas"' in document
         assert gzip.decompress(Path(str(path) + ".gz").read_bytes()) == path.read_bytes()
         for stylesheet in output.glob("assets/*.css"):
@@ -61,4 +62,7 @@ def test_cache_compression_validation_and_private_routes():
     assert identity == body
     assert identity_headers["ETag"] != headers["ETag"]
     for route, status in (("/pessoas", 200), ("/api/people", 200), ("/como-funciona", 400)):
-        assert prepare_public_response(route, status, body, {})[2] == {"Cache-Control": "no-store"}
+        actual = prepare_public_response(route, status, body, {})[2]
+        assert actual["Cache-Control"] == "no-store"
+        if route.startswith("/api/") or status != 200:
+            assert actual["X-Robots-Tag"] == "noindex, follow"

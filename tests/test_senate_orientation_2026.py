@@ -6,7 +6,6 @@ from pathlib import Path
 from crawlers.senado.current_roster_report import parse_current_roster_report
 from service.political_dashboard.orientation_composition import orientation_composition
 from service.political_dashboard.orientation_timeline import orientation_cell
-from service.political_dashboard.page import render_composition
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -74,20 +73,12 @@ def test_card_and_timeline_visibly_qualify_majority_and_sensitivity():
     urls = {row["source_url"] for row in cell["source_evidence"]}
     assert "https://doi.org/10.7910/DVN/MFIXKW" in urls
     assert "https://psd.org.br/noticias/o-psd-na-centro-direita/" in urls
-    html = render_composition(composition, "Senado Federal", "Brasil",
-                              "https://www25.senado.leg.br",
-                              view="political_orientation", year=2026)
-    assert "Direita: 63/81 cadeiras" in html
-    assert '/fontes-dos-dados#senado-2026' in html
     from service.data_sources.page import render_data_sources
 
     sources = render_data_sources()
     assert "direita 53/81 com MDB no centro" in sources
     assert "direita 49/81 com MDB no centro" in sources
     assert "40/81" in sources
-    assert html.count("<circle ") == 81
-    assert "<span>Direita</span><strong>63<small>77,8%</small></strong>" in html
-    assert "Não há classificação documentada para este ano" not in html
 
 
 def test_alternative_methods_keep_party_disagreements_and_same_roster():

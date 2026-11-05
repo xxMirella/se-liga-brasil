@@ -29,7 +29,12 @@ def fetch_completeness_rows(connection, person_id=None, person_ids=None) -> list
                 WHERE c.person_id=p.id)) AS reported_no_assets,
           EXISTS(SELECT 1 FROM se_liga_brasil.proposition_person pp
             WHERE pp.person_id=p.id) AS has_propositions,
-          attendance.period AS latest_attendance_period,attendance.unknown AS attendance_unknown
+          attendance.period AS latest_attendance_period,attendance.unknown AS attendance_unknown,
+          EXISTS(SELECT 1 FROM se_liga_brasil.person_fact f
+            WHERE f.person_id=p.id AND f.field_name LIKE 'alesp_attendance:%%'
+              AND f.review_status='verified'
+              AND f.normalized_value->>'scope'='committee_presence_observed')
+            AS has_alesp_historical_attendance
         FROM se_liga_brasil.person p
         LEFT JOIN LATERAL (
           SELECT ((f.normalized_value->>'period')||'-01')::date AS period,
@@ -38,6 +43,7 @@ def fetch_completeness_rows(connection, person_id=None, person_ids=None) -> list
           JOIN se_liga_brasil.institution i ON i.id=p.current_public_office_institution_id
           WHERE f.person_id=p.id AND f.field_name LIKE '%%_attendance:%%'
             AND f.review_status='verified' AND f.normalized_value->>'institution'=i.code
+            AND f.field_name NOT LIKE 'alesp_attendance:%%'
             AND f.normalized_value->>'period'<to_char(timezone('America/Belem',now()),'YYYY-MM')
           ORDER BY f.normalized_value->>'period' DESC,
             f.normalized_value->>'sourceObservedAt' DESC,f.id DESC LIMIT 1

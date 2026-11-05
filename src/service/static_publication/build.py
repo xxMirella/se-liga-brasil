@@ -3,12 +3,14 @@
 import gzip
 import hashlib
 import json
+import re
 from pathlib import Path
 from urllib.parse import urlsplit
 
 from service.civic_education.page import SPHERES, civic_stylesheet, render_civic_education
 from service.project_information.page import render_project_information
 from service.public_profile_web.layout import public_favicon, public_stylesheet
+from web_components import FONT_URL_PREFIX, font_file_names, read_font_file
 
 SPHERE_NAMES = (*SPHERES, "todos")
 
@@ -46,11 +48,13 @@ def render_static_page(sphere, asset_paths, backend_origin):
 
 
 def prepare_static_document(document, asset_paths, backend_origin):
+    # The hosting policy has no script-src: the static pages are complete without scripts.
+    document = re.sub(r'<script src="[^"]*" defer></script>', "", document)
     for original, fingerprinted in asset_paths.items():
         document = document.replace(original, fingerprinted)
     for selected in SPHERE_NAMES:
         document = document.replace(
-            f'"?esfera={selected}#cargos"', f'"/como-funciona/{selected}/#cargos"'
+            f'"?esfera={selected}#', f'"/como-funciona/{selected}/#'
         )
     document = document.replace('"/como-funciona"', '"/como-funciona/"')
     document = document.replace('"/sobre"', '"/sobre/"')
@@ -61,7 +65,7 @@ def prepare_static_document(document, asset_paths, backend_origin):
 
 def hosting_headers(backend_origin):
     policy = (
-        "default-src 'none'; style-src 'self'; img-src 'self' https:; "
+        "default-src 'none'; style-src 'self'; font-src 'self'; img-src 'self' https:; "
         f"form-action 'self' {backend_origin}; base-uri 'none'; frame-ancestors 'none'"
     )
     return f"""/*
@@ -78,6 +82,18 @@ def hosting_headers(backend_origin):
 """
 
 
+def write_fingerprinted_fonts(directory, files):
+    """Write each font under a content-hash name; return {served url: fingerprinted url}."""
+    font_paths = {}
+    for name in font_file_names():
+        body = read_font_file(FONT_URL_PREFIX + name)
+        stem, extension = name.rsplit(".", 1)
+        relative = f"assets/fonts/{stem}.{hashlib.sha256(body).hexdigest()[:16]}.{extension}"
+        font_paths[FONT_URL_PREFIX + name] = "/" + relative
+        files[relative] = write_representation(directory, relative, body)
+    return font_paths
+
+
 def build_civic_site(output_directory, *, backend_origin=None):
     origin = validate_backend_origin(backend_origin)
     directory = Path(output_directory)
@@ -86,10 +102,13 @@ def build_civic_site(output_directory, *, backend_origin=None):
     files["assets/brazil-flag.svg"] = write_representation(
         directory, "assets/brazil-flag.svg", public_favicon().encode("utf-8")
     )
+    font_paths = write_fingerprinted_fonts(directory, files)
     for name, stylesheet in (
         ("public-profile", public_stylesheet()),
         ("civic-education", civic_stylesheet()),
     ):
+        for original, fingerprinted in font_paths.items():
+            stylesheet = stylesheet.replace(original, fingerprinted)
         body = stylesheet.encode("utf-8")
         fingerprint = hashlib.sha256(body).hexdigest()[:16]
         relative = f"assets/{name}.{fingerprint}.css"

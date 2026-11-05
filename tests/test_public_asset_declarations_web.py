@@ -32,10 +32,10 @@ def assets_profile():
 
 def test_declaration_is_not_presented_as_current_wealth_and_html_is_escaped():
     html = render_asset_declarations(assets_profile())
-    assert "Bens declarados · 2022" in html
+    assert "Bens declarados à Justiça Eleitoral" in html and "2022" in html
     assert "R$ 1.234,50" in html
     assert "Soma dos registros disponíveis" in html
-    assert "não representam patrimônio atual" in html
+    assert "não representa o patrimônio atual" in html
     assert "<script>" not in html
     assert "&lt;script&gt;" in html
     assert "?a=1&amp;b=2" in html

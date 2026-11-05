@@ -19,6 +19,7 @@ LEGISLATIVE_KEPT_FIELDS = (
     "political_parties",
     "expected_seats",
     "documented_vacancies",
+    "documented_exercise_interruptions",
     "orientation_policy_version",
     "total",
     "coverage",

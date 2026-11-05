@@ -55,6 +55,25 @@ def history_repository(integration_database, *, with_history_table=True, missing
     return repository, publisher, connection
 
 
+def test_chamber_interruptions_survive_sql_projection_and_published_history(integration_database):
+    from service.political_dashboard.camara_orientation import chamber_orientation_summary
+
+    repository, publisher, _ = history_repository(integration_database)
+    partition = {**annual_partition(2019), "institution_code": "camara",
+                 "orientation_policy_version": "camara_2010_2019.v2", "expected_seats": 513,
+                 "total": 512, "snapshot_on": "2019-12-31",
+                 "political_parties": [{"abbreviation": "PT", "count": 512}],
+                 "documented_exercise_interruptions": [{"uf": "PB", "detail": "Afastamento"}]}
+    publisher.activate_partitions([partition])
+    snapshot = repository.fetch_annual_snapshot(2019, ["BR"], 2026)
+    historical = next(row["composition"] for row in snapshot["history"]
+                      if row["institution_code"] == "camara" and row["year"] == 2019)
+    expected = chamber_orientation_summary(partition, 2019)
+    assert chamber_orientation_summary(historical, 2019) == expected
+    assert expected["unobserved_seats"] == 0
+    assert expected["documented_exercise_interruptions"] == 1
+
+
 def test_selected_year_change_does_not_retransmit_or_mutate_same_version(integration_database):
     repository, _, connection = history_repository(integration_database)
     first = repository.fetch_annual_snapshot(2024, ["BR"], 2026)

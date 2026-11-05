@@ -1,0 +1,48 @@
+/* Design tokens of the public portal ("Panorama v2" design). Only variables; no selectors besides :root. */
+:root {
+  --color-page: #f6f5f1;
+  --color-surface: #fff;
+  --color-ink: #1d1d1b;
+  --color-ink-soft: #3a3935;
+  --color-muted: #5c5a54;
+  --color-line: #e3e0d8;
+  --color-line-strong: #d9d6cd;
+  --color-line-faint: #efece5;
+  --color-seat-a: #a9a397;
+  --color-seat-b: #d6d1c6;
+  --color-seat-muted: #e6e2d9;
+  --color-bar-idle: #8f897d;
+  --color-bar-dimmed: #cfcac0;
+  --color-majority-line: #9a978e;
+  --color-tone-left: #57866d;
+  --color-tone-center: #b0a34a;
+  --color-tone-right: #c79f53;
+  --color-tone-far-right: #9b623b;
+  --color-tone-undetermined: #8c9990;
+  --color-tone-controversial: #9d8ca2;
+  --color-tone-unaffiliated: #aeb9aa;
+  --color-brand: oklch(0.42 0.12 155);
+  --color-brand-strong: oklch(0.32 0.12 155);
+  --color-brand-tint: oklch(0.95 0.035 155);
+  --color-wrong: oklch(0.5 0.13 40);
+  --color-wrong-tint: oklch(0.95 0.03 40);
+  --color-executive: oklch(0.38 0.1 245);
+  --color-legislative: oklch(0.4 0.1 60);
+  --color-tag-with-sanction: oklch(0.94 0.03 245);
+  --color-tag-without-sanction: oklch(0.94 0.035 75);
+  --color-feedback-wrong: oklch(0.95 0.03 40);
+  --color-feedback-wrong-line: oklch(0.5 0.13 40);
+  --color-executive-line: oklch(0.45 0.1 245);
+  --color-executive-tint: oklch(0.97 0.015 245);
+  --color-legislative-line: oklch(0.45 0.1 60);
+  --color-legislative-tint: oklch(0.97 0.02 75);
+  --font-display: Newsreader, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius-small: 8px;
+  --radius-medium: 12px;
+  --radius-pill: 999px;
+  --content-width: 1120px;
+  --gutter: 20px;
+  --control-height: 42px;
+}

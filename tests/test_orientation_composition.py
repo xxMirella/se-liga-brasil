@@ -1,8 +1,6 @@
 """Cards aggregate every party in its dated category without inventing session attendance."""
 
 from service.political_dashboard.orientation_composition import orientation_composition
-from service.political_dashboard.page import render_composition
-from service.political_dashboard.semicircle import render_people_semicircle
 
 
 def composition():
@@ -49,74 +47,6 @@ def test_unreported_remainder_is_not_silently_lost():
     }
 
 
-def test_chamber_bars_and_seat_colors_use_category_counts_and_percentages():
-    html = render_composition(
-        composition(),
-        "Câmara dos Deputados",
-        "Brasil",
-        "https://www.camara.leg.br",
-        view="political_orientation",
-        year=2022,
-        reference_on="2022-12-31",
-    )
-    assert html.count("<circle ") == 30
-    assert "<strong>16<small>53,3%</small></strong>" in html
-    assert "Direita · 16 integrantes" in html
-    assert "panorama-vertical-bars" in html
-    assert "referência: 2022-12-31" in html and "Não é contagem de presença em sessão" in html
-    assert html.count('fill="#c79f53"') == 17  # 16 seat circles + one category bar.
-
-
-def test_senate_legend_uses_same_colors_and_percentages():
-    html = render_composition(
-        composition(),
-        "Senado Federal",
-        "Brasil",
-        "https://www25.senado.leg.br",
-        view="political_orientation",
-        year=2022,
-    )
-    assert "Integrantes por abordagem política" in html
-    assert "<strong>16<small>53,3%</small></strong>" in html
-    assert html.count("<circle ") == 30
-    assert 'fill="#8c9990"' in html and 'fill="#aeb9aa"' in html
-
-
-def test_2026_limit_is_visible_and_party_default_remains_unchanged():
-    kwargs = dict(
-        title="Senado Federal", eyebrow="Brasil", official_link="https://www25.senado.leg.br"
-    )
-    html = render_composition(composition(), **kwargs, view="political_orientation", year=2026)
-    assert "Não há classificação documentada para este ano" in html
-    assert "<span>Sem classificação</span><strong>29" in html
-    default = render_composition(composition(), **kwargs)
-    assert "<span>PT</span><strong>10</strong>" in default
-    assert "panorama-orientation-composition-note" not in default
-
-
-def test_partial_roll_is_labeled_documented_and_uses_only_available_people():
-    html = render_composition(
-        {
-            "total": None,
-            "members": [{"person_id": "source:1", "name": "Pessoa", "political_party": "PT"}],
-        },
-        "Câmara dos Deputados",
-        "Brasil",
-        "https://www.camara.leg.br",
-        view="political_orientation",
-        year=2022,
-    )
-    assert html.count("<circle ") == 1
-    assert "não representa cadeiras simultâneas" in html
-    assert ">documentados</text>" in html
-
-
-def test_empty_semicircle_stays_empty():
-    assert "<circle " not in render_people_semicircle(
-        orientation_composition({"total": 0, "political_parties": []}, 2022)
-    )
-
-
 def test_unreconciled_affiliation_is_not_promoted_from_a_display_label():
     data = {
         "total": 3,
@@ -157,5 +87,4 @@ def test_controversial_category_remains_separate_and_ties_are_named(monkeypatch)
         "controversial": 1,
         "center": 1,
     }
-    html = module.render_largest_orientation_group(result["political_parties"])
-    assert "Maiores grupos classificados" in html and "Direita · Esquerda" in html
+    assert result["total"] == 8

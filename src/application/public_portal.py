@@ -10,7 +10,9 @@ from zoneinfo import ZoneInfo
 
 from service.public_profile import PublicProfileError
 
-SEARCH_PARAMETERS = frozenset({"q", "uf", "office_kind", "political_party", "cursor", "limit"})
+SEARCH_PARAMETERS = frozenset(
+    {"q", "uf", "office_kind", "political_party", "cursor", "limit", "sort"}
+)
 PROFILE_PARAMETERS = frozenset(
     {
         "tab",
@@ -33,13 +35,16 @@ class PublicResponse:
     body: bytes
     content_type: str
     dataset_version: str | None = None
+    search_indexable: bool = True
 
 
-def encode_response(payload, *, status=200, content_type="application/json", dataset_version=None):
+def encode_response(payload, *, status=200, content_type="application/json", dataset_version=None,
+                    search_indexable=True):
     if content_type == "application/json":
         payload = json.dumps(payload, ensure_ascii=False, allow_nan=False)
     return PublicResponse(
-        status, payload.encode("utf-8"), content_type + "; charset=utf-8", dataset_version
+        status, payload.encode("utf-8"), content_type + "; charset=utf-8", dataset_version,
+        search_indexable,
     )
 
 
@@ -57,16 +62,25 @@ def dispatch_portal_request(application, target):
         parsed = urlsplit(target)
         if parsed.scheme or parsed.netloc or parsed.fragment:
             return encode_response({"error": "ROUTE_NOT_FOUND"}, status=404)
-        return route_public_request(application, parsed)
+        from application.search_indexing import enrich_search_response
+
+        response = route_font_request(parsed) or route_public_request(application, parsed)
+        return enrich_search_response(response, target, application)
     except PublicProfileError as error:
-        return encode_public_error(target, error.code, error.status_code)
+        return searchable_public_error(application, target, error.code, error.status_code)
     except ValueError:
-        return encode_public_error(target, "INVALID_REQUEST", 400)
+        return searchable_public_error(application, target, "INVALID_REQUEST", 400)
     except Exception as error:
         logging.getLogger(__name__).error(
             "Public portal request failed: error_type=%s", type(error).__name__
         )
-        return encode_public_error(target, "TEMPORARILY_UNAVAILABLE", 503)
+        return searchable_public_error(application, target, "TEMPORARILY_UNAVAILABLE", 503)
+
+
+def searchable_public_error(application, target, code, status):
+    from application.search_indexing import enrich_search_response
+
+    return enrich_search_response(encode_public_error(target, code, status), target, application)
 
 
 def encode_public_error(target, code, status):
@@ -101,6 +115,11 @@ def encode_public_error(target, code, status):
 
 
 def route_public_request(application, parsed):
+    from application.search_indexing import route_search_index_request
+
+    index_response = route_search_index_request(application, parsed)
+    if index_response is not None:
+        return index_response
     dashboard_response = route_dashboard_request(application, parsed)
     if dashboard_response is not None:
         return dashboard_response
@@ -109,26 +128,20 @@ def route_public_request(application, parsed):
         return educational_response
     if parsed.path in {"/pessoas", "/api/people"}:
         parameters = read_parameters(parsed.query, SEARCH_PARAMETERS)
-        if parsed.path == "/pessoas" and "limit" not in parameters:
-            from service.public_profile.people_contracts import PeopleQuery
-            from service.public_profile_web.search import render_search_shell
-
-            PeopleQuery(**parameters)
-            return encode_response(render_search_shell(parameters), content_type="text/html")
         result = application.fetch_people(parameters)
         if parsed.path == "/api/people":
             return encode_response(result)
         from service.public_profile_web import render_search_page
 
-        return encode_response(render_search_page(parameters, result), content_type="text/html")
-    if parsed.path == "/assets/people-viewport.js" and not parsed.query:
-        from pathlib import Path
+        return encode_response(render_search_page(
+            parameters, result,
+            party_options=application.fetch_political_party_options(),
+        ), content_type="text/html")
+    from application.public_scripts import route_script_request
 
-        import service.public_profile_web.search as search_module
-        from service.public_profile_web.static_text import read_static_text
-
-        script = Path(search_module.__file__).parent / "assets" / "people-viewport.js"
-        return encode_response(read_static_text(script), content_type="text/javascript")
+    script_response = route_script_request(parsed)
+    if script_response is not None:
+        return script_response
     if parsed.path == "/assets/public-profile.css" and not parsed.query:
         from service.public_profile_web import public_stylesheet
 
@@ -143,26 +156,38 @@ def route_public_request(application, parsed):
     return encode_response({"error": "ROUTE_NOT_FOUND"}, status=404)
 
 
-def route_dashboard_request(application, parsed):
-    if parsed.path == "/assets/panorama.css" and not parsed.query:
-        from service.political_dashboard.page import dashboard_stylesheet
+def route_font_request(parsed):
+    from web_components import FONT_CONTENT_TYPE, read_font_file
 
-        return encode_response(dashboard_stylesheet(), content_type="text/css")
-    if parsed.path not in {"/panorama", "/api/political-dashboard"}:
+    font = None if parsed.query else read_font_file(parsed.path)
+    return PublicResponse(200, font, FONT_CONTENT_TYPE) if font is not None else None
+
+
+def route_dashboard_request(application, parsed):
+    if parsed.path == "/panorama":
+        return route_majority_panorama(application, parsed)
+    if parsed.path != "/api/political-dashboard":
         return None
     parameters = read_parameters(
         parsed.query, {"uf", "year", "senate_uf", "level", "municipality_ibge", "territory", "view"}
     )
     result = application.fetch_political_dashboard(parameters)
-    version = result.get("dataset_version")
-    if parsed.path == "/api/political-dashboard":
-        return encode_response(result, dataset_version=version)
-    from service.political_dashboard.page import render_dashboard
+    return encode_response(result, dataset_version=result.get("dataset_version"))
 
+
+def route_majority_panorama(application, parsed):
+    from service.majority_panorama.page import render_majority_panorama
+    from service.majority_panorama.state import QUERY_PARAMETERS, parse_state
+
+    state = parse_state(read_parameters(parsed.query, QUERY_PARAMETERS))
+    panorama = application.fetch_majority_panorama()
     return encode_response(
-        render_dashboard(result, application.today()),
+        render_majority_panorama(panorama, state),
         content_type="text/html",
-        dataset_version=version,
+        dataset_version=str(panorama.generated_on),
+        search_indexable=any(
+            legislature.has_data for legislature in panorama.legislatures
+        ),
     )
 
 
@@ -240,6 +265,7 @@ class PublicPortalApplication:
         from service.public_profile.search_cache import PublicSearchCache
 
         self.people_cache = PublicSearchCache()
+        self.party_options_cache = PublicSearchCache(ttl_seconds=3600, capacity=2)
         from application.political_dashboard_reader import PoliticalDashboardReader
         from database.public_read_connections import (
             PublicReadConnectionPool,
@@ -253,34 +279,33 @@ class PublicPortalApplication:
         self.political_dashboard = PoliticalDashboardReader(
             self.read_connections, lambda: self.today()
         )
+        from application.majority_panorama_reader import (
+            CachedMajorityPanorama,
+            MajorityPanoramaReader,
+        )
+
+        self.majority_panorama = CachedMajorityPanorama(
+            MajorityPanoramaReader(self.fetch_political_dashboard, self.today)
+        )
+        from application.search_indexing import SearchIndexReader
+
+        self.search_index = SearchIndexReader(self.read_connections, self.today)
 
     def fetch_political_dashboard(self, parameters):
         return self.political_dashboard.fetch(parameters)
 
+    def fetch_majority_panorama(self):
+        return self.majority_panorama.fetch()
+
+    def fetch_political_party_options(self):
+        from application.political_party_options import fetch_party_options
+
+        return fetch_party_options(self)
+
     def fetch_people(self, parameters):
-        from database.operations import connect_database
-        from database.public_people import PublicPeopleRepository
-        from service.public_profile.people import search_people
-        from service.public_profile.people_contracts import PeopleQuery
+        from application.people_search import fetch_people
 
-        query = PeopleQuery(
-            q=parameters.get("q", ""),
-            uf=parameters.get("uf"),
-            office_kind=parameters.get("office_kind"),
-            political_party=parameters.get("political_party"),
-            cursor=parameters.get("cursor"),
-            limit=int(parameters.get("limit", "6")),
-        )
-        as_of = self.today()
-        from service.public_profile.people_contracts import decode_people_cursor
-
-        decode_people_cursor(query, as_of)
-
-        def load_public_people():
-            with connect_database(self.env_file) as connection:
-                return search_people(PublicPeopleRepository(connection), query, as_of)
-
-        return self.people_cache.get_or_load((query, as_of), load_public_people)
+        return fetch_people(self, parameters)
 
     def fetch_person(self, person_id, *, proposal_page=1):
         from database.alerj_history import fetch_person_historical_activity

@@ -1,5 +1,4 @@
 from service.political_dashboard.orientation_timeline import orientation_cell
-from service.political_dashboard.view_filter import render_orientation_legend
 
 
 def composition(**counts):
@@ -36,11 +35,3 @@ def test_presidential_intra_year_categories_include_unaffiliated_separately():
     cell = orientation_cell(institution, 2022, "executive")
     assert "Esquerda" in cell["label"]
     assert "Sem filiação" in cell["label"]
-
-
-def test_orientation_legend_preserves_categories_without_methodology_section():
-    explanation = render_orientation_legend({"view": "political_orientation"})
-    assert "Legenda das abordagens políticas" in explanation
-    assert "Esquerda" in explanation
-    assert "Como ler a abordagem política" not in explanation
-    assert "Classificações dos partidos:" not in explanation

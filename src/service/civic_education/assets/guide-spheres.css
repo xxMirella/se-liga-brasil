@@ -1,0 +1,32 @@
+/* Civic guide, Step 1 Esferas (reference: Como Funciona v2). */
+.ds-civic-realms { display: flex; flex-direction: column; gap: 24px; padding-block: 64px; border-bottom: 1px solid var(--color-line); }
+.ds-civic-realms__eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-brand); }
+.ds-civic-realms__title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(30px, 4vw, 42px); line-height: 1.1; }
+.civic-guide .ds-civic-realms__lead { margin: 0; font-size: 18px; line-height: 1.55; max-width: 680px; color: var(--color-ink-soft); }
+.ds-civic-realms__lead strong { color: var(--color-ink); }
+.ds-civic-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.ds-civic-pill { display: inline-flex; align-items: center; font-size: 15px; font-weight: 500; min-height: 44px; padding: 0 18px; border: 1px solid var(--color-line-strong); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-ink); text-decoration: none; }
+.ds-civic-pill:hover { color: var(--color-ink); border-color: var(--color-ink); }
+.ds-civic-pill[aria-current="true"] { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-surface); }
+.ds-civic-panel { background: var(--color-surface); border: 1px solid var(--color-line-strong); border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 18px; }
+.ds-civic-panel__head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.ds-civic-panel__title { margin: 0; font-size: 20px; font-weight: 600; }
+.ds-civic-panel__scope { font-size: 14px; color: var(--color-muted); }
+.ds-civic-powers { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; align-items: stretch; }
+.ds-civic-power { border: 1px solid; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 8px; }
+.ds-civic-power--executive { border-color: var(--color-executive-line); background: var(--color-executive-tint); }
+.ds-civic-power--legislative { border-color: var(--color-legislative-line); background: var(--color-legislative-tint); }
+.ds-civic-power__label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+.ds-civic-power--executive .ds-civic-power__label { color: var(--color-executive); }
+.ds-civic-power--legislative .ds-civic-power__label { color: var(--color-legislative); }
+.ds-civic-power__name { font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 1.15; }
+.ds-civic-power__where { font-size: 15px; color: var(--color-ink-soft); }
+.ds-civic-power__does { font-size: 15px; line-height: 1.5; color: var(--color-ink-soft); }
+.ds-civic-relation { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; background: var(--color-page); border-radius: var(--radius-small); }
+.ds-civic-relation > span { font-size: 20px; line-height: 1.2; }
+.civic-guide .ds-civic-relation p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--color-ink-soft); }
+.ds-civic-relation strong { color: var(--color-ink); }
+.ds-civic-disclosures { display: flex; flex-direction: column; border-top: 1px solid var(--color-line-strong); max-width: 780px; }
+.ds-civic-disclosures .ds-disclosure { max-width: none; }
+.civic-guide .ds-civic-disclosures .ds-disclosure__body p { line-height: 1.6; font-size: 16px; }
+.civic-guide .ds-civic-realms__source { margin: 0; font-size: 13px; color: var(--color-muted); max-width: none; }

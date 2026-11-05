@@ -1,0 +1,376 @@
+[
+  {
+    "year": 2010,
+    "uf": "SP",
+    "kind": "licensed_awaiting_possession",
+    "detail": "Silvio Torres estava licenciado desde 31/12/2010; André Montoro assumiu somente em 05/01/2011. Interrupção de exercício documentada, sem vacância do mandato.",
+    "events": [
+      {
+        "source_person_id": "73560",
+        "signature": {
+          "id": 73560,
+          "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/73560",
+          "nome": "SILVIO TORRES",
+          "nomeEleitoral": "SILVIO TORRES",
+          "siglaPartido": "PSDB",
+          "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36835",
+          "siglaUf": "SP",
+          "idLegislatura": 53,
+          "email": null,
+          "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/73560.jpg",
+          "dataHora": "2010-12-31T00:00",
+          "situacao": "Licença",
+          "condicaoEleitoral": "Titular",
+          "descricaoStatus": "Saída - Afastamento sem prazo determinado - Secretário de Estado"
+        }
+      },
+      {
+        "source_person_id": "159261",
+        "signature": {
+          "id": 159261,
+          "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/159261",
+          "nome": "ANDRE MONTORO",
+          "nomeEleitoral": "ANDRE MONTORO",
+          "siglaPartido": "PSDB",
+          "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36835",
+          "siglaUf": "SP",
+          "idLegislatura": 53,
+          "email": null,
+          "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/159261.jpg",
+          "dataHora": "2011-01-05T11:29",
+          "situacao": "Exercício",
+          "condicaoEleitoral": "Suplente",
+          "descricaoStatus": "Entrada - Posse de Suplente - Posse como Suplente"
+        }
+      }
+    ],
+    "evidence_assertions": [
+      {
+        "source": {
+          "url": "https://www.camara.leg.br/deputados/73560/biografia",
+          "sha256": "0b95d63e6d6b07fca4818b6ff57f19e014306d5e4234c281cfbfe96a788c9a0e",
+          "fetched_at": "2026-11-02T13:52:53.505525+00:00",
+          "http_status": 200
+        },
+        "archive": "nominal-review-20261102/0b95d63e6d6b07fca4818b6ff57f19e014306d5e4234c281cfbfe96a788c9a0e.html",
+        "contains": "a partir de 31 de dezembro de 2010."
+      },
+      {
+        "source": {
+          "url": "https://www.camara.leg.br/deputados/159261/biografia",
+          "sha256": "e1d11fdad3c0330c26445ccd945d106207c1f09d98b0a057b2c01cab68d7582f",
+          "fetched_at": "2026-11-02T13:52:53.603074+00:00",
+          "http_status": 200
+        },
+        "archive": "nominal-review-20261102/e1d11fdad3c0330c26445ccd945d106207c1f09d98b0a057b2c01cab68d7582f.html",
+        "contains": "a partir de 5 de janeiro de 2011, em virtude do licenciamento do Deputado Sílvio Torres."
+      }
+    ],
+    "uf_member_ids_sha256": "f3b7ddd3cd8b6afebdc23a50bb1d55d56ab53fb95273f9d8046e137bffc3a413"
+  },
+  {
+    "year": 2014,
+    "uf": "PR",
+    "kind": "serving_substitute_effectuated",
+    "detail": "Nishimori substituía Francischini desde 16/12/2014 e foi efetivado em razão da renúncia de Cida Borghetti em 31/12. Já estava entre os 29 integrantes: a efetivação não cria outra pessoa em exercício. Oliveira Filho já substituía Cezar Silvestri. A interrupção remanescente não é classificada como vacância nem como nova cadeira de Nishimori.",
+    "events": [
+      {
+        "source_person_id": "160580",
+        "signature": {
+          "id": 160580,
+          "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/160580",
+          "nome": "CIDA BORGHETTI",
+          "nomeEleitoral": "CIDA BORGHETTI",
+          "siglaPartido": "PROS",
+          "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36763",
+          "siglaUf": "PR",
+          "idLegislatura": 54,
+          "email": null,
+          "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/160580.jpg",
+          "dataHora": "2014-12-31T00:00",
+          "situacao": "VACANCIA",
+          "condicaoEleitoral": "Titular",
+          "descricaoStatus": "Saída - Afastamento definitivo - Renúncia"
+        }
+      },
+      {
+        "source_person_id": "162332",
+        "signature": {
+          "id": 162332,
+          "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/162332",
+          "nome": "LUIZ NISHIMORI",
+          "nomeEleitoral": "LUIZ NISHIMORI",
+          "siglaPartido": "PR",
+          "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36814",
+          "siglaUf": "PR",
+          "idLegislatura": 54,
+          "email": null,
+          "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/162332.jpg",
+          "dataHora": "2014-12-31T00:00",
+          "situacao": "Exercício",
+          "condicaoEleitoral": "EFETIVADO",
+          "descricaoStatus": "DIVERSO - Alteração na Situação - Efetivação (Ato da Presidência)"
+        }
+      },
+      {
+        "source_person_id": "160646",
+        "signature": {
+          "id": 160646,
+          "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/160646",
+          "nome": "FERNANDO FRANCISCHINI",
+          "nomeEleitoral": "FERNANDO FRANCISCHINI",
+          "siglaPartido": "SD",
+          "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36765",
+          "siglaUf": "PR",
+          "idLegislatura": 54,
+          "email": null,
+          "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/160646.jpg",
+          "dataHora": "2014-12-16T18:48",
+          "situacao": "Licença",
+          "condicaoEleitoral": "Titular",
+          "descricaoStatus": "Saída - Afastamento sem prazo determinado - Secretário de Estado"
+        }
+      }
+    ],
+    "evidence_assertions": [
+      {
+        "source": {
+          "url": "https://www.camara.leg.br/deputados/resultado-historico-parlamentar?Pesquisar=Pesquisar&dataFinal=31%2F01%2F2015&dataInicial=01%2F12%2F2014&filiacaoPartidaria=1&histMandato=1&mudancaNomePart=1&ordenarPor=2&parlamentar=",
+          "sha256": "3428fa3cd181a9484fb6dc8e7f3614f02b42822341af8735c90f11c8c3411bc9",
+          "fetched_at": "2026-11-02T13:56:31.665095+00:00",
+          "http_status": 200
+        },
+        "archive": "nominal-review-20261102/3428fa3cd181a9484fb6dc8e7f3614f02b42822341af8735c90f11c8c3411bc9.html",
+        "contains": "Renúncia (Efetivação (Ato da Presidência) - LUIZ NISHIMORI - 31/12/2014 00:00:00 )"
+      },
+      {
+        "source": {
+          "url": "https://www.camara.leg.br/deputados/resultado-historico-parlamentar?Pesquisar=Pesquisar&dataFinal=31%2F01%2F2015&dataInicial=01%2F12%2F2014&filiacaoPartidaria=1&histMandato=1&mudancaNomePart=1&ordenarPor=2&parlamentar=",
+          "sha256": "3428fa3cd181a9484fb6dc8e7f3614f02b42822341af8735c90f11c8c3411bc9",
+          "fetched_at": "2026-11-02T13:56:31.665095+00:00",
+          "http_status": 200
+        },
+        "archive": "nominal-review-20261102/3428fa3cd181a9484fb6dc8e7f3614f02b42822341af8735c90f11c8c3411bc9.html",
+        "contains": "16/12/2014 18:48:00 - Secretário de Estado (Reassunção - LUIZ NISHIMORI - 16/12/2014 20:40:00 )"
+      },
+      {
+        "source": {
+          "url": "https://www.camara.leg.br/deputados/resultado-historico-parlamentar?Pesquisar=Pesquisar&dataFinal=31%2F01%2F2015&dataInicial=01%2F12%2F2014&filiacaoPartidaria=1&histMandato=1&mudancaNomePart=1&ordenarPor=2&parlamentar=",
+          "sha256": "3428fa3cd181a9484fb6dc8e7f3614f02b42822341af8735c90f11c8c3411bc9",
+          "fetched_at": "2026-11-02T13:56:31.665095+00:00",
+          "http_status": 200
+        },
+        "archive": "nominal-review-20261102/3428fa3cd181a9484fb6dc8e7f3614f02b42822341af8735c90f11c8c3411bc9.html",
+        "contains": "18/12/2014 00:00:00 - Secretário de Estado (Reassunção - OLIVEIRA FILHO - 19/12/2014 12:54:00 )"
+      }
+    ],
+    "uf_member_ids_sha256": "85fd33d82833ade7762f0fbcb8c3d6c06b5c6272ff92d82ad2c6f2fefa525c33"
+  },
+  {
+    "year": 2015,
+    "uf": "RJ",
+    "kind": "licensed_awaiting_possession",
+    "detail": "Ezequiel Teixeira estava licenciado desde 15/12/2015; Átila A. Nunes tomou posse em 06/01/2016. Interrupção de exercício documentada, sem vacância do mandato.",
+    "events": [
+      {
+        "source_person_id": "178941",
+        "signature": {
+          "id": 178941,
+          "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/178941",
+          "nome": "EZEQUIEL TEIXEIRA",
+          "nomeEleitoral": "EZEQUIEL TEIXEIRA",
+          "siglaPartido": "PMB",
+          "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36887",
+          "siglaUf": "RJ",
+          "idLegislatura": 55,
+          "email": null,
+          "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/178941.jpg",
+          "dataHora": "2015-12-15T11:51",
+          "situacao": "Licença",
+          "condicaoEleitoral": "Titular",
+          "descricaoStatus": "Saída - Afastamento sem prazo determinado - Secretário de Estado"
+        }
+      },
+      {
+        "source_person_id": "193165",
+        "signature": {
+          "id": 193165,
+          "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/193165",
+          "nome": "ATILA A. NUNES",
+          "nomeEleitoral": "ÁTILA A. NUNES",
+          "siglaPartido": "PSL",
+          "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36837",
+          "siglaUf": "RJ",
+          "idLegislatura": 55,
+          "email": null,
+          "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/193165.jpg",
+          "dataHora": "2016-01-06T10:32",
+          "situacao": "Exercício",
+          "condicaoEleitoral": "Suplente",
+          "descricaoStatus": "Entrada - Posse de Suplente - Posse como Suplente"
+        }
+      }
+    ],
+    "evidence_assertions": [
+      {
+        "source": {
+          "url": "https://www.camara.leg.br/deputados/178941/biografia",
+          "sha256": "1ff4497bc238479e85e22019251e31953122005af8326df76cb36b145018807d",
+          "fetched_at": "2026-11-02T13:52:53.650249+00:00",
+          "http_status": 200
+        },
+        "archive": "nominal-review-20261102/1ff4497bc238479e85e22019251e31953122005af8326df76cb36b145018807d.html",
+        "contains": "a partir de 15 de dezembro de 2015."
+      },
+      {
+        "source": {
+          "url": "https://www.camara.leg.br/deputados/193165/biografia",
+          "sha256": "d846e2b8da552a70f6ccf373f75e31bae0f837772d125cba4a1368fe8ddab0f9",
+          "fetched_at": "2026-11-02T13:52:53.699762+00:00",
+          "http_status": 200
+        },
+        "archive": "nominal-review-20261102/d846e2b8da552a70f6ccf373f75e31bae0f837772d125cba4a1368fe8ddab0f9.html",
+        "contains": "em virtude do licenciamento do Deputado Ezequiel Teixeira (PMB-RJ)."
+      }
+    ],
+    "uf_member_ids_sha256": "8bb141c6ca14ac6514650346025031960e493c95088253928d69b9148d075344"
+  },
+  {
+    "year": 2018,
+    "uf": "PA",
+    "kind": "renunciation_awaiting_possession",
+    "detail": "Lúcio Vale renunciou em 31/12/2018; Giovanni Queiroz tomou posse como titular em 08/01/2019, com vínculo explícito na movimentação oficial. Vaga documentada no encerramento de 2018.",
+    "events": [
+      {
+        "source_person_id": "141484",
+        "signature": {
+          "id": 141484,
+          "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/141484",
+          "nome": "LÚCIO VALE",
+          "nomeEleitoral": "LÚCIO VALE",
+          "siglaPartido": "PR",
+          "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36814",
+          "siglaUf": "PA",
+          "idLegislatura": 55,
+          "email": null,
+          "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/141484.jpg",
+          "dataHora": "2018-12-31T00:00",
+          "situacao": "VACANCIA",
+          "condicaoEleitoral": "Titular",
+          "descricaoStatus": "Saída - Afastamento definitivo - Renúncia"
+        }
+      },
+      {
+        "source_person_id": "74077",
+        "signature": {
+          "id": 74077,
+          "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74077",
+          "nome": "GIOVANNI QUEIROZ",
+          "nomeEleitoral": "GIOVANNI QUEIROZ",
+          "siglaPartido": "PDT",
+          "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36786",
+          "siglaUf": "PA",
+          "idLegislatura": 55,
+          "email": null,
+          "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74077.jpg",
+          "dataHora": "2019-01-08T18:00",
+          "situacao": "Exercício",
+          "condicaoEleitoral": "EFETIVADO",
+          "descricaoStatus": "Entrada - Posse de Suplente - Posse como Titular"
+        }
+      }
+    ],
+    "evidence_assertions": [
+      {
+        "source": {
+          "url": "https://www.camara.leg.br/deputados/141484/biografia",
+          "sha256": "37d0ea8904b31d32f4faefeaadff4d9df7138dcc7f22030432040536b320ad27",
+          "fetched_at": "2026-11-02T13:52:53.776962+00:00",
+          "http_status": 200
+        },
+        "archive": "nominal-review-20261102/37d0ea8904b31d32f4faefeaadff4d9df7138dcc7f22030432040536b320ad27.html",
+        "contains": "em 31 de Dezembro de 2018."
+      },
+      {
+        "source": {
+          "url": "https://www.camara.leg.br/deputados/resultado-historico-parlamentar?Pesquisar=Pesquisar&dataFinal=31%2F01%2F2019&dataInicial=01%2F12%2F2018&filiacaoPartidaria=1&histMandato=1&mudancaNomePart=1&ordenarPor=2&parlamentar=",
+          "sha256": "c893f7c4fefcf5d54dcfc30b220fa71605fe7e9cce441f1f2138ea27e69ce93a",
+          "fetched_at": "2026-11-02T13:56:35.817736+00:00",
+          "http_status": 200
+        },
+        "archive": "nominal-review-20261102/c893f7c4fefcf5d54dcfc30b220fa71605fe7e9cce441f1f2138ea27e69ce93a.html",
+        "contains": "GIOVANNI QUEIROZ - PDT/PA 08/01/2019 18:00:00 - Posse como Titular (Renúncia - LÚCIO VALE - 31/12/2018 00:00:00 )"
+      }
+    ],
+    "uf_member_ids_sha256": "28a21d41d3e8126e6f00821d2b4c95b63e8c24a3a2c4bc591632fb09b4eb6c8d"
+  },
+  {
+    "year": 2019,
+    "uf": "PB",
+    "kind": "judicial_suspension",
+    "detail": "Wilson Santiago estava afastado judicialmente desde 23/12/2019 e reassumiu em 05/02/2020. O mandato foi preservado; o afastamento não é vacância nem exercício de suplente presumido.",
+    "events": [
+      {
+        "source_person_id": "74044",
+        "signature": {
+          "id": 74044,
+          "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74044",
+          "nome": "Wilson Santiago ",
+          "nomeEleitoral": "WILSON SANTIAGO ",
+          "siglaPartido": "PTB",
+          "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36845",
+          "siglaUf": "PB",
+          "idLegislatura": 56,
+          "email": null,
+          "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74044.jpg",
+          "dataHora": "2019-12-23T23:50",
+          "situacao": "Afastado",
+          "condicaoEleitoral": "Titular",
+          "descricaoStatus": "Saída - Afastamento sem prazo determinado - Afastamento por Decisão Judicial"
+        }
+      },
+      {
+        "source_person_id": "74044",
+        "signature": {
+          "id": 74044,
+          "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74044",
+          "nome": "Wilson Santiago ",
+          "nomeEleitoral": "WILSON SANTIAGO ",
+          "siglaPartido": "PTB",
+          "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36845",
+          "siglaUf": "PB",
+          "idLegislatura": 56,
+          "email": null,
+          "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74044.jpg",
+          "dataHora": "2020-02-05T22:46",
+          "situacao": "Exercício",
+          "condicaoEleitoral": "Titular",
+          "descricaoStatus": "Entrada - Reassunção"
+        }
+      }
+    ],
+    "evidence_assertions": [
+      {
+        "source": {
+          "url": "https://www.camara.leg.br/deputados/74044/biografia",
+          "sha256": "d1c5dc4592dceb7ec7af88ec5fc92580992b1ea80d6c3f700a8271a8794d6875",
+          "fetched_at": "2026-11-02T13:52:53.824777+00:00",
+          "http_status": 200
+        },
+        "archive": "nominal-review-20261102/d1c5dc4592dceb7ec7af88ec5fc92580992b1ea80d6c3f700a8271a8794d6875.html",
+        "contains": "a partir de 23 de Dezembro de 2019. Reassumiu, em 5 de Fevereiro de 2020."
+      },
+      {
+        "source": {
+          "url": "https://www.camara.leg.br/noticias/634689-camara-rejeita-afastamento-do-deputado-wilson-santiago/",
+          "sha256": "9c6cc2829b548e7f0baf6b081196689b560e33b40595ed6dc59487662fbabea2",
+          "fetched_at": "2026-11-02T13:52:54.075304+00:00",
+          "http_status": 200
+        },
+        "archive": "nominal-review-20261102/9c6cc2829b548e7f0baf6b081196689b560e33b40595ed6dc59487662fbabea2.html",
+        "contains": "perde validade a medida cautelar do Supremo que o afastou em dezembro do ano passado."
+      }
+    ],
+    "uf_member_ids_sha256": "19258b2927c4983138748714e190316d5918bbda3909c2a0556b6efab47d728e"
+  }
+]

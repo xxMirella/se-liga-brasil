@@ -1,25 +1,25 @@
 # Câmara dos Deputados — conciliação 2010–2026
 
-Integração local efetivamente ativada em 29/10/2026, no painel e na linha do tempo existentes do Se Liga, Brasil. Não houve publicação remota.
+Integração local ativada em 29/10/2026, com revisão nominal em 02/11/2026, no painel e na linha do tempo existentes do Se Liga, Brasil. Não houve publicação remota.
 
 ## Resultado efetivo
 
-Entre 2010 e 2019, as 94 diferenças do pacote estrito caíram para cinco: foram recuperadas 69 observações de pessoa em exercício no encerramento do ano (pessoa-ano, não 69 pessoas distintas) e documentados 20 registros de vaga em fotografias anuais. Cinco dos dez encerramentos estão conciliados. As outras cinco fotografias permanecem parciais.
+Em 29/10, as 94 diferenças do pacote estrito caíram para cinco: foram recuperadas 69 observações de pessoa em exercício no encerramento do ano (pessoa-ano, não 69 pessoas distintas) e documentados 20 registros de vaga em fotografias anuais. Em 02/11, as cinco situações restantes receberam revisão documental: uma vaga adicional (PA/2018) e quatro interrupções de exercício, separadas de vacância. Os dez encerramentos de 2010–2019 estão contabilizados por UF, sem acrescentar pessoas ou alterar bancadas. Isso não encerra as lacunas de condição eleitoral, intervalos diários ou classificação política.
 
 Os 17 anos foram conferidos por HTTP no servidor local. Em 2020 continuam 512 pessoas em exercício + uma vaga documentada no ES. Em 2021–2026 há 513 pessoas; 2026 é fotografia de 29/10, não encerramento do ano.
 
 ## Resultado anual
 
-- 2010 (2010-12-31): 509 em exercício; 3 vagas documentadas; pendências SP: 1. Classificação: esquerda 0, centro 0, direita 0, sem classificação 509, sem filiação 0. Limiar 257/513.
+- 2010 (2010-12-31): 509 em exercício; 3 vagas documentadas; 1 interrupção de exercício documentada; pendências nenhuma. Classificação: esquerda 0, centro 0, direita 0, sem classificação 509, sem filiação 0. Limiar 257/513.
 - 2011 (2011-12-31): 513 em exercício; 0 vagas documentadas; pendências nenhuma. Classificação: esquerda 0, centro 0, direita 0, sem classificação 513, sem filiação 0. Limiar 257/513.
 - 2012 (2012-12-31): 505 em exercício; 8 vagas documentadas; pendências nenhuma. Classificação: esquerda 0, centro 0, direita 0, sem classificação 505, sem filiação 0. Limiar 257/513.
 - 2013 (2013-12-31): 513 em exercício; 0 vagas documentadas; pendências nenhuma. Classificação: esquerda 0, centro 0, direita 0, sem classificação 513, sem filiação 0. Limiar 257/513.
-- 2014 (2014-12-31): 507 em exercício; 5 vagas documentadas; pendências PR: 1. Classificação: esquerda 0, centro 0, direita 0, sem classificação 507, sem filiação 0. Limiar 257/513.
-- 2015 (2015-12-31): 512 em exercício; 0 vagas documentadas; pendências RJ: 1. Classificação: esquerda 0, centro 0, direita 0, sem classificação 511, sem filiação 1. Limiar 257/513.
+- 2014 (2014-12-31): 507 em exercício; 5 vagas documentadas; 1 interrupção de exercício documentada; pendências nenhuma. Classificação: esquerda 0, centro 0, direita 0, sem classificação 507, sem filiação 0. Limiar 257/513.
+- 2015 (2015-12-31): 512 em exercício; 0 vagas documentadas; 1 interrupção de exercício documentada; pendências nenhuma. Classificação: esquerda 0, centro 0, direita 0, sem classificação 511, sem filiação 1. Limiar 257/513.
 - 2016 (2016-12-31): 509 em exercício; 4 vagas documentadas; pendências nenhuma. Classificação: esquerda 0, centro 0, direita 0, sem classificação 509, sem filiação 0. Limiar 257/513.
 - 2017 (2017-12-31): 513 em exercício; 0 vagas documentadas; pendências nenhuma. Classificação: esquerda 0, centro 0, direita 0, sem classificação 510, sem filiação 3. Limiar 257/513.
-- 2018 (2018-12-31): 512 em exercício; 0 vagas documentadas; pendências PA: 1. Classificação: esquerda 124, centro 14, direita 374, sem classificação 0, sem filiação 0. Limiar 257/513.
-- 2019 (2019-12-31): 512 em exercício; 0 vagas documentadas; pendências PB: 1. Classificação: esquerda 129, centro 14, direita 369, sem classificação 0, sem filiação 0. Limiar 257/513.
+- 2018 (2018-12-31): 512 em exercício; 1 vaga documentada; pendências nenhuma. Classificação: esquerda 124, centro 14, direita 374, sem classificação 0, sem filiação 0. Limiar 257/513.
+- 2019 (2019-12-31): 512 em exercício; 0 vagas documentadas; 1 interrupção de exercício documentada; pendências nenhuma. Classificação: esquerda 129, centro 14, direita 369, sem classificação 0, sem filiação 0. Limiar 257/513.
 - 2020 (2020-12-31): 512 em exercício; 1 vagas documentadas; pendências nenhuma. Classificação: esquerda 130, centro 5, direita 296, sem classificação 81, sem filiação 0. Limiar 257/513.
 - 2021 (2021-12-31): 513 em exercício; 0 vagas documentadas; pendências nenhuma. Classificação: esquerda 124, centro 5, direita 303, sem classificação 81, sem filiação 0. Limiar 257/513.
 - 2022 (2022-12-31): 513 em exercício; 0 vagas documentadas; pendências nenhuma. Classificação: esquerda 120, centro 0, direita 393, sem classificação 0, sem filiação 0. Limiar 257/513.
@@ -28,15 +28,17 @@ Os 17 anos foram conferidos por HTTP no servidor local. Em 2020 continuam 512 pe
 - 2025 (2025-12-31): 513 em exercício; 0 vagas documentadas; pendências nenhuma. Classificação: esquerda 127, centro 0, direita 381, sem classificação 5, sem filiação 0. Limiar 257/513.
 - 2026 (2026-10-29): 513 em exercício; 0 vagas documentadas; pendências nenhuma. Classificação: esquerda 125, centro 0, direita 384, sem classificação 4, sem filiação 0. Limiar 257/513.
 
-## Pendências nominais e impacto
+## Cinco casos nominais esclarecidos em 02/11/2026
 
-- SP/2010: Silvio Torres (73560) está licenciado desde 31/12/2010. André Montoro (159261) tem convocação no encerramento e posse posterior. Não se inventou substituição individual nem se chamou licença de vacância.
-- PR/2014: há renúncia de Cida Borghetti (160580), licenças de Cezar Silvestri (74379) e Fernando Francischini (160646), e convocação de Luciano Pizzatto (73777). Os vínculos legados consultados não permitem atribuir com segurança a diferença remanescente a uma cadeira estável.
-- RJ/2015: Ezequiel Teixeira (178941) está licenciado, e Átila A. Nunes (193165) somente tomou posse em 06/01/2016. A diferença permanece separada de vacância jurídica.
-- PA/2018: Lúcio Vale (141484) tem renúncia registrada em 31/12/2018. Sem sucessor e fechamento nominal corroborados para essa cadeira, a diferença continua explicitamente não conciliada.
-- PB/2019: Wilson Santiago (74044) foi afastado judicialmente em 23/12/2019. Afastamento não foi transformado em vacância e não se presumiu exercício de suplente.
+- **SP/2010 — licença e posse posterior:** Silvio Torres (73560) saiu em 31/12/2010. A biografia de André Montoro (159261) vincula expressamente sua posse em 05/01/2011 ao licenciamento de Torres. Mantêm-se 509 pessoas + 3 vagas + 1 interrupção documentada. [Torres](https://www.camara.leg.br/deputados/73560/biografia), [Montoro](https://www.camara.leg.br/deputados/159261/biografia).
+- **PR/2014 — efetivação de suplente já em exercício:** a movimentação oficial vincula a renúncia de Cida Borghetti à efetivação de Luiz Nishimori em 31/12. Nishimori já substituía Francischini desde 16/12; Oliveira Filho já substituía Silvestri desde 19/12. A efetivação não acrescenta uma pessoa ao roster. Mantêm-se 29 pessoas no PR e uma interrupção documentada; não se cria cadeira adicional, vacância ou pareamento novo com Pizzatto. O legado aponta outro predecessor para Pizzatto e não pode substituir o vínculo explícito da movimentação. [Movimentação oficial](https://www.camara.leg.br/deputados/resultado-historico-parlamentar?Pesquisar=Pesquisar&dataFinal=31%2F01%2F2015&dataInicial=01%2F12%2F2014&filiacaoPartidaria=1&histMandato=1&mudancaNomePart=1&ordenarPor=2&parlamentar=).
+- **RJ/2015 — licença e posse posterior:** Ezequiel Teixeira (178941) saiu em 15/12/2015; a biografia de Átila A. Nunes (193165) confirma posse em 06/01/2016, vinculada explicitamente à licença. Mantêm-se 512 pessoas + 1 interrupção; não é vacância. [Átila](https://www.camara.leg.br/deputados/193165/biografia).
+- **PA/2018 — vaga com sucessor explícito:** Lúcio Vale (141484) renunciou em 31/12. A movimentação oficial vincula sua renúncia à posse de Giovanni Queiroz (74077), em 08/01/2019 às 18h. O campo de predecessor do legado estava vazio; não se o preencheu por inferência. A fonte HTML fornece o vínculo que faltava. Mantêm-se 512 pessoas + 1 vaga documentada. [Movimentação oficial](https://www.camara.leg.br/deputados/resultado-historico-parlamentar?Pesquisar=Pesquisar&dataFinal=31%2F01%2F2019&dataInicial=01%2F12%2F2018&filiacaoPartidaria=1&histMandato=1&mudancaNomePart=1&ordenarPor=2&parlamentar=).
+- **PB/2019 — afastamento judicial:** a biografia e os períodos legados de Wilson Santiago (74044) corroboram saída em 23/12/2019 e retorno em 05/02/2020. Mantêm-se 512 pessoas + 1 interrupção documentada. Não se presume suplente empossado nem se declara perda do mandato. [Biografia](https://www.camara.leg.br/deputados/74044/biografia), [notícia da Câmara](https://www.camara.leg.br/noticias/634689-camara-rejeita-afastamento-do-deputado-wilson-santiago/).
 
-Cada pendência afeta uma cadeira. Em 2018 e 2019, nem a atribuição adversa dessa cadeira nem a sua exclusão eliminam a maioria absoluta à direita no método adotado: 374 e 369 cadeiras classificadas, respectivamente, diante de 257 necessárias. Para 2010–2017 não há maioria ideológica demonstrada, porque falta classificação datada integrada — composição completa não resolve esse outro problema.
+A contabilização é: pessoas em exercício + vagas documentadas + interrupções revisadas + diferenças não conciliadas = capacidade institucional. A interrupção documentada não entra nas bancadas, na classificação ou nos votos. O denominador de maioria permanece 513, com limiar 257. Em 2018 e 2019 permanecem 374 e 369 integrantes à direita; para 2010–2017 continua ausente a classificação datada integrada.
+
+A revisão vale somente para cada fotografia de 31/12. Ela não reconstrói identificadores estáveis de cadeiras nem todos os dias dos afastamentos. O registro versionado `config/chamber-reviewed-year-end-cases.json` exige a mesma composição nominal da UF, assinaturas exatas dos eventos, fontes oficiais, hashes dos documentos e trechos verificados. Qualquer mudança invalida a aplicação automática e exige nova revisão. Não se trata de regra genérica que transforma uma licença em cadeira vaga.
 
 ## Reconciliações documentadas
 
@@ -92,7 +94,7 @@ Para 2010–2017 foi reavaliado o estudo primário de Power e Rodrigues-Silveira
 
 ## Intervalos e condição eleitoral
 
-Os 51 intervalos conflitantes originais permanecem rastreáveis: 43 tiveram assinatura de situação resolvida pela entrada explícita simultânea; 3 têm corroboração legada apenas para fotografias anuais listadas; 5 continuam sem resolução do intervalo. Isso não declara todos os dias desses intervalos comprovados. As cinco diferenças de cadeira remanescentes são outra contagem e não devem ser confundidas com esses cinco intervalos.
+Os 51 intervalos conflitantes originais permanecem rastreáveis: 43 tiveram assinatura de situação resolvida pela entrada explícita simultânea; 3 têm corroboração legada apenas para fotografias anuais listadas; 5 continuam sem resolução do intervalo. Isso não declara todos os dias desses intervalos comprovados. As cinco diferenças de cadeira da entrega inicial foram esclarecidas em 02/11; são outra contagem e não devem ser confundidas com esses cinco intervalos.
 
 Os 424 intervalos originais sem condição eleitoral unívoca foram preservados. Titular, Suplente, EFETIVADO e a situação legada Efetivado mantêm sua proveniência; não foram equiparados por conveniência. O arquivo pessoa-ano distingue o cargo de deputado federal da condição eleitoral. Funções na Mesa, comissões e lideranças não geram cadeiras. IDs sem conciliação canônica continuam qualificados como `camara:{id}`; nenhum UUID foi criado por aproximação nominal.
 
@@ -145,4 +147,17 @@ Custo: para Y fotografias e E eventos, construção O(Y×E), mais índices linea
 - 2019: http://127.0.0.1:8787/panorama?year=2019&view=political_orientation
 - 2024: http://127.0.0.1:8787/panorama?year=2024&view=political_orientation
 
-A entrega não declara a investigação documental de todas as posses/licenças de todo o período encerrada: permanecem as cinco diferenças nominais apontadas, cinco intervalos originais sem resolução, três corroborados apenas em fotografias anuais, condições eleitorais ausentes e classificação datada não integrada para 2010–2017. Esses limites estão preservados e não foram ocultados por um total nacional ou por preenchimento de centro.
+A entrega não declara a investigação documental de todas as posses/licenças de todo o período encerrada: os cinco casos nominais foram esclarecidos; permanecem cinco intervalos originais sem resolução, três corroborados apenas em fotografias anuais, condições eleitorais ausentes e classificação datada não integrada para 2010–2017. Esses limites estão preservados e não foram ocultados por um total nacional ou por preenchimento de centro.
+
+
+## Correções e validação do painel em 02/11/2026
+
+A inspeção do painel local revelou divergência em 2018: resumo e linha do tempo traziam direita 374; o gráfico trazia 369 e cinco sem classificação. O gráfico não repassava a política de equivalências nominais. Agora aplica a mesma política da síntese, sem alterar o catálogo acadêmico original. O aviso dos anos 2010–2017 deixou de mencionar survey de 2018: explicita a falta de classificação datada.
+
+As fontes HTML adquiridas, manifestos e hashes ficam em `data/camara-reconciliation-2010-2026/nominal-review-20261102/`. Os manifestos anteriores foram preservados em `before-nominal-closure-20261102/`; os arquivos content-addressed anteriores continuam no acervo. Relatórios de 29/10 que registravam cinco pendências são históricos, não o estado desta revisão. `audit.json`, `activation.json` e `annual-manifest.json` representam a reconstrução atual.
+
+Validação da revisão: 136 testes locais e 10 testes de integração SQL passaram (146 no total). Os testes SQL usam esquema isolado e rollback; houve também ensaio real no banco com ativação, reaplicação e rollback verificado. As listas completas de pessoas e bancadas foram comparadas com as projeções anteriores, sem diferença; os hashes de 2020–2026 foram preservados. O revisor estrutural e Ruff passaram. O ensaio está em `closure-transaction-validation-20261102.json`. A projeção SQL do histórico também preserva `documented_exercise_interruptions`; o teste de integração compara a síntese da fotografia com a do histórico efetivamente publicado. A releitura está em `closure-published-history-validation-20261102.json`.
+
+Complexidade: a verificação adicional indexa os históricos em O(H), valida E eventos dos casos por busca nos históricos correspondentes e ordena os membros de cada UF revisada em O(M log M). O conjunto de casos é fixo (cinco), sem requisição remota na leitura pública. Os documentos são verificados uma vez por fonte na reconstrução; memória O(H + M + tamanho dos documentos verificados). A construção anual existente continua O(Y × E).
+
+A validação HTTP final está em `closure-http-validation-20261102.json`: 17 anos com HTTP 200; dez sínteses anuais comparadas às projeções e nenhuma diferença nominal não conciliada. A reprodução offline conferiu os dez hashes, sem rede ou escrita no banco.

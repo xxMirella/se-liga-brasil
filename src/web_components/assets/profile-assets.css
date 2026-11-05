@@ -1,0 +1,28 @@
+/* Person profile: assets and remuneration (reference: Perfil v2, section "Bens e remuneração"). */
+.ds-profile-assets { padding: 44px 0 64px; display: flex; flex-direction: column; gap: 18px; }
+.ds-profile-assets > h2 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 4vw, 36px); }
+.ds-profile-assets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 16px; align-items: start; }
+.ds-profile-card { background: var(--color-surface); border: 1px solid var(--color-line-strong); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.ds-profile-pay { gap: 10px; }
+.ds-profile-card > h3 { margin: 0; font-size: 17px; font-weight: 600; }
+.ds-profile-card p { margin: 0; }
+.ds-profile-note { font-size: 13px; line-height: 1.5; color: var(--color-muted); }
+.ds-profile-asset-year { display: flex; flex-direction: column; gap: 6px; }
+.ds-profile-asset-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.ds-profile-asset-head strong { font-size: 15px; }
+.ds-profile-asset-head span { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ds-profile-bar { display: block; width: 100%; height: 12px; border: 0; border-radius: 3px; background: var(--color-line-faint); overflow: hidden; appearance: none; -webkit-appearance: none; }
+.ds-profile-bar::-webkit-progress-bar { background: var(--color-line-faint); }
+.ds-profile-bar::-webkit-progress-value { background: oklch(0.5 0.12 155); }
+.ds-profile-bar::-moz-progress-bar { background: oklch(0.5 0.12 155); }
+.ds-profile-asset-year summary { font-size: 14px; color: var(--color-ink-soft); }
+.ds-profile-asset-year ul { margin: 8px 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 1.5; color: var(--color-ink-soft); }
+.ds-profile-asset-year details > .ds-profile-note { margin-top: 8px; }
+.ds-profile-payment { display: flex; flex-direction: column; gap: 10px; }
+.ds-profile-amount { font-family: var(--font-display); font-weight: 400; font-size: 32px; line-height: 1.1; }
+.ds-profile-payment > span { font-size: 15px; color: var(--color-ink-soft); }
+.ds-profile-cabinet { border-top: 1px solid var(--color-line-faint); padding-top: 10px; display: flex; flex-direction: column; gap: 4px; }
+.ds-profile-cabinet strong { font-size: 15px; }
+.ds-profile-cabinet span { font-size: 14px; color: var(--color-ink-soft); }
+.ds-profile-link-button { align-self: flex-start; min-height: 44px; padding: 0; border: 0; background: transparent; font: inherit; font-size: 14px; font-weight: 600; color: var(--color-brand); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.ds-profile-link-button:hover { color: var(--color-brand-strong); }

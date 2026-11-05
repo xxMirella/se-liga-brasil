@@ -103,11 +103,11 @@ def test_missing_postgres_configuration_blocks_release_before_application_call(m
     application.assert_not_called()
 
 
-def test_shell_success_cannot_hide_missing_database_configuration(monkeypatch, caplog):
+def test_search_fails_explicitly_without_database_configuration(monkeypatch, caplog):
     monkeypatch.delenv("DATABASE_URL", raising=False)
     monkeypatch.delenv("SUPABASE_URL", raising=False)
     application = PublicPortalWSGI(PublicPortalApplication(None, None))
-    assert probe_wsgi(application, "/pessoas", "")["status"] == 200
+    assert probe_wsgi(application, "/pessoas", "")["status"] == 503
     assert probe_wsgi(application, "/pessoas", "limit=4")["status"] == 503
     with pytest.raises(DeploymentValidationError, match="POSTGRES_CONNECTION_REQUIRED"):
         check_public_search(application)
@@ -166,6 +166,33 @@ def test_municipal_schema_failure_cannot_hide_behind_working_federal_dashboard(m
             environ["PATH_INFO"] == "/api/political-dashboard"
             and environ["QUERY_STRING"] == "level=municipal&uf=SP"
         )
+        start_response("503 Service Unavailable" if failed else "200 OK", [])
+        return [json.dumps({"items": [{"person_id": "person"}]}).encode()]
+
+    with pytest.raises(DeploymentValidationError, match="PUBLIC_DASHBOARD_HTTP_503"):
+        check_public_deployment(application)
+
+
+def test_release_probes_the_majority_panorama_with_and_without_interaction_state(monkeypatch):
+    configure_release_environment(monkeypatch)
+    calls = []
+
+    def application(environ, start_response):
+        calls.append((environ["PATH_INFO"], environ["QUERY_STRING"]))
+        start_response("200 OK", [])
+        return [json.dumps({"items": [{"person_id": "person"}]}).encode()]
+
+    check_public_deployment(application)
+    assert ("/panorama", "") in calls
+    assert ("/panorama", "leg=2019&house=senado") in calls
+    assert not any("level=" in query for path, query in calls if path == "/panorama")
+
+
+def test_interactive_panorama_failure_cannot_hide_behind_the_default_page(monkeypatch):
+    configure_release_environment(monkeypatch)
+
+    def application(environ, start_response):
+        failed = environ["PATH_INFO"] == "/panorama" and "house=senado" in environ["QUERY_STRING"]
         start_response("503 Service Unavailable" if failed else "200 OK", [])
         return [json.dumps({"items": [{"person_id": "person"}]}).encode()]
 

@@ -43,12 +43,14 @@ def test_server_composition_closes_transport_when_loop_stops(monkeypatch):
 
 
 @pytest.mark.parametrize("status", [200, 304])
-def test_not_modified_response_has_no_body_or_content_length(monkeypatch, status):
+@pytest.mark.parametrize("method", ["GET", "HEAD"])
+def test_not_modified_response_has_no_body_or_content_length(monkeypatch, status, method):
     monkeypatch.setattr(
         api, "prepare_public_response", lambda *_: (status, b"body", {"ETag": "hash"})
     )
     handler = SimpleNamespace(
         path="/como-funciona",
+        command=method,
         headers={},
         wfile=BytesIO(),
         send_response=Mock(),
@@ -58,7 +60,7 @@ def test_not_modified_response_has_no_body_or_content_length(monkeypatch, status
     api.PublicHandler.send_content(handler, 200, b"body", "text/html")
     names = [call.args[0] for call in handler.send_header.call_args_list]
     assert ("Content-Length" in names) == (status != 304)
-    assert handler.wfile.getvalue() == (b"body" if status == 200 else b"")
+    assert handler.wfile.getvalue() == (b"body" if status == 200 and method == "GET" else b"")
     assert "Content-Security-Policy" in names and "X-Content-Type-Options" in names
 
 
