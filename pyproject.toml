@@ -38,11 +38,11 @@ select = ["E", "F", "I", "B", "UP", "C90", "SIM"]
 max-complexity = 10
 
 [tool.setuptools.package-data]
-"web_components" = ["assets/*.css", "assets/fonts/*"]
+"web_components" = ["assets/*.css", "assets/*.js", "assets/fonts/*"]
 "service.project_information" = ["*.html"]
 "service.political_dashboard" = ["*.json"]
-"service.public_profile_web" = ["assets/*.css", "assets/*.svg", "assets/*LICENSE.txt", "assets/people-viewport.js"]
-"service.civic_education" = ["assets/*.css", "assets/*.svg"]
+"service.public_profile_web" = ["assets/*.css", "assets/*.svg", "assets/*LICENSE.txt", "assets/*.js"]
+"service.civic_education" = ["assets/*.css", "assets/*.js"]
 "service.party_orientation_comparison" = ["*.json", "assets/*.css"]
 
 [tool.coverage.run]

@@ -123,3 +123,13 @@ def test_static_export_strips_scripts_because_the_hosting_policy_forbids_them():
 
     assert b"<script src=" not in document
     assert b"ds-civic-stepper" in document
+
+
+def test_guide_script_is_served_and_never_injects_markup_strings():
+    response = dispatch_portal_request(object(), "/assets/civic-guide.js")
+    script = response.body.decode()
+
+    assert response.status == 200 and response.content_type.startswith("text/javascript")
+    assert "showSphere" in script and "hashchange" in script
+    for forbidden in ("innerHTML", "outerHTML", "eval(", "document.write"):
+        assert forbidden not in script

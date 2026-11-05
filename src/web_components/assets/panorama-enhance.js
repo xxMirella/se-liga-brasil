@@ -10,6 +10,8 @@
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   let pendingRequest = null;
+  // path + query on screen: a popstate that only changes the #fragment is not a new page
+  let shownKey = window.location.pathname + window.location.search;
 
   function mainElement() {
     return document.getElementById(MAIN_ID);
@@ -74,6 +76,7 @@
       const scrollTargetId = link ? fragmentIdToScrollTo(link, url.hash) : null;
       swapContent(next);
       if (push) history.pushState({ panorama: true }, "", url.pathname + url.search + url.hash);
+      shownKey = url.pathname + url.search;
       if (link) restoreFocus(link);
       const target = scrollTargetId && document.getElementById(scrollTargetId);
       if (target) {
@@ -99,7 +102,8 @@
   });
 
   window.addEventListener("popstate", () => {
-    if (window.location.pathname === PANORAMA_PATH) {
+    const key = window.location.pathname + window.location.search;
+    if (window.location.pathname === PANORAMA_PATH && key !== shownKey) {
       navigate(new URL(window.location.href), { push: false });
     }
   });

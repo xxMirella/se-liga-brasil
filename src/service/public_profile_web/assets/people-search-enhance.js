@@ -15,6 +15,8 @@
   const UPDATING_CLASS = "ds-is-updating";
 
   let pendingRequest = null;
+  // path + query on screen: a popstate that only changes the #fragment is not a new search
+  let shownKey = window.location.pathname + window.location.search;
 
   function mainElement() {
     return document.getElementById("main");
@@ -77,6 +79,7 @@
         mainElement().replaceChildren(...page.getElementById("main").childNodes);
         document.title = page.title;
         if (push) history.pushState({ people: true }, "", url.pathname + url.search);
+        shownKey = url.pathname + url.search;
         restoreFocus(focusName);
       });
     } catch (error) {
@@ -146,7 +149,8 @@
   });
 
   window.addEventListener("popstate", () => {
-    if (window.location.pathname === PEOPLE_PATH) {
+    const key = window.location.pathname + window.location.search;
+    if (window.location.pathname === PEOPLE_PATH && key !== shownKey) {
       showSearch(new URL(window.location.href), { push: false });
     }
   });

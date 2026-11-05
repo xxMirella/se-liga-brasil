@@ -7,7 +7,7 @@
 .civic-guide .ds-civic-law__term { color: var(--color-brand); text-decoration: underline dotted; text-underline-offset: 4px; }
 .civic-guide .ds-civic-law__term-panel { display: none; max-width: 680px; background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius-small); padding: 12px 14px; font-size: 15px; line-height: 1.5; color: var(--color-ink-soft); scroll-margin-top: 80px; }
 .civic-guide .ds-civic-law__term-panel strong { color: var(--color-ink); }
-.civic-guide .ds-civic-law__term-panel:target { display: block; }
+.civic-guide .ds-civic-law__term-panel:target, .civic-guide .ds-civic-law__term-panel.is-open { display: block; }
 
 .civic-guide .ds-civic-law__layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 24px; align-items: start; }
 .civic-guide .ds-civic-law__card { background: var(--color-surface); border: 1px solid var(--color-line-strong); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 16px; }
@@ -51,6 +51,9 @@
 .civic-guide .ds-civic-law__feedback { display: none; padding: 12px 14px; border-radius: var(--radius-small); font-size: 15px; line-height: 1.5; scroll-margin-top: 80px; }
 .civic-guide .ds-civic-law__feedback--right { background: var(--color-brand-tint); }
 .civic-guide .ds-civic-law__feedback--wrong { background: var(--color-feedback-wrong); }
-.civic-guide .ds-civic-law__feedback:target { display: block; }
+.civic-guide .ds-civic-law__feedback:target, .civic-guide .ds-civic-law__feedback.is-open { display: block; }
 .civic-guide .ds-civic-law__check:has(#checagem-pec-sim:target) a[href="#checagem-pec-sim"] { border-color: var(--color-feedback-wrong-line); background: var(--color-feedback-wrong); }
 .civic-guide .ds-civic-law__check:has(#checagem-pec-nao:target) a[href="#checagem-pec-nao"] { border-color: var(--color-brand); background: var(--color-brand-tint); }
+/* Same states, set by civic-guide.js without navigating (so the page does not scroll). */
+.civic-guide .ds-civic-law__check[data-chosen="checagem-pec-sim"] a[href="#checagem-pec-sim"] { border-color: var(--color-feedback-wrong-line); background: var(--color-feedback-wrong); }
+.civic-guide .ds-civic-law__check[data-chosen="checagem-pec-nao"] a[href="#checagem-pec-nao"] { border-color: var(--color-brand); background: var(--color-brand-tint); }

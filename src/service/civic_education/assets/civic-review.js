@@ -136,5 +136,11 @@
     refresh();
   }
 
-  Array.prototype.forEach.call(document.querySelectorAll("[data-civic-review]"), enhance);
+  function enhanceAll() {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-civic-review]"), enhance);
+  }
+
+  enhanceAll();
+  // The guide replaces its content when the sphere changes; the new review needs its behaviour.
+  document.addEventListener("ds:content-replaced", enhanceAll);
 })();

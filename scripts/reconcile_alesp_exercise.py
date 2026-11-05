@@ -220,7 +220,7 @@ def reconcile_current_exercise(connection, person, apply):
     candidate = person.get("current_exercise_start_candidate")
     entry_kind = reviewed_current_entry_kind(person)
     if not candidate or not entry_kind:
-        return {"status": "current_start_unverified"}
+        return reconcile_pending_followup(connection, person, apply)
     term = find_term(connection, person)
     if not term or not term["has_current_public_office"] or (
         term["current_public_office_term_id"] != term["id"]
@@ -245,6 +245,33 @@ def reconcile_current_exercise(connection, person, apply):
     if apply and result["status"] in {"inserted", "already_present"}:
         result["resolved_gaps"] = resolve_current_exercise_gap(connection, person)
     return result
+
+
+def reconcile_pending_followup(connection, person, apply):
+    followup = person.get("individual_followup")
+    saved = 0
+    if apply and followup and find_term(connection, person):
+        saved = save_pending_followup(connection, person, followup)
+    return {"status": "current_start_unverified", "evidence_saved": saved}
+
+
+def save_pending_followup(connection, person, followup):
+    source = followup["sources"][0]
+    payload = {"person_id": person["person_id"], "legislature": 20, "followup": followup}
+    evidence = {"date": source["observation_date"], "source_url": source["source_url"]}
+    source_id = save_evidence(
+        connection, f"exercise_review:{person['person_id']}", evidence, payload
+    )
+    return connection.execute(
+        """
+        INSERT INTO se_liga_brasil.person_fact
+          (person_id,field_name,original_value,normalized_value,
+           evidence_kind,review_status,source_record_id)
+        VALUES (%s,'alesp_exercise_review',%s,%s,'derived','incomplete',%s)
+        ON CONFLICT(person_id,field_name,source_record_id) DO NOTHING
+        """,
+        (person["person_id"], Jsonb(payload), Jsonb(payload), source_id),
+    ).rowcount
 
 
 def reviewed_current_entry_kind(person):
