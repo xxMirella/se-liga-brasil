@@ -11,6 +11,7 @@ from application.public_portal import (
     dispatch_portal_request,
     encode_response,
 )
+from application.web_analytics import add_web_analytics
 from service.public_profile import PublicProfileError
 
 CONTENT_SECURITY_POLICY = (
@@ -65,6 +66,7 @@ class PublicPortalWSGI:
             if method in {"GET", "HEAD"}
             else encode_response({"error": "METHOD_NOT_ALLOWED"}, status=405)
         )
+        response = add_web_analytics(response)
         status, body, cache_headers = prepare_public_response(
             target,
             response.status,

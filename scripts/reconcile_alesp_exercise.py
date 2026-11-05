@@ -239,7 +239,9 @@ def reconcile_current_exercise(connection, person, apply):
         return {"status": "event_review_required"}
     entry = entries[0] | {"capacity": person.get("current_exercise_capacity"),
                          "capacity_source_url": person.get("capacity_source_url")}
-    if entry_kind == "posse_confirmada":
+    if person.get("user_confirmation"):
+        entry["user_confirmation"] = person["user_confirmation"]
+    elif entry_kind == "posse_confirmada":
         entry["continuity_review"] = person["continuity_evidence"]["second_nominal_search"]
     result = reconcile_interval(connection, person, term, entry, None, apply)
     if apply and result["status"] in {"inserted", "already_present"}:
@@ -275,6 +277,14 @@ def save_pending_followup(connection, person, followup):
 
 
 def reviewed_current_entry_kind(person):
+    confirmation = person.get("user_confirmation", {})
+    if confirmation.get("starts_on") == person.get("current_exercise_start_candidate") and (
+        confirmation.get("basis") == "user_confirmation"
+    ):
+        return {
+            "user_confirmed_reentry": "reentrada_confirmada",
+            "user_confirmed_continuity": "posse_confirmada",
+        }.get(person.get("review_status"))
     if person.get("review_status") == "official_effective_reentry":
         return "reentrada_data_efetiva_em_ato"
     if person.get("review_status") != "no_interruption_found_after_second_search":
