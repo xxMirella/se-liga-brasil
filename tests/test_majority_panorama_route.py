@@ -8,12 +8,15 @@ from urllib.parse import parse_qsl, urlsplit
 import pytest
 from majority_panorama_fixtures import fictional_panorama
 
+from application.majority_panorama_reader import MajorityPanoramaReading
 from application.public_portal import dispatch_portal_request
 from service.majority_panorama.state import QUERY_PARAMETERS, parse_state
 
 
 def application():
-    return SimpleNamespace(fetch_majority_panorama=fictional_panorama)
+    return SimpleNamespace(
+        fetch_majority_panorama_reading=lambda: MajorityPanoramaReading(fictional_panorama())
+    )
 
 
 def get(target):

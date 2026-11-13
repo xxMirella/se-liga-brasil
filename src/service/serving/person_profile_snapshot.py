@@ -6,6 +6,12 @@ electoral asset declarations stay out. The payload keeps what each of the profil
 (see application.person_profile_reads); age, tenure, status and every other date-dependent
 derivation still run in Python at read time. The build composes the profile with the very same
 function the live path uses, so the recorded reads are exactly the ones the profile needs.
+
+Build cost: the scope is one query; each person then costs the same 13 reads the live profile
+does (one savepoint each), so ~700 people are ~9 thousand statements, linear in the people and
+constant per person, run by the offline build and never per request. Nothing inside a read
+queries per record. Proposition pagination: only page 1 is stored (and only below
+`MAX_PAYLOAD_CHARS`); other pages, and page 1 when it was left out, are read live.
 """
 
 import logging

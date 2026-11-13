@@ -21,7 +21,8 @@ def normalize_search_term(text):
 
 
 def like_pattern(text):
-    escaped = normalize_search_term(text).replace("\\", "\\\\").replace("%", "\\%")
+    """LIKE pattern with wildcards escaped; accents and case are folded by SQL, not Python."""
+    escaped = text.replace("\\", "\\\\").replace("%", "\\%")
     return "%" + escaped.replace("_", "\\_") + "%"
 
 
@@ -59,7 +60,7 @@ def search_people_from_directory(connection, query, cursor):
     return connection.execute(
         f"""SELECT person_id::text AS person_id,display_name,slug,{key_sql} AS sort_key
         FROM {DIRECTORY_TABLE}
-        WHERE name_search LIKE %(pattern)s
+        WHERE name_search LIKE lower(unaccent(%(pattern)s))
           AND (%(uf)s::text IS NULL OR %(office_kind)s::text IS NOT NULL
             OR uf @> ARRAY[%(uf)s::text])
           AND (%(office_kind)s::text IS NULL OR %(uf)s::text IS NOT NULL

@@ -40,6 +40,7 @@ def test_dataset_is_registered_and_inlines_as_of_without_bind_parameters():
     assert "%(" not in sql
     assert "DATE '2026-11-05'" in sql
     assert "unaccent(display_name)" in sql
+    assert "p.photo_url AS photo" in sql
     spec = person_directory_spec(None, AS_OF)
     assert spec.name == "person_directory"
     assert any("gin (uf)" in index for index in spec.indexes)
@@ -60,8 +61,8 @@ def test_search_term_is_normalised_like_name_search(text, expected):
     assert normalize_search_term(text) == expected
 
 
-def test_like_pattern_escapes_wildcards_after_normalising():
-    assert like_pattern("A%_\\É") == "%a\\%\\_\\\\e%"
+def test_like_pattern_escapes_wildcards_and_leaves_folding_to_sql():
+    assert like_pattern("A%_\\É") == "%A\\%\\_\\\\É%"
 
 
 @pytest.mark.parametrize("sort", ["name", "party", "state"])
@@ -85,7 +86,17 @@ def test_reader_omits_keyset_without_cursor():
     search_people_from_directory(connection, PeopleQuery(q="José"), None)
     sql, parameters = connection.calls[0]
     assert ")>(" not in sql
-    assert parameters["pattern"] == "%jose%"
+    assert parameters["pattern"] == "%José%"
+    assert "name_search LIKE lower(unaccent(%(pattern)s))" in sql
+
+
+def test_party_list_and_search_read_the_directory_table_when_release_is_valid():
+    connection = RecordingConnection()
+    connection.release_table_installed = True
+    repository = DirectoryPeopleRepository(connection)
+    repository.list_current_political_parties(AS_OF)
+    repository.search_people(PeopleQuery(), AS_OF, None)
+    assert all("se_liga_brasil_serving.person_directory" in sql for sql, _ in connection.calls)
 
 
 def fake_with_release(as_of, installed=True):
@@ -187,6 +198,8 @@ def populate(connection):
     insert_affiliation(
         connection, record_id, eva, party["PL"], "2026-03-02", evidence_kind="electoral_declaration"
     )
+    sven = insert_person(connection, record_id, "Søren Ærø")
+    insert_mandate(connection, record_id, senate, sven, "senator", "MG")
     alias = insert_person(connection, record_id, "Ana Lima Duplicada")
     connection.execute(
         "INSERT INTO se_liga_brasil.person_identity_alias"
@@ -219,6 +232,12 @@ PARITY_FILTERS = [
     {"q": "100%"},
     {"q": "%_"},
     {"q": "zelia"},
+    {"q": "soren"},
+    {"q": "Ærø"},
+    {"uf": "MG"},
+    {"office_kind": "state_deputy"},
+    {"political_party": "ZZZ"},
+    {"uf": "RJ", "office_kind": "federal_deputy", "political_party": "PT"},
     {"uf": "SP"},
     {"uf": "RJ"},
     {"office_kind": "senator"},
@@ -283,3 +302,52 @@ def test_accents_match_both_ways(integration_database):
         for term in ("jose", "josé", "JOSE")
     }
     assert found["jose"] == found["josé"] == found["JOSE"] == ["Jose Carlos", "José Alves"]
+
+
+@pytest.mark.integration
+def test_directory_row_has_one_row_per_person_with_contract_columns(integration_database):
+    populate(integration_database)
+    build_dataset(integration_database, person_directory_spec(None, AS_OF), AS_OF)
+    rows = integration_database.execute(
+        "SELECT * FROM se_liga_brasil_serving.person_directory ORDER BY display_name"
+    ).fetchall()
+    names = [row["display_name"] for row in rows]
+    assert "Ana Lima Duplicada" not in names
+    ana = next(row for row in rows if row["display_name"] == "Ana Lima")
+    assert ana["uf"] == ["RJ", "SP"] and ana["office_kinds"] == ["federal_deputy", "senator"]
+    assert ana["party_abbr"] == "PT" and ana["party_sort_key"] == "0PT"
+    assert ana["as_of"] == AS_OF and "photo" in ana and ana["slug"]
+    soren = next(row for row in rows if row["display_name"] == "Søren Ærø")
+    assert soren["name_search"] == "soren aero"
+
+
+@pytest.mark.integration
+def test_directory_indexes_exist_and_serve_the_public_queries(integration_database):
+    populate(integration_database)
+    build_dataset(integration_database, person_directory_spec(None, AS_OF), AS_OF)
+    table = "se_liga_brasil_serving.person_directory"
+    definitions = " ".join(
+        row["indexdef"]
+        for row in integration_database.execute(
+            "SELECT indexdef FROM pg_indexes WHERE schemaname='se_liga_brasil_serving' "
+            "AND tablename LIKE 'person_directory%'"
+        ).fetchall()
+    )
+    for expected in (
+        "(party_sort_key, display_name, person_id)",
+        "(state_sort_key, display_name, person_id)",
+        "gin (uf)",
+    ):
+        assert expected in definitions
+    integration_database.execute("SET LOCAL enable_seqscan=off")
+    plans = {
+        "party": f"SELECT person_id FROM {table} ORDER BY party_sort_key,display_name,person_id",
+        "state": f"SELECT person_id FROM {table} ORDER BY state_sort_key,display_name,person_id",
+        "uf": f"SELECT person_id FROM {table} WHERE uf @> ARRAY['SP']",
+    }
+    for label, sql in plans.items():
+        plan = " ".join(
+            next(iter(row.values()))
+            for row in integration_database.execute("EXPLAIN " + sql).fetchall()
+        )
+        assert "Index" in plan or "Bitmap" in plan, (label, plan)

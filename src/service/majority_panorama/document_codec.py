@@ -55,6 +55,8 @@ def _decode(value, hint):
         )
     if hint is date:
         return date.fromisoformat(value)
+    if hint in {int, str} and (type(value) is not hint):
+        raise ValueError("PANORAMA_DOCUMENT_SCALAR_TYPE")
     if origin is tuple:
         return tuple(_decode(item, arguments[0]) for item in value)
     if origin is not None and issubclass(origin, Mapping):
@@ -66,3 +68,19 @@ def decode_document(document) -> MajorityPanorama:
     """Accept the serialized text or the already parsed object (jsonb comes back parsed)."""
     parsed = json.loads(document) if isinstance(document, (str, bytes)) else document
     return _decode(parsed, MajorityPanorama)
+
+
+def decode_exact(document) -> MajorityPanorama:
+    """Decode and prove nothing was dropped, defaulted or mistyped: re-encoding gives the input.
+
+    A document from an older contract (missing or extra fields) or a corrupted one raises
+    `ValueError`, so the caller falls back to the live assembly instead of serving a lookalike.
+    """
+    parsed = json.loads(document) if isinstance(document, (str, bytes)) else document
+    try:
+        panorama = _decode(parsed, MajorityPanorama)
+    except (TypeError, KeyError, AttributeError) as error:
+        raise ValueError("PANORAMA_DOCUMENT_SHAPE") from error
+    if json.loads(encode_document(panorama)) != parsed:
+        raise ValueError("PANORAMA_DOCUMENT_NOT_EXACT")
+    return panorama

@@ -271,3 +271,160 @@ def test_fallbacks_on_real_sql_keep_the_result(integration_database, monkeypatch
     calls.clear()  # undecodable row
     assert load_person_profile(Pool(db), person_id, AS_OF) == live
     assert [c.__name__ for c in calls] == ["LiveProfileSource"]
+
+
+# --- sample of people, legal scopes, proposition pages, per-person cost -----------------------
+
+
+def install_legal_scopes(db):
+    from database.office_legal_scopes import ingest_office_legal_scopes
+    from database.operations import read_sql_file, strip_transaction_wrapper
+    from service.office_duties.legal_catalog import build_legal_scope_records
+
+    db.execute(
+        strip_transaction_wrapper(read_sql_file("migrations/0020_office_legal_scope_versions.sql"))
+    )
+    ingest_office_legal_scopes(db, build_legal_scope_records())
+
+
+def insert_authored_propositions(db, person_id, record_id, camara, count):
+    base = uuid4().int % 10**9 * 1000
+    db.execute(
+        "WITH created AS (INSERT INTO se_liga_brasil.proposition(institution_id,official_key,"
+        "kind,number,year,title,summary,introduced_on,current_status,status_as_of,"
+        "source_record_id) SELECT %s,'https://dadosabertos.camara.leg.br/api/v2/proposicoes/'"
+        "||(%s+n),'PL',n::text,2025,'PL '||n,'Ementa','2025-01-01'::date+n,'in_progress',"
+        "now(),%s FROM generate_series(1,%s) n RETURNING id) "
+        "INSERT INTO se_liga_brasil.proposition_person(proposition_id,person_id,role,"
+        "source_record_id) SELECT id,%s,'author',%s FROM created",
+        (camara, base, record_id, count, person_id, record_id),
+    )
+
+
+def insert_extra_person(db, record_id, camara, name, *, propositions=0, born="1975-01-01"):
+    """A second profile of another shape: a mandate, optional many propositions, no payroll."""
+    person_id = str(uuid4())
+    db.execute(
+        "INSERT INTO se_liga_brasil.person(id,slug,civil_name,display_name,primary_record_id,"
+        "birth_date) VALUES(%s,%s,'Identificação privada fictícia',%s,%s,%s)",
+        (person_id, person_id, name, record_id, born),
+    )
+    term = db.execute(
+        "INSERT INTO se_liga_brasil.office_term(person_id,institution_id,office_kind,"
+        "represented_uf,legislature_key,official_term_key,term_start,term_end,source_record_id) "
+        f"VALUES(%s,%s,'federal_deputy','SP','57','57-{person_id}','2023-02-01','2027-02-01',%s) "
+        "RETURNING id",
+        (person_id, camara, record_id),
+    ).fetchone()["id"]
+    db.execute(
+        "INSERT INTO se_liga_brasil.office_exercise(term_id,starts_on,capacity,source_record_id) "
+        "VALUES(%s,'2023-02-01','holder',%s)",
+        (term, record_id),
+    )
+    if propositions:
+        insert_authored_propositions(db, person_id, record_id, camara, propositions)
+    return person_id
+
+
+def build_snapshot(db):
+    return build_dataset(
+        BuildConnection(db), person_profile_snapshot_spec(db, AS_OF, today=AS_OF), AS_OF
+    )
+
+
+def live_profile(db, monkeypatch, person_id, page=1):
+    with monkeypatch.context() as patch:
+        patch.setattr(snapshot, "read_stored_reads", lambda *a: None)
+        return load_person_profile(Pool(db), person_id, AS_OF, page)
+
+
+@pytest.mark.integration
+def test_html_is_identical_for_a_sample_with_legal_scopes_and_every_proposition_page(
+    integration_database, monkeypatch
+):
+    db = integration_database
+    person_id, other_id, record_id, source_id, camara = insert_rich_person(db)
+    insert_rich_data(db, person_id, record_id, source_id, camara)
+    install_legal_scopes(db)
+    heavy = insert_extra_person(db, record_id, camara, "Autor Prolífico", propositions=130)
+    light = insert_extra_person(db, record_id, camara, "Mandato Simples", born="1990-11-06")
+    assert build_snapshot(db).row_count == 3  # other_id (no data) stays out
+    sample = [(person_id, 1), (heavy, 1), (heavy, 2), (light, 1)]
+    for sampled_id, page in sample:
+        from_snapshot = load_person_profile(Pool(db), sampled_id, AS_OF, page)
+        live = live_profile(db, monkeypatch, sampled_id, page)
+        assert from_snapshot == live
+        assert render(from_snapshot) == render(live)
+    assert live_profile(db, monkeypatch, person_id)["legal_scopes"]
+    first = load_person_profile(Pool(db), heavy, AS_OF)["propositions"]
+    second = load_person_profile(Pool(db), heavy, AS_OF, 2)["propositions"]
+    assert first["truncated"] is True and len(first["items"]) == 100
+    assert second["page"] == 2 and len(second["items"]) == 30 and second["truncated"] is False
+
+
+@pytest.mark.integration
+def test_page_one_is_replayed_and_later_pages_are_the_only_live_read(
+    integration_database, monkeypatch
+):
+    db = integration_database
+    _, _, record_id, _, camara = insert_rich_person(db)
+    heavy = insert_extra_person(db, record_id, camara, "Autor Prolífico", propositions=130)
+    build_snapshot(db)
+    for page, expected_live in ((1, 0), (2, 1)):
+        counted = CountingConnection(db)
+        load_person_profile(Pool(counted), heavy, AS_OF, page)
+        live_propositions = [
+            s for s in counted.statements if "FROM se_liga_brasil.proposition_person" in s
+        ]
+        assert len(live_propositions) == expected_live
+
+
+@pytest.mark.integration
+def test_oversized_proposition_page_is_left_out_and_read_live(integration_database, monkeypatch):
+    db = integration_database
+    _, _, record_id, _, camara = insert_rich_person(db)
+    heavy = insert_extra_person(db, record_id, camara, "Autor Prolífico", propositions=30)
+    monkeypatch.setattr(snapshot, "MAX_PAYLOAD_CHARS", 1_000)
+    build_snapshot(db)
+    stored = db.execute(
+        "SELECT payload FROM se_liga_brasil_serving.person_profile_snapshot WHERE person_id=%s",
+        (heavy,),
+    ).fetchone()["payload"]
+    from service.serving.person_profile_codec import decode_reads
+
+    assert "propositions" not in decode_reads(stored)
+    live = live_profile(db, monkeypatch, heavy)
+    assert load_person_profile(Pool(db), heavy, AS_OF) == live
+    assert render(load_person_profile(Pool(db), heavy, AS_OF)) == render(live)
+
+
+@pytest.mark.integration
+def test_incomplete_payload_and_other_day_row_fall_back_with_the_same_html(
+    integration_database, monkeypatch
+):
+    db = integration_database
+    person_id, _, record_id, source_id, camara = insert_rich_person(db)
+    insert_rich_data(db, person_id, record_id, source_id, camara)
+    build_snapshot(db)
+    live = live_profile(db, monkeypatch, person_id)
+    table = "se_liga_brasil_serving.person_profile_snapshot"
+    db.execute(  # valid format and tags, but a read is missing: composition fails, live path runs
+        f"UPDATE {table} SET payload=jsonb_set(payload,'{{reads}}',"
+        '\'{"__t":"dict","items":[]}\'::jsonb)'
+    )
+    assert load_person_profile(Pool(db), person_id, AS_OF) == live
+    db.execute(f"UPDATE {table} SET as_of=as_of-1")  # row built for another day
+    assert render(load_person_profile(Pool(db), person_id, AS_OF)) == render(live)
+
+
+@pytest.mark.integration
+def test_build_reads_each_person_with_a_constant_number_of_statements(integration_database):
+    db = integration_database
+    person_id, _, record_id, source_id, camara = insert_rich_person(db)
+    insert_rich_data(db, person_id, record_id, source_id, camara)
+    extra = [insert_extra_person(db, record_id, camara, f"Pessoa {n}") for n in range(4)]
+    counted = CountingConnection(db)
+    rows = list(snapshot.snapshot_rows(counted, [person_id, *extra], AS_OF))
+    assert len(rows) == 5
+    reads = [s for s in counted.statements if s.lstrip().upper().startswith(("SELECT", "WITH"))]
+    assert len(reads) <= 5 * 13  # 13 reads per person, none per record (no N+1 inside a read)

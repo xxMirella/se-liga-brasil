@@ -194,3 +194,75 @@ def test_profile_error_discards_pooled_connection_and_reuse_follows_success(monk
         app.fetch_person(PERSON)
     assert closed == [1]
     assert app.read_connections._idle == []
+
+
+def panorama_etag(reading, headers=None):
+    from application.public_cache import prepare_public_response
+
+    app = SimpleNamespace(fetch_majority_panorama_reading=lambda: reading)
+    response = dispatch_portal_request(app, "/panorama")
+    status, _, answer = prepare_public_response(
+        "/panorama", response.status, response.body, headers or {}, response.dataset_version
+    )
+    return response, status, answer
+
+
+def test_panorama_etag_follows_release_version():
+    from majority_panorama_fixtures import fictional_panorama
+
+    from application.majority_panorama_reader import MajorityPanoramaReading
+
+    first = panorama_etag(MajorityPanoramaReading(fictional_panorama(), "hash-a"))
+    again = panorama_etag(MajorityPanoramaReading(fictional_panorama(), "hash-a"))
+    other_release = panorama_etag(MajorityPanoramaReading(fictional_panorama(), "hash-b"))
+    assert first[0].dataset_version == "hash-a"
+    assert first[0].body == other_release[0].body
+    assert first[2]["ETag"] == again[2]["ETag"]
+    assert first[2]["ETag"] != other_release[2]["ETag"]
+    assert first[2]["Cache-Control"] == other_release[2]["Cache-Control"]
+
+
+def test_panorama_etag_is_stable_across_days_for_one_release():
+    import json
+    from datetime import date as day
+
+    from test_majority_panorama_document import (
+        FakePool,
+        FakeReadConnection,
+        encode_document,
+        rich_panorama,
+    )
+
+    from application.majority_panorama_reader import MajorityPanoramaReader
+
+    stored = json.loads(encode_document(rich_panorama()))
+    etags = set()
+    for today in (day(2026, 10, 19), day(2026, 10, 20)):
+        connection = FakeReadConnection(stored, as_of=day(2026, 10, 19))
+        reader = MajorityPanoramaReader(None, lambda today=today: today, FakePool(connection))
+        etags.add(panorama_etag(reader.fetch_reading())[2]["ETag"])
+    assert len(etags) == 1
+
+
+def test_panorama_etag_still_hashes_the_body_and_answers_304():
+    from majority_panorama_fixtures import fictional_panorama
+
+    from application.majority_panorama_reader import MajorityPanoramaReading
+
+    reading = MajorityPanoramaReading(fictional_panorama(), "hash-a")
+    _, _, headers = panorama_etag(reading)
+    assert panorama_etag(reading, {"If-None-Match": headers["ETag"]})[1] == 304
+    from application.public_cache import public_representation
+
+    etag_x = public_representation(b"x", "", "hash-a")[1]
+    assert etag_x != public_representation(b"y", "", "hash-a")[1]
+
+
+def test_panorama_live_fallback_keeps_generated_on_as_version():
+    from majority_panorama_fixtures import fictional_panorama
+
+    from application.majority_panorama_reader import MajorityPanoramaReading
+
+    panorama = fictional_panorama()
+    response, _, _ = panorama_etag(MajorityPanoramaReading(panorama))
+    assert response.dataset_version == str(panorama.generated_on)

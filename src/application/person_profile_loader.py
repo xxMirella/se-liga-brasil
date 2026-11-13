@@ -1,8 +1,10 @@
 """Load a person profile in one read snapshot over a pooled connection.
 
-The profile is composed from 13 reads. When a fresh `person_profile_snapshot` row exists the
-reads are replayed from it (3 statements instead of 13); any miss or failure falls back to the
-database, with the same composition and therefore the same result.
+The profile is composed from 13 reads (the plan card P1-C speaks of 14: it also counts the
+`read_snapshot` transaction, which is not a read of rows and is not stored).
+When a fresh `person_profile_snapshot` row exists the reads are replayed from it
+(3 statements instead of 13); any miss or failure falls back to the database, with the same
+composition and therefore the same result.
 """
 
 import logging

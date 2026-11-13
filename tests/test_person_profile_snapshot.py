@@ -366,3 +366,17 @@ def test_huge_proposition_pages_are_not_stored(monkeypatch):
     )
     reads = snapshot.collect_person_reads(None, PERSON, AS_OF)
     assert PROPOSITIONS not in reads and "fetch_public_person" in reads
+
+
+def test_page_one_missing_from_the_snapshot_is_read_live_too():
+    reads = canned_reads()
+    reads.pop(PROPOSITIONS)  # left out at build time (oversized)
+    live = ScriptedSource(canned_reads(propositions={"items": [], "page": 1}))
+    profile = compose_profile(StoredProfileSource(reads, live), PERSON, AS_OF, proposal_page=1)
+    assert live.calls == ["propositions"] and profile["propositions"]["page"] == 1
+
+
+def test_the_stored_source_serves_exactly_the_thirteen_reads():
+    from application.person_profile_reads import READ_NAMES
+
+    assert len(READ_NAMES) == 13 and set(canned_reads()) == set(READ_NAMES)

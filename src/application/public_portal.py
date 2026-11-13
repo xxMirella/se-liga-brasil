@@ -197,11 +197,13 @@ def route_majority_panorama(application, parsed):
     from service.majority_panorama.state import QUERY_PARAMETERS, parse_state
 
     state = parse_state(read_parameters(parsed.query, QUERY_PARAMETERS))
-    panorama = application.fetch_majority_panorama()
+    reading = application.fetch_majority_panorama_reading()
+    panorama = reading.panorama
     return encode_response(
         render_majority_panorama(panorama, state),
         content_type="text/html",
-        dataset_version=str(panorama.generated_on),
+        # Released document: the content hash; live assembly: the day it was assembled.
+        dataset_version=reading.release_version or str(panorama.generated_on),
         search_indexable=any(legislature.has_data for legislature in panorama.legislatures),
     )
 
@@ -316,6 +318,9 @@ class PublicPortalApplication:
 
     def fetch_majority_panorama(self):
         return self.majority_panorama.fetch()
+
+    def fetch_majority_panorama_reading(self):
+        return self.majority_panorama.fetch_reading()
 
     def fetch_political_party_options(self):
         from application.political_party_options import fetch_party_options

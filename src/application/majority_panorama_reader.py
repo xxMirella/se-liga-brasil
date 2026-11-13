@@ -6,6 +6,7 @@ house, presidential segments). Presidential names come from one extra read per t
 """
 
 import logging
+from dataclasses import dataclass
 
 from service.majority_panorama.builder import build_majority_panorama
 from service.majority_panorama.presidents import (
@@ -63,6 +64,17 @@ class DashboardPanoramaSource:
         return collect_presidential_exercises(segments_by_year, self.identities(segments_by_year))
 
 
+@dataclass(frozen=True)
+class MajorityPanoramaReading:
+    """A panorama and, when it came from the serving registry, the release that produced it.
+
+    `release_version` is None for a live assembly: its only freshness marker is `generated_on`.
+    """
+
+    panorama: object
+    release_version: str | None = None
+
+
 class MajorityPanoramaReader:
     """Serves the panorama stored by the serving registry; assembles it live when there is none."""
 
@@ -71,14 +83,22 @@ class MajorityPanoramaReader:
         self.read_connections = read_connections
 
     def fetch(self):
+        return self.fetch_reading().panorama
+
+    def fetch_reading(self):
         today = self.today()
-        return self.fetch_released(today) or self.assemble(today)
+        return self.fetch_released_reading(today) or MajorityPanoramaReading(self.assemble(today))
 
     def assemble(self, today):
         return build_majority_panorama(DashboardPanoramaSource(self.fetch_dashboard, today), today)
 
     def fetch_released(self, today):
         """The released document, or None (no pool, no release, stale, or any read problem)."""
+        reading = self.fetch_released_reading(today)
+        return None if reading is None else reading.panorama
+
+    def fetch_released_reading(self, today):
+        """Like `fetch_released`, with the version of the release the document belongs to."""
         if self.read_connections is None:
             return None
         try:
@@ -89,17 +109,20 @@ class MajorityPanoramaReader:
 
 
 def _released(connection, today):
-    from service.majority_panorama.document_codec import decode_document
+    from service.majority_panorama.document_codec import decode_exact
     from service.serving.majority_panorama_document import (
         DATASET_NAME,
         read_panorama_document,
     )
     from service.serving.release import current_release
 
-    if current_release(connection, DATASET_NAME, today) is None:
+    release = current_release(connection, DATASET_NAME, today)
+    if release is None:
         return None
     document = read_panorama_document(connection)
-    return None if document is None else decode_document(document)
+    if document is None:
+        return None
+    return MajorityPanoramaReading(decode_exact(document), release.version)
 
 
 class CachedMajorityPanorama:
@@ -115,8 +138,11 @@ class CachedMajorityPanorama:
         self._value, self._expires_at = None, 0.0
 
     def fetch(self):
+        return self.fetch_reading().panorama
+
+    def fetch_reading(self):
         with self._lock:
             if self._value is None or self.clock() >= self._expires_at:
-                self._value = self.reader.fetch()
+                self._value = self.reader.fetch_reading()
                 self._expires_at = self.clock() + self.ttl_seconds
             return self._value

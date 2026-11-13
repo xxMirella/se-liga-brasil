@@ -20,8 +20,8 @@ DATASET_NAME = "person_directory"
 COLUMNS_DDL = """person_id uuid PRIMARY KEY, slug text NOT NULL, display_name text NOT NULL,
   name_search text NOT NULL, uf text[] NOT NULL, office_kinds text[] NOT NULL,
   uf_kinds text[] NOT NULL, party_abbr text, party_filter text[] NOT NULL,
-  parties_current text[] NOT NULL, party_sort_key text NOT NULL, state_sort_key text NOT NULL,
-  as_of date NOT NULL"""
+  parties_current text[] NOT NULL, photo text, party_sort_key text NOT NULL,
+  state_sort_key text NOT NULL, as_of date NOT NULL"""
 
 INDEXES = (
     "(party_sort_key, display_name, person_id)",
@@ -41,12 +41,12 @@ _CURRENT_TERMS = """FROM se_liga_brasil.office_term t
     AND (e.ends_before IS NULL OR e.ends_before>%(as_of)s)"""
 
 _INSERT_SQL = f"""INSERT INTO {{table}}(person_id,slug,display_name,name_search,uf,office_kinds,
-  uf_kinds,party_abbr,party_filter,parties_current,party_sort_key,state_sort_key,as_of)
+  uf_kinds,party_abbr,party_filter,parties_current,photo,party_sort_key,state_sort_key,as_of)
 SELECT person_id,slug,display_name,lower(unaccent(display_name)),uf,office_kinds,uf_kinds,
   CASE WHEN left(party_sort_key,1)='0' THEN substr(party_sort_key,2) END,
-  party_filter,parties_current,party_sort_key,state_sort_key,%(as_of)s
+  party_filter,parties_current,photo,party_sort_key,state_sort_key,%(as_of)s
 FROM (
-  SELECT p.id AS person_id,p.slug,p.display_name,
+  SELECT p.id AS person_id,p.slug,p.display_name,p.photo_url AS photo,
     ARRAY(SELECT DISTINCT t.represented_uf {_CURRENT_TERMS}
       AND t.represented_uf IS NOT NULL ORDER BY 1) AS uf,
     ARRAY(SELECT DISTINCT t.office_kind {_CURRENT_TERMS}
