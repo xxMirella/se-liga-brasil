@@ -70,11 +70,16 @@ def render_orientation_composition_note(composition, year, reference_on):
     from service.political_dashboard.camara_orientation import chamber_policy_applies
 
     if chamber_policy_applies(composition, year):
-        reference_year = 2018 if year < 2022 else 2022
+        if year < 2018:
+            method = ("Sem classificação datada integrada para este ano; "
+                      "ondas futuras do survey não retroagem.")
+        else:
+            reference_year = 2018 if year < 2022 else 2022
+            method = (f"Survey de {reference_year}; aplicação editorial nos demais anos, "
+                      "com sensibilidade abaixo.")
         return (
             '<p class="panorama-caption panorama-orientation-composition-note">'
-            f"Câmara · fotografia em {text(reference)}. Survey de {reference_year}; "
-            "aplicação editorial nos demais anos, com sensibilidade abaixo. "
+            f"Câmara · fotografia em {text(reference)}. {method} "
             "Não mede orientação individual ou apoio ao governo.</p>"
         )
     available = year in {2018, 2022}
