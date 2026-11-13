@@ -12,6 +12,10 @@ from crawlers.alesp.configuration import (
     load_configuration,
 )
 from crawlers.alesp.local_enrichment import collect_alesp_local_enrichment
+from crawlers.alesp.participation_sources import (
+    PARTICIPATION_HOSTS,
+    acquire_participation_sources,
+)
 from crawlers.alesp.projection import AlespProjectionWriter
 from database.operations import PROJECT_ROOT
 from service.acquisition.http_client import OfficialHttpClient
@@ -40,17 +44,21 @@ def collect_alesp_enrichment(connection, person_ids=None, fields=None) -> dict:
                 "political_activity",
             }
         )
-        attendance_options = (
-            {"fetch_attendance": lambda: download_committee_attendance(configuration)}
-            if "attendance" in requested_fields else {}
-        )
+        attendance_options = participation_collection_options(configuration, requested_fields)
         result = {
             "local_enrichment": collect_alesp_local_enrichment(
-                repository, configuration.storage_directory, person_ids, requested_fields,
+                repository,
+                configuration.storage_directory,
+                person_ids,
+                requested_fields,
                 **attendance_options,
             )
         }
         attendance_failures = result["local_enrichment"].get("attendance", {}).get("failures")
+        participation_failures = (
+            result["local_enrichment"].get("participation", {}).get("failures", [])
+        )
+        attendance_failures = (attendance_failures or []) + participation_failures
         if attendance_failures:
             result["failures"] = attendance_failures
         if "current_salary" in requested_fields:
@@ -62,7 +70,9 @@ def collect_alesp_enrichment(connection, person_ids=None, fields=None) -> dict:
                 result.setdefault("failures", []).append(describe_error(error))
         status = (
             "partial"
-            if result.get("failures") or result.get("identity_unresolved")
+            if result.get("failures")
+            or result.get("identity_unresolved")
+            or result["local_enrichment"].get("participation", {}).get("pending_resources")
             else "completed"
         )
         repository.finish_run(status, result)
@@ -72,8 +82,26 @@ def collect_alesp_enrichment(connection, person_ids=None, fields=None) -> dict:
         raise
 
 
-
 def download_committee_attendance(configuration):
     with httpx.Client(timeout=configuration.request_timeout_seconds) as client:
         transport = OfficialHttpClient(configuration, client, OFFICIAL_HOSTS)
         return fetch_attendance_export(configuration.storage_directory, transport)
+
+
+def download_participation(configuration, registrations):
+    with httpx.Client(timeout=configuration.request_timeout_seconds) as client:
+        transport = OfficialHttpClient(configuration, client, PARTICIPATION_HOSTS)
+        return acquire_participation_sources(
+            configuration.storage_directory, transport, registrations
+        )
+
+
+def participation_collection_options(configuration, requested_fields):
+    options = {}
+    if "attendance" in requested_fields:
+        options["fetch_attendance"] = lambda: download_committee_attendance(configuration)
+    if requested_fields & {"attendance", "political_activity"}:
+        options["acquire_participation"] = lambda registrations: download_participation(
+            configuration, registrations
+        )
+    return options

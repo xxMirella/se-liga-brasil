@@ -11,6 +11,7 @@ from crawlers.alesp.attendance import (
 from crawlers.alesp.configuration import ALESP_PARSER_VERSION
 from crawlers.alesp.institutional_records import institutional_profiles
 from crawlers.alesp.local_records import authored_propositions
+from crawlers.alesp.participation import collect_participation_evidence
 from crawlers.alesp.photos import cached_photo_records
 from service.ingestion.contracts import (
     DownloadedArtifact,
@@ -48,10 +49,10 @@ def resolution_sources(resolutions):
             yield from subject.get("sources", [])
 
 
-def dataset_references(storage_directory):
+def dataset_references(storage_directory, names=None):
     research = storage_directory / "research"
     manifest = load_json(research / "catalog-download-manifest.json", [])
-    names = {"61_deputados.xml", "56_proposituras.zip", "81_documento_autor.zip"}
+    names = names or {"61_deputados.xml", "56_proposituras.zip", "81_documento_autor.zip"}
     references = []
     for entry in manifest:
         if Path(entry["file"]).name not in names:
@@ -127,7 +128,13 @@ def stage_local_records(storage_directory, kind, rows, references, person_ids):
 
 
 def collect_alesp_local_enrichment(
-    repository, storage_directory, person_ids=None, fields=None, *, fetch_attendance=None,
+    repository,
+    storage_directory,
+    person_ids=None,
+    fields=None,
+    *,
+    fetch_attendance=None,
+    acquire_participation=None,
 ):
     person_ids = {str(value) for value in person_ids} if person_ids is not None else None
     fields = set(
@@ -162,17 +169,38 @@ def collect_alesp_local_enrichment(
         result["attendance"] = collect_committee_attendance(
             repository, storage_directory, resolutions, evidence, person_ids, fetch_attendance
         )
+    if fields & {"attendance", "political_activity"}:
+        result["participation"] = collect_participation_evidence(
+            repository,
+            storage_directory,
+            resolutions,
+            person_ids,
+            stage_local_records,
+            acquire_participation,
+        )
     attendance = result.get("attendance", {})
+    participation = result.get("participation", {})
     return result | {
-        "status": "partial" if attendance.get("failures") else "completed",
-        "remote_requests": attendance.get("remote_requests", 0),
+        "status": "partial"
+        if attendance.get("failures") or participation.get("failures")
+        else "completed",
+        "remote_requests": attendance.get("remote_requests", 0)
+        + participation.get("remote_requests", 0),
     }
 
 
 def collect_committee_attendance(
-    repository, storage_directory, resolutions, evidence, person_ids, fetch_attendance,
+    repository,
+    storage_directory,
+    resolutions,
+    evidence,
+    person_ids,
+    fetch_attendance,
 ):
-    identities = attendance_identity_index(resolutions, person_ids)
+    roster_evidence = dataset_references(storage_directory, {"61_deputados.xml"})
+    identities = attendance_identity_index(
+        resolutions, person_ids, Path(roster_evidence[0]["path"])
+    )
     exports = list(archived_attendance_exports(storage_directory)) if identities else []
     rows = committee_attendance_rows([Path(item["path"]) for item in exports], identities)
     missing = set(identities.values()) - {row["personId"] for row in rows}
@@ -191,7 +219,11 @@ def collect_committee_attendance(
         for row in rows:
             row["observedAt"] = observed_at
         artifact = stage_local_records(
-            storage_directory, "alesp_attendance", rows, exports + evidence, person_ids
+            storage_directory,
+            "alesp_attendance",
+            rows,
+            exports + roster_evidence + evidence,
+            person_ids,
         )
         repository.ingest_validated_artifact(artifact, 500)
     return {

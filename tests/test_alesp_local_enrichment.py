@@ -362,7 +362,7 @@ def test_remote_payroll_failure_preserves_local_enrichment(monkeypatch):
     monkeypatch.setattr(
         enrichment,
         "collect_alesp_local_enrichment",
-        lambda *args: {
+        lambda *args, **kwargs: {
             "authorships": {"new": 1},
             "remote_requests": 0,
         },

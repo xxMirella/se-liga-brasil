@@ -4,7 +4,7 @@ from collections import defaultdict
 from datetime import UTC, date, datetime
 from hashlib import sha256
 
-from crawlers.alesp.local_records import assign_unique_person, xml_rows
+from crawlers.alesp.local_records import verified_author_index, xml_rows
 from service.ingestion.contracts import IngestionError
 from storage.files import hash_content, hash_file, load_json, save_json
 
@@ -35,17 +35,9 @@ def archived_attendance_exports(storage_directory):
         }
 
 
-def attendance_identity_index(resolutions, person_ids):
-    index = {}
-    for resolution in resolutions:
-        person_id = str(resolution["person_id"])
-        if resolution["status"] != "matched" or (
-            person_ids is not None and person_id not in person_ids
-        ):
-            continue
-        for subject in resolution.get("official_subjects", []):
-            assign_unique_person(index, str(subject["source_subject_id"]), person_id)
-    return index
+def attendance_identity_index(resolutions, person_ids, roster_path):
+    """Committee exports use SPL IDs, bridged by the official deputy roster."""
+    return verified_author_index(roster_path, resolutions, person_ids)
 
 
 def committee_attendance_rows(paths, identity_index):
@@ -62,8 +54,9 @@ def committee_attendance_rows(paths, identity_index):
             meetings[person_id, day[:7]].add((day, row["IdComissao"], row["IdReuniao"]))
     return [
         {
-            "personId": person_id, "officialKey": period, "institution": "alesp",
+            "personId": person_id, "officialKey": "spl-v2:" + period, "institution": "alesp",
             "period": period, "scope": "committee_presence_observed",
+            "identityMethod": "official_profile_to_roster_IdSPL",
             "present": len(events),
             "meetings": [
                 {"date": day, "committeeId": committee, "meetingId": meeting}

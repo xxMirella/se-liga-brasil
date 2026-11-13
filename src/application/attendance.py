@@ -23,7 +23,14 @@ from service.legislative_collection.runtime import CollectionDefinition, run_off
 
 
 def attendance_pipeline(
-    command, configuration, acquisition, repository, *, limit, person_id, years=None,
+    command,
+    configuration,
+    acquisition,
+    repository,
+    *,
+    limit,
+    person_id,
+    years=None,
 ):
     return collect_attendance_batch(
         repository, acquisition, limit=limit, person_id=person_id, years=years
@@ -34,7 +41,11 @@ def execute_attendance_command(arguments):
     directory = arguments.storage_directory or PROJECT_ROOT / "data/enrichment"
     configuration = CrawlerConfiguration(directory.resolve())
     definition = CollectionDefinition(
-        SOURCE, PARSER_VERSION, OFFICIAL_HOSTS, CamaraProjectionWriter, CamaraAcquisition,
+        SOURCE,
+        PARSER_VERSION,
+        OFFICIAL_HOSTS,
+        CamaraProjectionWriter,
+        CamaraAcquisition,
     )
     years = parse_attendance_years(getattr(arguments, "years", None))
     pipeline = partial(
@@ -44,10 +55,13 @@ def execute_attendance_command(arguments):
         result = run_official_collection(connection, configuration, definition, pipeline)
         with httpx.Client(timeout=60) as client:
             storage = SupabaseDatasetStorage(
-                load_storage_configuration(arguments.env_file), client,
+                load_storage_configuration(arguments.env_file),
+                client,
             )
             result["dataset"] = publish_attendance_dataset(
-                connection, directory / "datasets", storage,
+                connection,
+                directory / "datasets",
+                storage,
             )
         return result | {"status": "partial"}
 
