@@ -42,7 +42,7 @@ Arquivos baixados são originais imutáveis. Novas respostas recebem novos camin
 
 A aquisição compartilhada restringe hosts oficiais, tamanho por arquivo/execução, timeout e tentativas. Há espaçamento por host, cache/checksum e janela padrão de rechecagem de 24 horas nos conectores institucionais. Respostas 403/429 suspendem a fonte; 5xx têm tentativas limitadas. `Retry-After` e `source_request_policy` impedem que outro despacho volte imediatamente à fonte bloqueada. Cache não impede que determinados índices sejam consultados de novo: a descoberta ALESP, por exemplo, consulta seu índice a cada execução de folha.
 
-Tabelas comuns de controle/proveniência: `source`, `source_record`, `ingestion_run`, `ingestion_artifact`, `ingestion_entity`, `ingestion_entity_version`, `ingestion_artifact_entity` e `ingestion_rejection`. Registros recusados não devem ser tratados como fatos canônicos. `person_identity_review` registra conflitos de identidade. `person_data_gap` é fila temporária: `is_processed=true` somente após completude confirmar atendimento/justificativa; o expurgo remove resolvidas em lotes. Falha de tentativa continua pendente. O histórico de fatos permanece nas tabelas próprias, não na fila.
+Tabelas comuns de controle/proveniência: `source`, `source_record`, `ingestion_run`, `ingestion_artifact`, `ingestion_entity` (identidade e ponteiro para o `source_record` vigente, sem cópia do conteúdo) e `ingestion_rejection`; `ingestion_entity_version` é uma visão derivada de `source_record` e a antiga `ingestion_artifact_entity` foi arquivada e removida. Registros recusados não devem ser tratados como fatos canônicos. `person_identity_review` registra conflitos de identidade. `person_data_gap` é fila temporária: `is_processed=true` somente após completude confirmar atendimento/justificativa; o expurgo remove resolvidas em lotes. Falha de tentativa continua pendente. O histórico de fatos permanece nas tabelas próprias, não na fila.
 
 ## TSE — `src/crawlers/tse/`
 
@@ -65,10 +65,9 @@ O enriquecimento delegado `collect_requested_tse_data` agrupa pessoas/anos/campo
 - `electoral_candidacy`: pessoa, ano, sequência técnica, turno, UF, cargo disputado, situação, resultado e referências ao partido/observação.
 - `political_party`: código, nome, sigla e última observação eleitoral.
 - `political_party_affiliation`: observação eleitoral por pessoa/partido/fonte, `information_scope='electoral:<ano>'`, validade da informação e evidência.
-- `person_fact`: fatos normalizados e valores originais com evidência.
+- `person_fact`: fatos normalizados e, só quando divergem, o valor original da fonte (`original_value` NULL = igual a `normalized_value`; ver `modelo-de-dados.md`).
 - `candidate_asset_declaration`: pessoa, ano, ordem/tipo/descrição, `declared_value`, `value_quality_status` e fonte. Valores negativos são preservados e sinalizados; não convertidos para zero.
 - `candidate_document`: tipo, ano, caminho/hash do plano de governo ou certidão.
-- `person_activity_context`: contexto de atividade/evento da fonte; não equivale a autoria parlamentar.
 - `person_identity_review` e `ingestion_rejection`: pendências de validação/identidade.
 
 ### Limites e estado

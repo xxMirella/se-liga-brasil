@@ -17,9 +17,10 @@ SELECT i.person_id,i.external_id,i.source_record_id,
  EXISTS(SELECT 1 FROM se_liga_brasil.person_document_identity d
   WHERE d.person_id=i.person_id) AS independent_document_available,
  (SELECT count(*) FROM se_liga_brasil.ingestion_entity e
-  WHERE e.normalized_data->>'personId'=i.person_id::text
+  JOIN se_liga_brasil.source_record profile_record ON profile_record.id=e.source_record_id
+  WHERE profile_record.payload->>'personId'=i.person_id::text
    AND e.entity_kind IN ('alesp_profile','camara_profile','senado_profile','alerj_profile')
-   AND e.normalized_data->>'identityMethod' IN ('validated_cpf','unique_full_name_birth_date'))
+   AND profile_record.payload->>'identityMethod' IN ('validated_cpf','unique_full_name_birth_date'))
    AS independently_verified_profiles,
  EXISTS(SELECT 1 FROM se_liga_brasil.source_record newer
   WHERE newer.source_id=i.source_id AND newer.external_key=r.external_key

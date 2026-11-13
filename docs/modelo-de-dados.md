@@ -22,8 +22,9 @@ A duplicação fica restrita ao modelo de leitura. Os relacionamentos pessoa↔p
 
 | Grupo | Tabelas | Função |
 | --- | --- | --- |
-| Origem | `source`, `source_record` | Órgão, método, URL, chave externa, hash, coleta, validade e conteúdo ou referência ao arquivo |
-| Pessoa | `person`, `person_identifier`, `person_fact` | Identidade canônica por UUID interno, pontes derivadas revisadas e evidências por campo, inclusive divergências |
+| Origem | `source`, `source_record` | Órgão, método, URL, chave externa, hash, coleta, validade e conteúdo ou referência ao arquivo; cada conteúdo distinto é uma linha (histórico de versões) |
+| Ingestão | `ingestion_run`, `ingestion_artifact`, `ingestion_entity`, `ingestion_rejection`; visão `ingestion_entity_version` | Execução, arquivo baixado, identidade da entidade com ponteiro para o `source_record` vigente (sem cópia do conteúdo) e quarentena; a visão deriva as versões de `source_record`. `ingestion_artifact_entity` foi arquivada e removida |
+| Pessoa | `person`, `person_identifier`, `person_fact` | Identidade canônica por UUID interno, pontes derivadas revisadas e evidências por campo, inclusive divergências (`original_value` só quando difere do normalizado) |
 | Completude | `person_data_coverage` | Fonte, área, período e estado de cobertura; zero importado não significa ausência de atividade |
 | Formação e trajetória | `education`, `public_career_event` | Cursos e eventos com ano/data e fonte; primeiro mandato e início declarado da vida pública separados |
 | Partido | `political_party`, `political_party_affiliation` | Partido e histórico com datas conhecidas e data de observação |
@@ -46,6 +47,22 @@ A duplicação fica restrita ao modelo de leitura. Os relacionamentos pessoa↔p
 - **Emendas coletivas:** autoria formal, solicitação e apoio ficam separados. Não dividir ou atribuir todo o valor de uma emenda coletiva a cada apoiador.
 - **Dinheiro:** valores são `numeric`, não float. Os snapshots são saldos por data e recorte, não movimentos para somar ao longo do tempo. Empenhado, liquidado e pago não são somados como um total único. NULL é desconhecido, não zero. Valores negativos podem representar ajustes na fonte; revisar a semântica por coletor.
 - **Cobertura:** contagens no card são de registros importados. A interface só pode comunicar ausência de atividade quando o período/fonte estiver coberto. Exibir “cobertura parcial” ou “não disponível” conforme `data_coverage`.
+
+## Semântica de `person_fact.original_value`
+
+`original_value IS NULL` significa **idêntico a `normalized_value`**. O valor efetivo da fonte é
+`coalesce(original_value, normalized_value)`. Quando a normalização altera o conteúdo, o
+`original_value` continua gravado integralmente; nenhuma divergência é descartada.
+
+- Um trigger `BEFORE INSERT OR UPDATE OF original_value, normalized_value`
+  (`person_fact_null_original_value_when_equal`, migration 0027) zera `original_value` quando é
+  igual a `normalized_value`; os pontos de escrita continuam informando o valor bruto. Se um
+  `normalized_value` mudar em uma linha com `original_value` NULL, o trigger materializa antes o
+  valor antigo em `original_value`.
+- Um CHECK impede `original_value` e `normalized_value` ambos NULL (NULL significaria "igual a nada").
+- Novos leitores devem usar `coalesce(original_value, normalized_value)`. Hoje nenhum código lê a coluna.
+- A migration 0027 só cria linhas mortas; o espaço (~46 MB) volta ao sistema operacional apenas
+  após rewrite da tabela (`pg_repack` ou `VACUUM FULL`, fora da migration).
 
 ## Recuperação otimizada
 

@@ -127,11 +127,12 @@ def test_initial_schema_behavior_checks_still_pass(integration_database):
     sql = read_sql_file("tests.sql")
     sql = sql.removesuffix("\n").removesuffix("ROLLBACK;")
     sql = strip_transaction_wrapper(sql)
-    # The original suite asserts 23 RLS tables; extensions in this test schema total 46.
-    sql = sql.replace("<> 23", "<> 46")
+    # The original suite asserts 23 RLS tables; extensions in this test schema total 43 after
+    # migrations 0025 (entity versions become a view), 0029 and 0030 removed three tables.
+    sql = sql.replace("<> 23", "<> 43")
     integration_database.execute(sql)
     assert apply_ingestion_schema(integration_database) is False
-    assert verify_schema(integration_database)["tables"] == 46
+    assert verify_schema(integration_database)["tables"] == 43
 
 
 def test_assets_and_generic_existence_keep_source_provenance(

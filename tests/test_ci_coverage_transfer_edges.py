@@ -1,7 +1,7 @@
 """Career coverage receipts and corporate transfers cannot imply unsupported facts."""
 
-from dataclasses import asdict, replace
-from datetime import UTC, date, datetime
+from dataclasses import replace
+from datetime import date
 from types import SimpleNamespace
 from unittest.mock import Mock
 
@@ -9,8 +9,6 @@ import pytest
 
 from crawlers.receita_federal import acquisition
 from crawlers.transferegov import normalization
-from database.activity_context import PostgresActivityContextRepository
-from service.activity_context.linking import ActivityContext, ActivityContextService
 from service.ingestion.contracts import IngestionError, Resource
 from service.public_career_coverage import assessment, planning
 from service.public_career_coverage.contracts import (
@@ -104,31 +102,6 @@ def test_monthly_senate_coverage_requires_both_plenary_and_committee_channels():
     scopes = planning.build_activity_scopes([expected], domains=("votes",))
     assert {item.partition for item in scopes} == {"plenary/2024-01", "committee/2024-01"}
     assert planning.build_activity_scopes([replace(expected, institution="prefeitura")]) == set()
-
-
-@pytest.mark.parametrize("verified", [True, False])
-def test_activity_context_adapter_uses_parameterized_ownership_validation(verified):
-    connection = Mock()
-    connection.execute.return_value.fetchone.return_value = {"id": 7} if verified else None
-    context = ActivityContext(1, "vote", "proposal:key", "one", 9, datetime(2024, 1, 1, tzinfo=UTC))
-    repository = PostgresActivityContextRepository(connection)
-    if verified:
-        assert repository.link_context(context) == 7
-    else:
-        with pytest.raises(IngestionError, match="ACTIVITY_CONTEXT_NOT_VERIFIED"):
-            repository.link_context(context)
-    assert connection.execute.call_args.args[1] == asdict(context)
-    assert "canonical_person_id" in connection.execute.call_args.args[0]
-
-
-@pytest.mark.parametrize("field", ["activity_kind", "external_key", "observed_at", "occurred_at"])
-def test_activity_service_rejects_missing_identifiers_and_naive_timestamps(field):
-    context = ActivityContext(1, "vote", "key", "one", 9, datetime(2024, 1, 1, tzinfo=UTC))
-    value = " " if field in {"activity_kind", "external_key"} else datetime(2024, 1, 1)
-    repository = Mock()
-    with pytest.raises(IngestionError, match="INVALID_ACTIVITY_"):
-        ActivityContextService(repository).link_activity(replace(context, **{field: value}))
-    repository.link_context.assert_not_called()
 
 
 @pytest.mark.parametrize("value", ["2024-02-30T00:00:00", "not-a-date", "2024-01-01T99:99:99"])

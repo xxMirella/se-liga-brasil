@@ -22,5 +22,4 @@ class TseProjectionWriter:
         }
         if resource_kind in projections:
             self.writer.execute_statements(projections[resource_kind], parameters)
-        self.writer.execute_statements("activity_context", parameters)
         self.writer.connection.execute("DROP TABLE resolved_batch_identity")

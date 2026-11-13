@@ -53,7 +53,7 @@ def test_same_document_reuses_person_and_party_changes_keep_dated_snapshots(
         assert affiliations[0]["information_valid_until"] is not None
         assert all(affiliation["valid_from"] is None for affiliation in affiliations)
         contexts = integration_database.execute("""
-            SELECT count(*) AS contexts FROM se_liga_brasil.person_activity_context
+            SELECT count(*) AS contexts FROM se_liga_brasil.electoral_candidacy
             WHERE political_party_id IS NOT NULL
         """).fetchone()
         assert contexts["contexts"] == 3

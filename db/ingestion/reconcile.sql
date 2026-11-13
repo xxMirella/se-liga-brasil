@@ -20,22 +20,16 @@ ON CONFLICT(source_id,external_key,content_sha256) DO NOTHING;
 UPDATE ingestion_batch b SET source_record_id=r.id FROM se_liga_brasil.source_record r
 WHERE r.source_id=%(source_id)s AND r.external_key=b.kind||':'||b.external_key
 AND r.content_sha256=b.content_sha256;
-INSERT INTO se_liga_brasil.ingestion_entity AS current(source_id,entity_kind,external_key,content_sha256,normalized_data,source_record_id,source_generated_at)
-SELECT %(source_id)s,kind,external_key,content_sha256,normalized_data,source_record_id,source_generated_at
+INSERT INTO se_liga_brasil.ingestion_entity AS current(source_id,entity_kind,external_key,content_sha256,source_record_id,source_generated_at)
+SELECT %(source_id)s,kind,external_key,content_sha256,source_record_id,source_generated_at
 FROM ingestion_batch
 ON CONFLICT(source_id,entity_kind,external_key) DO UPDATE SET
- content_sha256=excluded.content_sha256,normalized_data=excluded.normalized_data,
+ content_sha256=excluded.content_sha256,
  source_record_id=excluded.source_record_id,source_generated_at=excluded.source_generated_at,
  last_ingested_at=CASE WHEN current.content_sha256<>excluded.content_sha256 THEN now() ELSE current.last_ingested_at END
 WHERE excluded.source_generated_at>current.source_generated_at;
 UPDATE ingestion_batch b SET entity_id=e.id FROM se_liga_brasil.ingestion_entity e
 WHERE e.source_id=%(source_id)s AND e.entity_kind=b.kind AND e.external_key=b.external_key;
-INSERT INTO se_liga_brasil.ingestion_entity_version(entity_id,content_sha256,normalized_data,source_record_id)
-SELECT entity_id,content_sha256,normalized_data,source_record_id FROM ingestion_batch
-ON CONFLICT(entity_id,content_sha256) DO NOTHING;
-INSERT INTO se_liga_brasil.ingestion_artifact_entity(artifact_id,entity_id,source_record_id)
-SELECT %(artifact_id)s,entity_id,source_record_id FROM ingestion_batch
-ON CONFLICT(artifact_id,entity_id) DO NOTHING;
 INSERT INTO se_liga_brasil.ingestion_rejection(run_id,artifact_id,resource_id,entry_name,row_number,reason_code,payload_sha256,details)
 SELECT %(run_id)s,%(artifact_id)s,%(resource_id)s,entry_name,row_number,'SAME_TIMESTAMP_CONFLICT',content_sha256,diagnostic_context
 FROM ingestion_batch WHERE classification='conflicting';

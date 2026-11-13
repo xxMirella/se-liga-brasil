@@ -53,16 +53,17 @@ disponível e os dados anteriores permanecem associados aos seus partidos origin
 
 ## Trabalhos, bens, documentos e notícias
 
-`person_activity_context` relaciona cada versão de um registro à pessoa, ao partido,
-à observação de filiação e à candidatura ou mandato pertinente. Bens e complementos
-usam ano + SQ_CANDIDATO; preservam o contexto de partido/cargo daquela candidatura.
-Um cargo pretendido não vira mandato ou exercício comprovado.
+Bens e complementos usam ano + SQ_CANDIDATO; preservam o contexto de partido/cargo daquela
+candidatura (`electoral_candidacy.political_party_id`, `political_party_affiliation_id` e
+`office_code`). Um cargo pretendido não vira mandato ou exercício comprovado.
 
-`service/activity_context` fornece uma API reutilizável, com adaptador em
-`database/activity_context.py`, para futuros conectores de propostas, notícias e trabalhos.
-Ela confere propriedade da filiação e do mandato, fonte do registro e datas. Para afirmar
-filiação em uma data de atividade, exige período real comprovado; snapshots eleitorais
-isolados não atendem a essa exigência. Notícias e trabalhos ainda precisam de seus crawlers.
+A tabela `person_activity_context` e o serviço `service/activity_context` foram removidos
+(migration 0030): nada os lia e todo o seu conteúdo era derivável de `electoral_candidacy`.
+Os registros foram arquivados antes do DROP. Quando houver crawlers de propostas, notícias ou
+trabalhos, o vínculo com pessoa, partido e mandato deve nascer de uma projeção própria que
+confira propriedade da filiação e do mandato, fonte do registro e datas, e que só afirme
+filiação em uma data de atividade com período real comprovado; snapshots eleitorais isolados
+não atendem a essa exigência.
 
 As chaves únicas tornam repetição de documento, candidatura, filiação e contexto idempotente.
 Os lotes usam SQL e pipeline PostgreSQL; sem consulta remota por pessoa. A varredura de n

@@ -67,7 +67,7 @@ A chave natural desta fonte usa competência + hash do nome completo normalizado
 Mudanças de nome exigem resolução; nomes iguais dentro do mesmo mês bloqueiam
 a publicação para evitar consolidação indevida.
 
-A tabela é projeção atual; `ingestion_entity_version` e `source_record` preservam
+A tabela é projeção atual; `source_record` (uma linha por conteúdo distinto; `ingestion_entity_version` é a visão derivada dele) preserva
 o histórico imutável com hash, payload, origem e artefato. Conteúdo idêntico
 não abre versão. Correções observadas mais tarde atualizam a projeção e abrem
 versão; dados antigos não sobrescrevem novos, e divergências no mesmo instante

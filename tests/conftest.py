@@ -158,6 +158,11 @@ def integration_database():
             "0020_office_legal_scope_versions.sql",
             "0022_drop_unused_person_profile.sql",
             "0023_serving_schema.sql",
+            "0025_drop_ingestion_entity_version.sql",
+            "0026_drop_ingestion_entity_normalized_data.sql",
+            "0029_drop_ingestion_artifact_entity.sql",
+            "0027_person_fact_original_value_null_when_equal.sql",
+            "0030_drop_person_activity_context.sql",
         ):
             isolated.execute(strip_transaction_wrapper(read_sql_file("migrations/" + filename)))
         yield isolated

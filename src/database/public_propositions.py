@@ -11,8 +11,8 @@ def fetch_person_propositions(connection, person_id, as_of, page=1):
     rows = connection.execute(
         """SELECT p.id,p.title,p.kind,p.number,p.year,p.introduced_on,p.summary,p.official_key,
           i.name AS institution,i.code AS institution_code,
-          detail.normalized_data->>'principalProposition' AS principal_key,
-          detail.normalized_data->>'textUrl' AS text_url,
+          detail_record.payload->>'principalProposition' AS principal_key,
+          detail_record.payload->>'textUrl' AS text_url,
           parent.title AS principal_title,parent.kind AS principal_kind,
           parent.number AS principal_number,parent.year AS principal_year,
           array_agg(DISTINCT link.role) AS roles,
@@ -32,10 +32,12 @@ def fetch_person_propositions(connection, person_id, as_of, page=1):
         LEFT JOIN se_liga_brasil.ingestion_entity detail ON detail.source_id=source.id
           AND detail.entity_kind='camara_legislative_detail'
           AND detail.external_key='detail:'||p.official_key
+        LEFT JOIN se_liga_brasil.source_record detail_record
+          ON detail_record.id=detail.source_record_id
         LEFT JOIN se_liga_brasil.proposition parent ON parent.institution_id=p.institution_id
-          AND parent.official_key=detail.normalized_data->>'principalProposition'
+          AND parent.official_key=detail_record.payload->>'principalProposition'
         WHERE link.person_id=%s AND (p.introduced_on IS NULL OR p.introduced_on<=%s)
-        GROUP BY p.id,i.name,i.code,detail.id,parent.id
+        GROUP BY p.id,i.name,i.code,detail.id,detail_record.id,parent.id
         ORDER BY p.introduced_on DESC NULLS LAST,p.id DESC
         LIMIT 101 OFFSET %s""",
         (as_of, person_id, as_of, (page - 1) * 100),

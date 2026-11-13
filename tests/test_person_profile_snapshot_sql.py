@@ -86,8 +86,8 @@ def insert_rich_person(db):
 def insert_entity(db, source_id, record_id, kind):
     return db.execute(
         "INSERT INTO se_liga_brasil.ingestion_entity(source_id,entity_kind,external_key,"
-        "content_sha256,normalized_data,source_record_id,source_generated_at) "
-        "VALUES(%s,%s,%s,repeat('b',64),'{}',%s,now()) RETURNING id",
+        "content_sha256,source_record_id,source_generated_at) "
+        "VALUES(%s,%s,%s,repeat('b',64),%s,now()) RETURNING id",
         (source_id, kind, str(uuid4()), record_id),
     ).fetchone()["id"]
 

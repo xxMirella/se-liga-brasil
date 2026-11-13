@@ -1,7 +1,7 @@
 """Public facts require dated evidence and preserve unavailable attendance."""
 
 from contextlib import nullcontext
-from datetime import UTC, date, datetime
+from datetime import date
 from decimal import Decimal
 from types import SimpleNamespace
 from unittest.mock import Mock
@@ -9,45 +9,7 @@ from unittest.mock import Mock
 import pytest
 
 from database.profile_media import ProfileMediaRepository
-from service.activity_context.linking import ActivityContext, ActivityContextService
 from service.attendance.monthly import consolidate_monthly_attendance
-from service.ingestion.contracts import IngestionError
-
-
-def context(**overrides):
-    values = dict(
-        source_id=1,
-        activity_kind="proposal",
-        external_key="proposal:1",
-        person_id="person",
-        source_record_id=1,
-        observed_at=datetime(2024, 1, 1, tzinfo=UTC),
-    )
-    return ActivityContext(**(values | overrides))
-
-
-@pytest.mark.parametrize(
-    "override,code",
-    [
-        ({"activity_kind": " "}, "INVALID_ACTIVITY_CONTEXT"),
-        ({"external_key": " "}, "INVALID_ACTIVITY_CONTEXT"),
-        ({"observed_at": datetime(2024, 1, 1)}, "INVALID_ACTIVITY_TIMESTAMP"),
-        ({"occurred_at": datetime(2024, 1, 1)}, "INVALID_ACTIVITY_TIMESTAMP"),
-    ],
-)
-def test_invalid_activity_never_reaches_repository(override, code):
-    repository = SimpleNamespace(link_context=Mock())
-    with pytest.raises(IngestionError, match=code):
-        ActivityContextService(repository).link_activity(context(**override))
-    repository.link_context.assert_not_called()
-
-
-@pytest.mark.parametrize("occurred", [None, datetime(2024, 1, 1, tzinfo=UTC)])
-def test_activity_unknown_date_is_preserved_without_inventing_one(occurred):
-    repository = SimpleNamespace(link_context=Mock(return_value=3))
-    value = context(occurred_at=occurred)
-    assert ActivityContextService(repository).link_activity(value) == 3
-    repository.link_context.assert_called_once_with(value)
 
 
 def test_attendance_months_are_sorted_and_current_month_is_provisional():
