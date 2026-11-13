@@ -10,45 +10,79 @@ from service.completeness.rules import SATISFIED_STATES
 from service.ingestion.contracts import IngestionError
 
 
-def persist_data_gaps(connection, report) -> dict:
-    assessment_id = str(uuid4())
-    people = [row["person_id"] for row in report["people"]]
+def stage_current_gaps(connection, report) -> int:
+    """Load the gaps visible in this assessment into a transaction-local staging table."""
     missing = (
         {"person_id": row["person_id"], "field_name": field, "quality_state": status}
         for row in report["people"]
         for field, status in row["fields"].items()
         if status not in SATISFIED_STATES
     )
+    connection.execute(
+        "CREATE TEMP TABLE IF NOT EXISTS person_data_gap_assessment("
+        "person_id uuid NOT NULL,field_name text NOT NULL,quality_state text NOT NULL,"
+        "PRIMARY KEY(person_id,field_name))"
+    )
+    connection.execute("TRUNCATE person_data_gap_assessment")
     count = 0
-    with connection.transaction():
-        for batch in batched(missing, 1000):
-            connection.execute(
-                """
-                INSERT INTO se_liga_brasil.person_data_gap AS current(
-                  person_id,field_name,quality_state,last_assessment_id)
-                SELECT (item->>'person_id')::uuid,item->>'field_name',
-                  item->>'quality_state',%s::uuid
-                FROM jsonb_array_elements(%s) item
-                ON CONFLICT(person_id,field_name) DO UPDATE SET
-                  quality_state=excluded.quality_state,last_checked_at=now(),
-                  last_assessment_id=excluded.last_assessment_id,
-                  status=CASE WHEN current.status='resolved' THEN 'queued' ELSE current.status END,
-                  next_attempt_at=CASE WHEN current.status='resolved'
-                    THEN now() ELSE current.next_attempt_at END,
-                  resolved_at=NULL,is_processed=false,processed_at=NULL
-            """,
-                (assessment_id, Jsonb(batch)),
-            )
-            count += len(batch)
+    for batch in batched(missing, 1000):
         connection.execute(
             """
-            UPDATE se_liga_brasil.person_data_gap SET status='resolved',
-              quality_state='resolved',resolved_at=now(),is_processed=true,processed_at=now(),
-              last_checked_at=now(),last_assessment_id=%s::uuid,claimed_by=NULL,lease_until=NULL
-            WHERE person_id=ANY(%s::uuid[]) AND last_assessment_id<>%s::uuid AND status<>'resolved'
-        """,
-            (assessment_id, people, assessment_id),
+            INSERT INTO person_data_gap_assessment(person_id,field_name,quality_state)
+            SELECT (item->>'person_id')::uuid,item->>'field_name',item->>'quality_state'
+            FROM jsonb_array_elements(%s) item
+            ON CONFLICT(person_id,field_name) DO UPDATE SET quality_state=excluded.quality_state
+            """,
+            (Jsonb(batch),),
         )
+        count += len(batch)
+    return count
+
+
+def upsert_changed_gaps(connection, assessment_id) -> None:
+    """Insert new gaps and rewrite existing ones only when the state or lifecycle changed."""
+    connection.execute(
+        """
+        INSERT INTO se_liga_brasil.person_data_gap AS current(
+          person_id,field_name,quality_state,last_assessment_id)
+        SELECT person_id,field_name,quality_state,%s::uuid FROM person_data_gap_assessment
+        ON CONFLICT(person_id,field_name) DO UPDATE SET
+          quality_state=excluded.quality_state,last_checked_at=now(),
+          last_assessment_id=excluded.last_assessment_id,
+          status=CASE WHEN current.status='resolved' THEN 'queued' ELSE current.status END,
+          next_attempt_at=CASE WHEN current.status='resolved'
+            THEN now() ELSE current.next_attempt_at END,
+          resolved_at=NULL,is_processed=false,processed_at=NULL
+        WHERE current.quality_state IS DISTINCT FROM excluded.quality_state
+          OR current.status='resolved' OR current.is_processed
+        """,
+        (assessment_id,),
+    )
+
+
+def resolve_absent_gaps(connection, assessment_id, people) -> None:
+    """Resolve open gaps of assessed people that are absent from the current assessment."""
+    connection.execute(
+        """
+        UPDATE se_liga_brasil.person_data_gap AS gap SET status='resolved',
+          quality_state='resolved',resolved_at=now(),is_processed=true,processed_at=now(),
+          last_checked_at=now(),last_assessment_id=%s::uuid,claimed_by=NULL,lease_until=NULL
+        WHERE gap.person_id=ANY(%s::uuid[]) AND gap.status<>'resolved'
+          AND NOT EXISTS(
+            SELECT 1 FROM person_data_gap_assessment present
+            WHERE present.person_id=gap.person_id AND present.field_name=gap.field_name)
+        """,
+        (assessment_id, people),
+    )
+
+
+def persist_data_gaps(connection, report) -> dict:
+    assessment_id = str(uuid4())
+    people = [row["person_id"] for row in report["people"]]
+    with connection.transaction():
+        count = stage_current_gaps(connection, report)
+        upsert_changed_gaps(connection, assessment_id)
+        resolve_absent_gaps(connection, assessment_id, people)
     return {"assessment_id": assessment_id, "open_fields_assessed": count}
 
 
@@ -109,8 +143,10 @@ def postpone_source(connection, source, delay_seconds, error_code, http_status=N
               next_attempt_at=greatest(next_attempt_at,now()+%s*interval '1 second'),
               last_error_code=%s
             WHERE assigned_source=%s AND status IN ('queued','running')
+              AND (next_attempt_at<now()+%s*interval '1 second'
+                OR last_error_code IS DISTINCT FROM %s)
         """,
-            (delay_seconds, error_code, source),
+            (delay_seconds, error_code, source, delay_seconds, error_code),
         )
 
 

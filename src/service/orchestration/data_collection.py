@@ -118,6 +118,7 @@ def release_deferred_people(connection, results) -> None:
                 """
                 UPDATE se_liga_brasil.person_data_gap SET next_attempt_at=now()
                 WHERE assigned_source=%s AND status='queued' AND person_id=ANY(%s::uuid[])
+                  AND next_attempt_at>now()
                 """,
                 (source, people),
             )
