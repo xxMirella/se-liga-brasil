@@ -61,7 +61,9 @@ def test_cache_compression_validation_and_private_routes():
     )
     assert identity == body
     assert identity_headers["ETag"] != headers["ETag"]
-    for route, status in (("/pessoas", 200), ("/api/people", 200), ("/como-funciona", 400)):
+    search_headers = prepare_public_response("/pessoas", 200, body, {})[2]
+    assert search_headers["Cache-Control"].startswith("public, s-maxage=")
+    for route, status in (("/pessoas", 400), ("/api/people", 200), ("/como-funciona", 400)):
         actual = prepare_public_response(route, status, body, {})[2]
         assert actual["Cache-Control"] == "no-store"
         if route.startswith("/api/") or status != 200:

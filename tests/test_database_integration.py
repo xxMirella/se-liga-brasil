@@ -5,7 +5,7 @@ import pytest
 from crawlers.tse.configuration import TSE_SOURCE
 from crawlers.tse.projection import TseProjectionWriter
 from crawlers.tse.validator import validate_resource
-from database.operations import read_sql_file, refresh_person_profiles, strip_transaction_wrapper
+from database.operations import read_sql_file, strip_transaction_wrapper
 from service.ingestion.repository import IngestionRepository
 from service.ingestion.sql_batches import SqlBatchWriter
 from storage.validation_index import ValidationIndex
@@ -36,11 +36,10 @@ def test_batch_progress_and_profiles_are_updated_before_whole_run_finishes(
         validated = validate_resource(archive_factory("candidate", rows), configuration, index)
         repository.ingest_validated_artifact(validated, 2)
         assert [details["processed_records"] for phase, details in events] == [2, 3]
-        refresh_person_profiles(integration_database)
-        profiles = integration_database.execute(
-            "SELECT count(*) AS total FROM se_liga_brasil.person_profile"
+        people = integration_database.execute(
+            "SELECT count(*) AS total FROM se_liga_brasil.person"
         ).fetchone()["total"]
-        assert profiles == 3
+        assert people == 3
     finally:
         index.close()
         repository.finish_run("completed", {})

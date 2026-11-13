@@ -2,7 +2,6 @@ import pytest
 from test_database_integration import start_repository
 
 from crawlers.tse.validator import validate_resource
-from database.operations import refresh_person_profiles
 from storage.validation_index import ValidationIndex
 
 pytestmark = pytest.mark.integration
@@ -41,17 +40,10 @@ def test_same_document_reuses_person_and_party_changes_keep_dated_snapshots(
         assert repository.ingest_validated_artifact(historical, 500).rejected == 0
         assert_birth_date_review(integration_database)
         assert repository.ingest_validated_artifact(second, 500).skipped_artifact
-        refresh_person_profiles(integration_database)
         counts = integration_database.execute("""
             SELECT count(*) AS people FROM se_liga_brasil.person
         """).fetchone()
         assert counts["people"] == 1
-        party = integration_database.execute("""
-            SELECT party.code FROM se_liga_brasil.person_profile profile
-            JOIN se_liga_brasil.political_party party
-            ON party.id=profile.last_observed_political_party_id
-        """).fetchone()
-        assert party["code"] == "98"
         affiliations = integration_database.execute("""
             SELECT election_context_year,information_valid_until,valid_from
             FROM se_liga_brasil.political_party_affiliation

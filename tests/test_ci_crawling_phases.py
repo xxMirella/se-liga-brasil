@@ -157,9 +157,6 @@ def phase_runner(request, monkeypatch, phase_files):
             "validate_downloaded_resources",
             lambda *args: effects.append("validate") or ([validated], [{"phase": "validate"}]),
         )
-        monkeypatch.setattr(
-            module, "refresh_profiles_with_progress", lambda *args: effects.append("refresh")
-        )
 
     def run(phase):
         repository = SimpleNamespace(connection="connection")
@@ -194,8 +191,6 @@ def test_full_run_keeps_phase_order_and_all_failures(phase_runner):
     module, config, effects, run = phase_runner
     result = run("run")
     expected = ["discover", "download", "validate", "ingest"]
-    if module is tse_pipeline:
-        expected.append("refresh")
     assert effects == expected
     assert result["failures"] == [{"phase": "download"}, {"phase": "validate"}]
     assert result["artifacts"] == [{"new": 1}]
@@ -205,7 +200,7 @@ def test_full_run_keeps_phase_order_and_all_failures(phase_runner):
 def test_ingest_uses_saved_validation_without_discovery_or_revalidation(phase_runner):
     module, _, effects, run = phase_runner
     assert run("ingest")["artifacts"] == [{"new": 1}]
-    assert effects == (["ingest", "refresh"] if module is tse_pipeline else ["ingest"])
+    assert effects == ["ingest"]
 
 
 def test_ingest_scope_mismatch_blocks_projection_and_profile_refresh(phase_runner):
@@ -257,15 +252,3 @@ def test_run_lock_is_released_when_phase_raises(monkeypatch, phase_files, module
     with pytest.raises(IngestionError, match="TEST_DISCOVERY_FAILURE"):
         invoke()
     assert events == ["locked", "unlocked"]
-
-
-def test_profile_refresh_reports_finished_only_after_database_effect(monkeypatch):
-    effects = []
-    monkeypatch.setattr(tse_pipeline, "emit_event", lambda event, **kwargs: effects.append(event))
-    monkeypatch.setattr(
-        tse_pipeline,
-        "refresh_person_profiles",
-        lambda connection: effects.append("database-refresh"),
-    )
-    tse_pipeline.refresh_profiles_with_progress(None)
-    assert effects == ["profiles_refresh_started", "database-refresh", "profiles_refresh_finished"]

@@ -61,7 +61,6 @@ def routed(monkeypatch):
         "route_data_gaps",
         "release_data_gaps",
         "defer_unmatched_institutional_people",
-        "refresh_person_profiles",
         "save_json",
     ]
     mocks = {}
@@ -222,7 +221,6 @@ def test_many_gaps_trigger_one_collection_per_source(monkeypatch, routed, tmp_pa
         "collect_requested_source",
         "fetch_completeness_rows",
         "fetch_enrichment_candidates",
-        "refresh_person_profiles",
         "assess_completeness",
     ],
 )

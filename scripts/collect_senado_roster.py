@@ -3,6 +3,7 @@
 import argparse
 import json
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -11,7 +12,8 @@ from crawlers.senado.roster_collection import (  # noqa: E402
     acquire_national_roster_batch,
     ingest_national_roster_batch,
 )
-from database.operations import connect_database, refresh_person_profiles  # noqa: E402
+from database.operations import connect_database  # noqa: E402
+from service.serving import rebuild_serving_datasets  # noqa: E402
 
 
 def main():
@@ -26,7 +28,7 @@ def main():
             connection, arguments.storage, limit=arguments.limit, offset=arguments.offset
         )
         summaries = ingest_national_roster_batch(connection, configuration, acquired)
-        refresh_person_profiles(connection)
+        rebuild_serving_datasets(connection, datetime.now(UTC).date())
     print(
         json.dumps(
             {

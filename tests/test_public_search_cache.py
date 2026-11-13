@@ -95,6 +95,7 @@ def test_portal_search_cache_avoids_connection_on_hit(monkeypatch):
     from application.public_portal import PublicPortalApplication
 
     connections, searches = [], []
+    monkeypatch.setattr("database.public_people_directory.directory_available", lambda *_: False)
     monkeypatch.setattr(
         "database.operations.connect_database",
         lambda *_: connections.append(1) or nullcontext(object()),

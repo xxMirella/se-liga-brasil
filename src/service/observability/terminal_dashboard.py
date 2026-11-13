@@ -17,8 +17,6 @@ STAGE_NAMES = {
     "ingest_started": "Ingestão",
     "ingest": "Ingestão",
     "ingest_progress": "Ingestão",
-    "profiles_refresh_started": "Atualização dos perfis",
-    "profiles_refresh_finished": "Perfis atualizados",
     "finished": "Finalizado",
     "failed": "Falha",
 }

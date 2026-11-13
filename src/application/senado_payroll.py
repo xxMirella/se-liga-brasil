@@ -9,9 +9,7 @@ from storage.files import save_json
 def execute_senado_payroll_command(arguments):
     storage = (arguments.storage_directory or PROJECT_ROOT / "data/senado-payroll").resolve()
     with connect_database(arguments.env_file) as connection:
-        result = collect_senado_payroll(
-            connection, storage, arguments.limit, arguments.person_id
-        )
+        result = collect_senado_payroll(connection, storage, arguments.limit, arguments.person_id)
         for person in result["people"]:
             assess_completeness(connection, storage, person["person_id"])
     save_json(storage / "collection-result.json", result)

@@ -38,12 +38,21 @@ class PublicResponse:
     search_indexable: bool = True
 
 
-def encode_response(payload, *, status=200, content_type="application/json", dataset_version=None,
-                    search_indexable=True):
+def encode_response(
+    payload,
+    *,
+    status=200,
+    content_type="application/json",
+    dataset_version=None,
+    search_indexable=True,
+):
     if content_type == "application/json":
         payload = json.dumps(payload, ensure_ascii=False, allow_nan=False)
     return PublicResponse(
-        status, payload.encode("utf-8"), content_type + "; charset=utf-8", dataset_version,
+        status,
+        payload.encode("utf-8"),
+        content_type + "; charset=utf-8",
+        dataset_version,
         search_indexable,
     )
 
@@ -87,7 +96,11 @@ def encode_public_error(target, code, status):
     if (
         target.startswith(
             (
-                "/pessoas", "/como-funciona", "/sobre", "/panorama", "/fontes-dos-dados",
+                "/pessoas",
+                "/como-funciona",
+                "/sobre",
+                "/panorama",
+                "/fontes-dos-dados",
                 "/comparacao-de-classificacoes",
             )
         )
@@ -133,10 +146,14 @@ def route_public_request(application, parsed):
             return encode_response(result)
         from service.public_profile_web import render_search_page
 
-        return encode_response(render_search_page(
-            parameters, result,
-            party_options=application.fetch_political_party_options(),
-        ), content_type="text/html")
+        return encode_response(
+            render_search_page(
+                parameters,
+                result,
+                party_options=application.fetch_political_party_options(),
+            ),
+            content_type="text/html",
+        )
     from application.public_scripts import route_script_request
 
     script_response = route_script_request(parsed)
@@ -185,9 +202,7 @@ def route_majority_panorama(application, parsed):
         render_majority_panorama(panorama, state),
         content_type="text/html",
         dataset_version=str(panorama.generated_on),
-        search_indexable=any(
-            legislature.has_data for legislature in panorama.legislatures
-        ),
+        search_indexable=any(legislature.has_data for legislature in panorama.legislatures),
     )
 
 
@@ -266,6 +281,9 @@ class PublicPortalApplication:
 
         self.people_cache = PublicSearchCache()
         self.party_options_cache = PublicSearchCache(ttl_seconds=3600, capacity=2)
+        from service.public_profile.vote_response_cache import VoteResponseCache
+
+        self.votes_cache = VoteResponseCache(dataset_reader)
         from application.political_dashboard_reader import PoliticalDashboardReader
         from database.public_read_connections import (
             PublicReadConnectionPool,
@@ -285,7 +303,9 @@ class PublicPortalApplication:
         )
 
         self.majority_panorama = CachedMajorityPanorama(
-            MajorityPanoramaReader(self.fetch_political_dashboard, self.today)
+            MajorityPanoramaReader(
+                self.fetch_political_dashboard, self.today, self.read_connections
+            )
         )
         from application.search_indexing import SearchIndexReader
 
@@ -308,81 +328,19 @@ class PublicPortalApplication:
         return fetch_people(self, parameters)
 
     def fetch_person(self, person_id, *, proposal_page=1):
-        from database.alerj_history import fetch_person_historical_activity
-        from database.attendance import (
-            fetch_person_attendance,
-            fetch_person_attendance_history,
-        )
-        from database.cabinet_payroll import fetch_cabinet_payroll_history
-        from database.office_legal_scopes import fetch_public_office_scopes
-        from database.operations import connect_database
-        from database.public_assets import PublicAssetsRepository
-        from database.public_people import PublicPeopleRepository
-        from database.public_propositions import fetch_person_propositions
-        from service.cabinet_payroll.public_projection import public_cabinet_payroll
-        from service.public_profile.assets import get_public_assets
-        from service.public_profile.people import get_public_person
+        from application.person_profile_loader import load_person_profile
 
-        as_of = self.today()
-        with connect_database(self.env_file) as connection:
-            repository = PublicPeopleRepository(connection)
-            # One snapshot for the whole profile: inner read_snapshot calls join it.
-            with repository.read_snapshot():
-                profile = get_public_person(repository, person_id, as_of)
-                profile["assets"] = get_public_assets(
-                    PublicAssetsRepository(connection), person_id, as_of
-                )
-                profile["historical_activity"] = fetch_person_historical_activity(
-                    connection, person_id, as_of
-                )
-                profile["attendance"] = fetch_person_attendance(connection, person_id, as_of)
-                profile["propositions"] = fetch_person_propositions(
-                    connection, person_id, as_of, proposal_page
-                )
-                profile["attendance_history"] = fetch_person_attendance_history(
-                    connection, person_id, as_of
-                )
-                profile["legal_scopes"] = fetch_public_office_scopes(connection, person_id, as_of)
-                profile["cabinet_payroll"] = public_cabinet_payroll(
-                    fetch_cabinet_payroll_history(connection, person_id, as_of)
-                )
-            return profile
+        return load_person_profile(self.read_connections, person_id, self.today(), proposal_page)
 
     def fetch_votes(self, person_id, parameters):
-        from application.public_api import build_vote_query
-        from database.operations import connect_database
-        from database.public_profile import PublicProfileRepository
-        from service.public_profile.storage_votes import get_person_storage_votes
+        from application.person_votes import fetch_votes
 
-        if parameters.get("scope", "period") not in {"history", "period"}:
-            raise PublicProfileError("INVALID_TIMELINE_SCOPE")
-        if parameters.get("scope") == "history":
-            return self.fetch_history(person_id, parameters)
-        parameters = {key: value for key, value in parameters.items() if key != "scope"}
-        query = build_vote_query(person_id, parameters)
-        with connect_database(self.env_file) as connection:
-            return get_person_storage_votes(
-                PublicProfileRepository(connection), self.dataset_reader, query
-            )
+        return fetch_votes(self, person_id, parameters)
 
     def fetch_history(self, person_id, parameters):
-        from database.operations import connect_database
-        from database.public_profile import PublicProfileRepository
-        from service.public_profile.storage_history import get_person_storage_history
+        from application.person_votes import fetch_history
 
-        with connect_database(self.env_file) as connection:
-            return get_person_storage_history(
-                PublicProfileRepository(connection),
-                self.dataset_reader,
-                person_id,
-                office_kind=parameters.get("office_kind"),
-                exercise_id=int(parameters["exercise_id"])
-                if parameters.get("exercise_id")
-                else None,
-                cursor=parameters.get("cursor"),
-                limit=int(parameters.get("limit", "30")),
-                as_of=self.today(),
-            )
+        return fetch_history(self, person_id, parameters)
 
     def profile_filters(self, parameters):
         result = {

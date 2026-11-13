@@ -5,6 +5,7 @@ from datetime import date
 from types import SimpleNamespace
 
 import pytest
+from psycopg.pq import TransactionStatus
 
 from application.public_portal import PublicPortalApplication, dispatch_portal_request
 from service.public_profile import PublicProfileError
@@ -14,13 +15,28 @@ TODAY = date(2026, 10, 19)
 
 
 def application(monkeypatch):
-    connection = SimpleNamespace(transaction=lambda: nullcontext(), execute=lambda *_: None)
+    connection = SimpleNamespace(
+        transaction=lambda: nullcontext(),
+        # serving schema not installed: profile reads fall back to the canonical tables
+        execute=lambda *_: SimpleNamespace(fetchone=lambda: {"installed": False}),
+        closed=False,
+        broken=False,
+        close=lambda: None,
+        info=SimpleNamespace(transaction_status=TransactionStatus.IDLE),
+    )
+    monkeypatch.setattr(
+        "database.public_read_connections.open_public_read_connection", lambda _env: connection
+    )
     monkeypatch.setattr("database.operations.connect_database", lambda *_: nullcontext(connection))
     return PublicPortalApplication(None, "dataset-reader", today=lambda: TODAY), connection
 
 
 def test_profile_composes_existing_projections_without_source_requests(monkeypatch):
     app, _ = application(monkeypatch)
+    monkeypatch.setattr(
+        "database.operations.connect_database",
+        lambda *_: pytest.fail("profile must use the public read pool"),
+    )
     monkeypatch.setattr(
         "database.alerj_history.fetch_person_historical_activity",
         lambda *_: {"items": [], "coverage": "partial_official_synopsis"},
@@ -64,6 +80,7 @@ def test_missing_person_stops_before_other_projection_queries(monkeypatch):
 
 
 def test_search_preserves_typed_limit_and_filters(monkeypatch):
+    monkeypatch.setattr("database.public_people_directory.directory_available", lambda *_: False)
     app, _ = application(monkeypatch)
     captured = []
     monkeypatch.setattr(
@@ -163,3 +180,17 @@ def test_invalid_routes_never_turn_into_person_queries(target):
     app = ProfileApplication()
     assert dispatch_portal_request(app, target).status in {400, 404}
     assert app.pages == []
+
+
+def test_profile_error_discards_pooled_connection_and_reuse_follows_success(monkeypatch):
+    app, connection = application(monkeypatch)
+    closed = []
+    connection.close = lambda: closed.append(1)
+    monkeypatch.setattr(
+        "service.public_profile.people.get_public_person",
+        lambda *_: (_ for _ in ()).throw(PublicProfileError("PERSON_NOT_FOUND", 404)),
+    )
+    with pytest.raises(PublicProfileError):
+        app.fetch_person(PERSON)
+    assert closed == [1]
+    assert app.read_connections._idle == []

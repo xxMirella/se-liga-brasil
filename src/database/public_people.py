@@ -12,6 +12,19 @@ CURRENT_AFFILIATION_FILTER = """a.person_id=p.id AND a.evidence_kind<>'electoral
   AND a.observed_on<=%(as_of)s AND (a.valid_from IS NULL OR a.valid_from<=%(as_of)s)
   AND (a.valid_until IS NULL OR a.valid_until>%(as_of)s)
   AND (a.information_valid_until IS NULL OR a.information_valid_until::date>%(as_of)s)"""
+# Party filter of the search: affiliations current today that carry the person's latest
+# observation date. Shared with the person_directory build so both apply the same rule.
+LATEST_AFFILIATION_PREDICATE = """a.person_id=p.id AND a.evidence_kind<>'electoral_declaration'
+  AND a.observed_on<=%(as_of)s AND (a.valid_from IS NULL OR a.valid_from<=%(as_of)s)
+  AND (a.valid_until IS NULL OR a.valid_until>%(as_of)s)
+  AND (a.information_valid_until IS NULL OR a.information_valid_until::date>%(as_of)s)
+  AND a.observed_on=(SELECT max(latest.observed_on)
+    FROM se_liga_brasil.political_party_affiliation latest
+    WHERE latest.person_id=p.id AND latest.observed_on<=%(as_of)s
+    AND latest.evidence_kind<>'electoral_declaration'
+    AND (latest.valid_until IS NULL OR latest.valid_until>%(as_of)s)
+    AND (latest.information_valid_until IS NULL
+      OR latest.information_valid_until::date>%(as_of)s))"""
 SORT_KEY_SQL = {
     "name": "''",
     "party": f"""COALESCE((SELECT '0'||{BASE_ABBREVIATION_SQL}
@@ -38,7 +51,7 @@ class PublicPeopleRepository(PublicProfileRepository):
               FROM se_liga_brasil.person p
               WHERE NOT EXISTS(SELECT 1 FROM se_liga_brasil.person_identity_alias a
                   WHERE a.alias_person_id=p.id)
-                AND p.display_name ILIKE %(pattern)s
+                AND unaccent(p.display_name) ILIKE unaccent(%(pattern)s)
                 AND (%(uf)s::text IS NULL AND %(office_kind)s::text IS NULL OR EXISTS(
                   SELECT 1 FROM se_liga_brasil.office_term t
                   JOIN se_liga_brasil.office_exercise e ON e.term_id=t.id
@@ -49,18 +62,7 @@ class PublicPeopleRepository(PublicProfileRepository):
                 AND (%(party)s::text IS NULL OR EXISTS(
                   SELECT 1 FROM se_liga_brasil.political_party_affiliation a
                   JOIN se_liga_brasil.political_party pp ON pp.id=a.political_party_id
-                  WHERE a.person_id=p.id AND a.evidence_kind<>'electoral_declaration'
-                  AND a.observed_on<=%(as_of)s AND (a.valid_from IS NULL OR a.valid_from<=%(as_of)s)
-                  AND (a.valid_until IS NULL OR a.valid_until>%(as_of)s)
-                  AND (a.information_valid_until IS NULL
-                    OR a.information_valid_until::date>%(as_of)s)
-                  AND a.observed_on=(SELECT max(latest.observed_on)
-                    FROM se_liga_brasil.political_party_affiliation latest
-                    WHERE latest.person_id=p.id AND latest.observed_on<=%(as_of)s
-                    AND latest.evidence_kind<>'electoral_declaration'
-                    AND (latest.valid_until IS NULL OR latest.valid_until>%(as_of)s)
-                    AND (latest.information_valid_until IS NULL
-                      OR latest.information_valid_until::date>%(as_of)s))
+                  WHERE {LATEST_AFFILIATION_PREDICATE}
                   AND {BASE_ABBREVIATION_SQL}=upper(%(party)s)))
             ) ranked
             WHERE %(after_name)s::text IS NULL

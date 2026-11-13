@@ -139,7 +139,18 @@ MIGRATION_APPLIERS = [
     "apply_career_receipt_schema",
     "apply_voting_refresh_queue_schema",
     "apply_office_legal_scope_schema",
+    "apply_serving_schema",
 ]
+
+
+@pytest.mark.parametrize("existed", [True, False])
+def test_drop_of_unused_profile_view_runs_only_when_the_view_exists(monkeypatch, existed):
+    connection = RecordingConnection([{"existed": existed}])
+    read = Mock(return_value="-- drop\nBEGIN;\nDROP MATERIALIZED VIEW IF EXISTS x;\nCOMMIT;\n")
+    monkeypatch.setattr(operations, "read_sql_file", read)
+    assert operations.apply_drop_person_profile_view(connection) is existed
+    assert read.called is existed
+    assert len(connection.calls) == (2 if existed else 1)
 
 
 @pytest.mark.parametrize("name", MIGRATION_APPLIERS)
@@ -159,7 +170,8 @@ def test_migrations_are_idempotent_and_strip_nested_transactions(monkeypatch, na
 
 
 def test_extension_migrations_do_not_short_circuit_after_first_change(monkeypatch):
-    names = ["apply_payroll_schema", *MIGRATION_APPLIERS]
+    *before_serving, serving = MIGRATION_APPLIERS
+    names = ["apply_payroll_schema", *before_serving, "apply_drop_person_profile_view", serving]
     calls = []
     for name in names:
         monkeypatch.setattr(
@@ -176,15 +188,6 @@ def test_migration_failure_rolls_back_and_holds_lock_before_schema_check(monkeyp
         operations.apply_ingestion_schema(connection)
     assert "pg_advisory_xact_lock" in connection.calls[0][0]
     assert connection.events == ["begin", "rollback"]
-
-
-def test_profile_refresh_has_transaction_scoped_timeouts():
-    connection = RecordingConnection()
-    operations.refresh_person_profiles(connection)
-    assert connection.events == ["begin", "commit"]
-    assert "statement_timeout" in connection.calls[0][0]
-    assert "lock_timeout" in connection.calls[1][0]
-    assert "REFRESH MATERIALIZED VIEW" in connection.calls[2][0]
 
 
 def test_changed_staging_file_is_rejected_before_any_database_write(staged):

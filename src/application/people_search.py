@@ -6,7 +6,7 @@ from datetime import date
 def fetch_people(application, parameters):
     # Imported lazily: the public portal starts without loading the database stack.
     from database.operations import connect_database
-    from database.public_people import PublicPeopleRepository
+    from database.public_people_directory import open_people_repository
     from service.public_profile.people import search_people
     from service.public_profile.people_contracts import (
         DEFAULT_PAGE_SIZE,
@@ -28,6 +28,6 @@ def fetch_people(application, parameters):
 
     def load_public_people():
         with connect_database(application.env_file) as connection:
-            return search_people(PublicPeopleRepository(connection), query, as_of)
+            return search_people(open_people_repository(connection, as_of), query, as_of)
 
     return application.people_cache.get_or_load((query, as_of), load_public_people)

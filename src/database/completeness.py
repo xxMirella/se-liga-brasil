@@ -34,8 +34,13 @@ def fetch_completeness_rows(connection, person_id=None, person_ids=None) -> list
             WHERE f.person_id=p.id AND f.field_name LIKE 'alesp_attendance:%%'
               AND f.review_status='verified'
               AND f.normalized_value->>'scope'='committee_presence_observed')
-            AS has_alesp_historical_attendance
-        FROM se_liga_brasil.person p
+          OR EXISTS(SELECT 1 FROM se_liga_brasil.person_fact f
+            WHERE f.person_id=p.id AND f.field_name LIKE 'alesp_participation:%%'
+              AND f.review_status='verified'
+              AND f.normalized_value->>'scope'='historical_participation_observed'
+              AND f.normalized_value->>'presenceConfirmed'='true'
+              AND (f.normalized_value->>'date')::date <= CURRENT_DATE)
+            AS has_alesp_historical_attendance FROM se_liga_brasil.person p
         LEFT JOIN LATERAL (
           SELECT ((f.normalized_value->>'period')||'-01')::date AS period,
             coalesce((f.normalized_value->>'unknown')::int,0) AS unknown

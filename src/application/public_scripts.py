@@ -9,18 +9,20 @@ from application.public_portal import encode_response
 from web_components.static_text import read_static_text
 
 SCRIPT_FILES = {
-    "/assets/people-search-enhance.js": Path(public_profile_web.__file__).parent / "assets"
+    "/assets/people-search-enhance.js": Path(public_profile_web.__file__).parent
+    / "assets"
     / "people-search-enhance.js",
-    "/assets/profile-activity.js": Path(web_components.__file__).parent / "assets"
+    "/assets/profile-activity.js": Path(web_components.__file__).parent
+    / "assets"
     / "profile-activity.js",
-    "/assets/civic-guide.js": Path(civic_education.__file__).parent / "assets"
-    / "civic-guide.js",
-    "/assets/scroll-reveal.js": Path(web_components.__file__).parent / "assets"
+    "/assets/civic-guide.js": Path(civic_education.__file__).parent / "assets" / "civic-guide.js",
+    "/assets/scroll-reveal.js": Path(web_components.__file__).parent
+    / "assets"
     / "scroll-reveal.js",
-    "/assets/panorama-enhance.js": Path(web_components.__file__).parent / "assets"
+    "/assets/panorama-enhance.js": Path(web_components.__file__).parent
+    / "assets"
     / "panorama-enhance.js",
-    "/assets/civic-review.js": Path(civic_education.__file__).parent / "assets"
-    / "civic-review.js",
+    "/assets/civic-review.js": Path(civic_education.__file__).parent / "assets" / "civic-review.js",
 }
 
 

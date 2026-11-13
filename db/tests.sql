@@ -45,23 +45,14 @@ INSERT INTO se_liga_brasil.amendment_execution_snapshot(amendment_id,slice_key,a
 SELECT id,'beneficiary:1',current_date-1,2026,100,source_record_id FROM se_liga_brasil.budget_amendment WHERE official_key='A1';
 INSERT INTO se_liga_brasil.amendment_execution_snapshot(amendment_id,slice_key,as_of,execution_year,paid,source_record_id)
 SELECT id,'beneficiary:1',current_date,2026,150,source_record_id FROM se_liga_brasil.budget_amendment WHERE official_key='A1';
-REFRESH MATERIALIZED VIEW se_liga_brasil.person_profile;
 DO $$
-DECLARE card record; days integer; latest_paid numeric;
+DECLARE tested_person uuid; days integer; latest_paid numeric;
 BEGIN
- SELECT * INTO STRICT card FROM se_liga_brasil.person_profile WHERE slug='test-person';
- IF card.last_observed_political_party IS DISTINCT FROM 'TEST' THEN RAISE EXCEPTION 'Political party projection failed'; END IF;
- IF card.authored_count<>2 OR card.authored_approved_in_house_count<>1 OR card.authored_rejected_in_house_count<>1 THEN
-  RAISE EXCEPTION 'Coauthorship/join deduplication failed';
- END IF;
- IF card.authored_law_count<>1 OR card.formal_amendment_count<>2 THEN RAISE EXCEPTION 'Law/amendment counts failed'; END IF;
- IF card.yes_vote_count<>0 OR card.no_vote_count<>1 THEN RAISE EXCEPTION 'Individual vote conflated with collective result'; END IF;
- IF jsonb_array_length(card.current_offices)<>1 THEN RAISE EXCEPTION 'Current office was duplicated'; END IF;
- IF card.data_coverage<>'[]'::jsonb THEN RAISE EXCEPTION 'Coverage was invented'; END IF;
+ SELECT id INTO STRICT tested_person FROM se_liga_brasil.person WHERE slug='test-person';
  SELECT sum(upper(r)-lower(r)) INTO days FROM (
  SELECT range_agg(daterange(e.starts_on,least(coalesce(e.ends_before,current_date+1),current_date+1),'[)')) periods
  FROM se_liga_brasil.office_exercise e JOIN se_liga_brasil.office_term t ON t.id=e.term_id
- WHERE t.person_id=card.person_id AND e.starts_on<=current_date) x CROSS JOIN LATERAL unnest(periods) r;
+ WHERE t.person_id=tested_person AND e.starts_on<=current_date) x CROSS JOIN LATERAL unnest(periods) r;
  IF days<>7 THEN RAISE EXCEPTION 'Exercise duration: expected 7, got %',days; END IF;
  SELECT paid INTO latest_paid FROM se_liga_brasil.amendment_execution_snapshot ORDER BY as_of DESC LIMIT 1;
  IF latest_paid<>150 THEN RAISE EXCEPTION 'Latest snapshot retrieval failed'; END IF;

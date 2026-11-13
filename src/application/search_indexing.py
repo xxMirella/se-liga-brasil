@@ -19,9 +19,16 @@ def enrich_search_response(response, target, application):
     if not response.content_type.startswith("text/html"):
         return response
     today = application.today() if hasattr(application, "today") else date.today()
-    return replace(response, body=enrich_public_html(
-        response.body, target, today, response.status, indexable=response.search_indexable,
-    ).encode("utf-8"))
+    return replace(
+        response,
+        body=enrich_public_html(
+            response.body,
+            target,
+            today,
+            response.status,
+            indexable=response.search_indexable,
+        ).encode("utf-8"),
+    )
 
 
 def route_search_index_request(application, parsed):
@@ -34,7 +41,8 @@ def route_search_index_request(application, parsed):
     if parsed.path == "/sitemap.xml":
         catalog = application.search_index.catalog()
         content = render_sitemap(
-            [{"path": path} for path in sitemap_index_paths(catalog)], index=True,
+            [{"path": path} for path in sitemap_index_paths(catalog)],
+            index=True,
         )
     elif parsed.path == "/sitemaps/pages.xml":
         content = render_sitemap([{"path": path} for path in STATIC_PATHS])

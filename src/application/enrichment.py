@@ -1,10 +1,13 @@
 """Service commands separate missing-data diagnosis from source collection."""
 
+from datetime import UTC, datetime
+
 from database.operations import PROJECT_ROOT, connect_database
 from service.completeness.assessment import assess_completeness
 from service.legislative_collection.coverage import career_collectors
 from service.maintenance.data_gap_cleanup import purge_processed_gaps
 from service.orchestration.data_collection import orchestrate_collection
+from service.serving import rebuild_serving_datasets
 
 
 def execute_enrichment_command(arguments) -> dict:
@@ -14,7 +17,7 @@ def execute_enrichment_command(arguments) -> dict:
             return purge_processed_gaps(connection)
         if arguments.command == "audit-completeness":
             return assess_completeness(connection, storage.resolve(), arguments.person_id)
-        return orchestrate_collection(
+        result = orchestrate_collection(
             connection,
             storage.resolve(),
             arguments.person_id,
@@ -28,3 +31,5 @@ def execute_enrichment_command(arguments) -> dict:
             if getattr(arguments, "include_career", False)
             else None,
         )
+        rebuild_serving_datasets(connection, datetime.now(UTC).date())
+        return result

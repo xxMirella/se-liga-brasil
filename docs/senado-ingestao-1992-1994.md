@@ -18,7 +18,7 @@ Tabelas envolvidas e constraints relevantes (conferidas no schema real e em `db/
 - `political_party`: `code UNIQUE`; `abbreviation` **não** é única.
 - `political_party_affiliation`: `UNIQUE(person_id, political_party_id, source_record_id)`, `valid_until > valid_from`, `evidence_kind in (administrative, electoral_declaration, official_membership)`. Por isso o retorno ao mesmo partido só cabe com **um `source_record` por intervalo**.
 - `office_term`: `UNIQUE(institution_id, official_term_key)`; `office_exercise`: `UNIQUE(term_id, starts_on)`, `capacity in (holder, substitute)`.
-- `person_profile` (visão materializada): derivada; precisa de `REFRESH` depois da gravação.
+- Datasets de leitura (`person_directory`, `person_profile_snapshot`): derivados; precisam de rebuild (`scripts/rebuild_serving_datasets.py`) depois da gravação. A visão `person_profile` foi removida.
 
 ## 2. O que a carga faz
 
@@ -102,8 +102,8 @@ Todas estão em `pending` do relatório, com ID e motivo.
 
 ## 6. Riscos
 
-1. **Cartão "partido atual" de pessoas históricas.** 16 senadores têm a última filiação sem data de fim na API (IDs 17, 47, 62, 68, 88, 1025, 1562, 1579, 1657, 1864, 1869, 1952, 2139, 2224, 2937, 3272). `person_profile` trata fim nulo como vigente, então o cartão mostrará esse partido como "último observado". A fonte é a do Senado; a ausência de fim não prova filiação em 2026. Para não superar observações mais novas de pessoas já existentes, `observed_on` é o início do intervalo, não a data do download.
-2. **Novas pessoas em `person_profile` e na busca por nome.** A busca pública não filtra por exercício atual: depois de `REFRESH`, 84 pessoas históricas aparecem. O `--apply` executa o `REFRESH` depois do commit.
+1. **Cartão "partido atual" de pessoas históricas.** 16 senadores têm a última filiação sem data de fim na API (IDs 17, 47, 62, 68, 88, 1025, 1562, 1579, 1657, 1864, 1869, 1952, 2139, 2224, 2937, 3272). a leitura trata fim nulo como vigente, então o cartão mostrará esse partido como "último observado". A fonte é a do Senado; a ausência de fim não prova filiação em 2026. Para não superar observações mais novas de pessoas já existentes, `observed_on` é o início do intervalo, não a data do download.
+2. **Novas pessoas nos datasets de leitura e na busca por nome.** A busca pública não filtra por exercício atual: depois do rebuild, 84 pessoas históricas aparecem. O `--apply` dispara o rebuild dos datasets de leitura depois do commit.
 3. **Sigla duplicada.** Se um dia a TSE/Câmara criar uma linha com a sigla de um partido histórico não qualificado (PFL, PRN, PDS, PPR, PDC, PTB), a ingestão atual do Senado por sigla ficará ambígua para essa sigla. Hoje não há colisão.
 4. **Identidade só por nome+nascimento** (item 4 da seção 4) pode não detectar quem não tem `normalized_name`.
 5. **Mandatos sem participação** (13) afirmam apenas a existência do mandato.
@@ -135,7 +135,7 @@ Depois do `--apply`, conferir com `db/queries/senate_history_1992_1994_verificat
 
 ## 8. Plano de rollback
 
-`db/repairs/senate_history_1992_1994_rollback.sql` (termina em `ROLLBACK`; troque por `COMMIT` depois de ver as contagens, e rode `REFRESH MATERIALIZED VIEW se_liga_brasil.person_profile`). Remove apenas linhas cujo `source_record` tem a chave `senate_history_1992_1994:*`. Pessoas criadas pela carga só são apagadas se nada mais as referenciar: as chaves estrangeiras abortam a transação se houver dado posterior. Pessoas que já existiam (Amin) mantêm suas linhas, perdendo só o que a carga acrescentou. Testado em PostgreSQL descartável (apaga exatamente o que a carga inseriu; aborta se houver dependência).
+`db/repairs/senate_history_1992_1994_rollback.sql` (termina em `ROLLBACK`; troque por `COMMIT` depois de ver as contagens, e rode o rebuild dos datasets de leitura). Remove apenas linhas cujo `source_record` tem a chave `senate_history_1992_1994:*`. Pessoas criadas pela carga só são apagadas se nada mais as referenciar: as chaves estrangeiras abortam a transação se houver dado posterior. Pessoas que já existiam (Amin) mantêm suas linhas, perdendo só o que a carga acrescentou. Testado em PostgreSQL descartável (apaga exatamente o que a carga inseriu; aborta se houver dependência).
 
 ## 9. Testes
 

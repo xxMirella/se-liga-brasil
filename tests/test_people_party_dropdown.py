@@ -33,6 +33,7 @@ def test_without_a_party_list_the_filter_falls_back_to_a_text_field():
 
 
 def test_party_options_are_read_through_the_repository(monkeypatch):
+    monkeypatch.setattr("database.public_people_directory.directory_available", lambda *_: False)
     class FakeConnections:
         def read(self, operation):
             class Connection:

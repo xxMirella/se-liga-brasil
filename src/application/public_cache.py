@@ -2,15 +2,27 @@
 
 import gzip
 import hashlib
+import re
 from functools import lru_cache
 from urllib.parse import urlsplit
 
 STATIC_PAGE_PATHS = frozenset(
     {
-        "/", "/como-funciona", "/sobre", "/sobre/", "/fontes-dos-dados", "/fontes-dos-dados/",
-        "/comparacao-de-classificacoes", "/comparacao-de-classificacoes/",
+        "/",
+        "/como-funciona",
+        "/sobre",
+        "/sobre/",
+        "/fontes-dos-dados",
+        "/fontes-dos-dados/",
+        "/comparacao-de-classificacoes",
+        "/comparacao-de-classificacoes/",
     }
 )
+
+PERSON_PROFILE_PATH = re.compile(r"/pessoas/[0-9a-fA-F-]{36}")
+# Edge TTLs are short because the dataset is republished; stale-while-revalidate hides latency.
+SEARCH_PAGE_CACHE = "public, s-maxage=300, stale-while-revalidate=600"
+PERSON_PROFILE_CACHE = "public, s-maxage=300, stale-while-revalidate=3600"
 
 
 def public_cache_policy(target, status):
@@ -19,6 +31,10 @@ def public_cache_policy(target, status):
     path = urlsplit(target).path
     if path == "/robots.txt" or path == "/sitemap.xml" or path.startswith("/sitemaps/"):
         return "public, max-age=0, s-maxage=60, must-revalidate"
+    if path == "/pessoas":
+        return SEARCH_PAGE_CACHE
+    if PERSON_PROFILE_PATH.fullmatch(path):
+        return PERSON_PROFILE_CACHE
     if path in {"/panorama", "/api/political-dashboard"}:
         return "public, max-age=60, s-maxage=300, stale-while-revalidate=300"
     if path.startswith("/assets/fonts/"):

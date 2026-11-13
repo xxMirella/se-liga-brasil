@@ -8,8 +8,9 @@ from crawlers.senado.historical_period_archive import SenateArchive
 from crawlers.senado.historical_period_plan import build_load_plan, load_inventory_senator_ids
 from crawlers.senado.historical_period_report import build_report
 from database.historical_senate_load import HistoricalSenateWriter
-from database.operations import PROJECT_ROOT, connect_database, refresh_person_profiles
+from database.operations import PROJECT_ROOT, connect_database
 from service.ingestion.historical_load import LoadMode, run_historical_load
+from service.serving import rebuild_serving_datasets
 from storage.files import save_json
 
 REPORT_DIRECTORY = Path("data/political-dashboard")
@@ -26,8 +27,9 @@ def execute_senado_history_command(arguments) -> dict:
             HistoricalSenateWriter(connection, _reviewed_links(arguments.reviewed_identities)),
             plan,
             mode,
-            after_commit=refresh_person_profiles,
         )
+        if run.committed:
+            rebuild_serving_datasets(connection, datetime.now(UTC).date())
     report = build_report(plan, run, today)
     path = arguments.report_file or PROJECT_ROOT / REPORT_DIRECTORY / (
         f"senate-history-1992-1994-{mode}-report-{today}.json"

@@ -1,16 +1,16 @@
 -- Examples for a backend using PostgreSQL bind parameters. Never interpolate IDs.
 
--- 1. Profile card. Compute age on read, so it does not become stale in the snapshot.
-SELECT *, extract(year FROM age(current_date, birth_date))::int AS age_today
-FROM se_liga_brasil.person_profile WHERE person_id=$1::uuid;
+-- 1. Profile snapshot (serving layer, ~335 people; built daily by scripts/rebuild_serving_datasets.py).
+-- Age and tenure are derived on read from the stored rows, so they never go stale.
+SELECT payload, source_version, as_of
+FROM se_liga_brasil_serving.person_profile_snapshot WHERE person_id=$1::uuid;
 
--- 2. Name search + UF, stable cursor. NULL cursor for first page.
-SELECT person_id, slug, display_name, current_offices, last_observed_political_party, data_coverage, refreshed_at
-FROM se_liga_brasil.person_profile
-WHERE search_document @@ plainto_tsquery('portuguese',$1)
- AND represented_ufs @> ARRAY[$2]::text[]
- AND ($3::uuid IS NULL OR person_id>$3::uuid)
-ORDER BY person_id LIMIT 25;
+-- 2. Name search + UF, stable keyset cursor, accent-insensitive via name_search.
+SELECT person_id, slug, display_name
+FROM se_liga_brasil_serving.person_directory
+WHERE name_search LIKE '%'||$1||'%' AND uf @> ARRAY[$2]::text[]
+ AND ($3::uuid IS NULL OR (display_name,person_id)>($4,$3::uuid))
+ORDER BY display_name, person_id LIMIT 25;
 
 -- 3. Authored works, deduplicated when a source assigns author and coauthor roles.
 SELECT p.id, p.kind, p.number, p.year, p.title, p.current_status, p.source_record_id

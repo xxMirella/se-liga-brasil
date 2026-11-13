@@ -34,7 +34,12 @@ def execute_historical_command(arguments):
             if (start is None) != (end is None) or (start and start > end):
                 raise IngestionError("INVALID_LEGISLATIVE_INTERVAL")
             return collect_camara_history(
-                connection, storage, people, limit=arguments.limit, start=start, end=end,
+                connection,
+                storage,
+                people,
+                limit=arguments.limit,
+                start=start,
+                end=end,
                 proposition_ids=tuple(filter(None, (arguments.proposition_ids or "").split(","))),
             )
         if arguments.source == "cmsp" and arguments.years and arguments.years != "all":

@@ -32,7 +32,7 @@ A duplicação fica restrita ao modelo de leitura. Os relacionamentos pessoa↔p
 | Voto | `voting`, `person_vote` | Resultado de cada deliberação e voto individual |
 | Lei | `law`, `proposition_law` | Norma publicada e ligação documental às proposições que a originaram |
 | Emenda | `budget_amendment`, `amendment_person`, `amendment_execution_snapshot` | Emenda, vínculo de autor/solicitante/apoiador e execução por recorte e data |
-| Leitura | `person_profile` | Card de perfil materializado e pesquisável |
+| Leitura | `person_directory`, `person_profile_snapshot`, `majority_panorama_document` (esquema `se_liga_brasil_serving`) | Datasets de leitura gerados pelos pipelines; a visão `person_profile` foi removida (migration 0022) |
 
 ## Semântica que o produto deve respeitar
 
@@ -49,7 +49,7 @@ A duplicação fica restrita ao modelo de leitura. Os relacionamentos pessoa↔p
 
 ## Recuperação otimizada
 
-O card requer uma consulta por ID ou slug na `person_profile`, com índice único. Busca textual usa `tsvector` em português com índice GIN; filtro de UF usa array indexado por GIN; partido usa B-tree. A busca por texto atende termos/prefixos compatíveis com a pesquisa textual; não é autocomplete tolerante a erros. Similaridade/trigramas só depois de necessidade medida.
+O perfil lê uma linha por pessoa em `person_profile_snapshot` (PK `person_id`), com fallback para as consultas diretas. A busca lê `person_directory`: nome sem acento em `name_search`, UFs e cargos em arrays com índice GIN, e chaves de ordenação pré-calculadas. Similaridade/trigramas só depois de necessidade medida.
 
 As listas de trabalhos continuam relacionais e paginadas. Os índices começam pela pessoa nas relações de autoria, voto e emenda. Usar paginação por cursor e buscar detalhes em lote, evitando uma consulta para cada item.
 
@@ -61,8 +61,8 @@ Complexidade aproximada: busca B-tree por pessoa/slug é O(log P); listagem inde
 
 1. Importar/reconciliar registros na base canônica numa transação por lote, preservando evidências e versões.
 2. Atualizar as coberturas efetivamente verificadas.
-3. Após confirmar a transação, executar `REFRESH MATERIALIZED VIEW CONCURRENTLY se_liga_brasil.person_profile` fora da transação de ingestão, num job serializado.
-4. Executar também refresh diário para alterações de cargo decorrentes da passagem da data. Monitorar `refreshed_at` e falhas. A migração não cria esse agendamento.
+3. Após confirmar a transação, reconstruir os datasets de leitura com `scripts/rebuild_serving_datasets.py` (troca atômica, uma transação por dataset, fora da transação de ingestão).
+4. Executar também o rebuild diário, para refletir mudanças de cargo pela passagem da data. Cada release grava `as_of`; o leitor ignora release com mais de um dia. A migração não cria esse agendamento.
 
 O índice único por pessoa permite refresh concorrente. A visão é criada inicialmente populada, ainda que sem pessoas. O leitor recebe o snapshot anterior enquanto o refresh ocorre. Nenhuma escrita canônica deve ser considerada imediatamente visível no card; o SLA de atualização será definido com os coletores.
 

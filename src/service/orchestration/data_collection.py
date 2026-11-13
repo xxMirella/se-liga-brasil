@@ -17,7 +17,6 @@ from database.data_gaps import (
     route_data_gaps,
 )
 from database.enrichment import fetch_enrichment_candidates
-from database.operations import refresh_person_profiles
 from service.completeness.assessment import assess_completeness
 from service.enrichment.pipeline import execute_source_collection, run_camara_collection
 from service.maintenance.data_gap_cleanup import purge_processed_gaps
@@ -176,7 +175,6 @@ def orchestrate_collection(
                 connection, worker_id, source, results[source].get("unmatched_person_ids", [])
             )
         collect_career_resources(connection, tasks, results, career_collectors)
-        refresh_person_profiles(connection)
         after = assess_completeness(connection, storage, person_id)
     finally:
         release_data_gaps(connection, worker_id)

@@ -5,11 +5,15 @@ house, presidential segments). Presidential names come from one extra read per t
 (at most nine). The reads go through the dashboard cache; the caller caches the finished panorama.
 """
 
+import logging
+
 from service.majority_panorama.builder import build_majority_panorama
 from service.majority_panorama.presidents import (
     FIRST_TERM_START,
     collect_presidential_exercises,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class DashboardPanoramaSource:
@@ -49,24 +53,53 @@ class DashboardPanoramaSource:
             payload = self.fetch_dashboard({"year": str(year)})
             for segment in (payload.get("presidency") or {}).get("segments", ()):
                 identities[segment["exercise_id"]] = segment | {
-                    "name": segment.get("name"), "official_url": segment.get("official_url"),
+                    "name": segment.get("name"),
+                    "official_url": segment.get("official_url"),
                 }
         return identities
 
     def presidency(self):
         segments_by_year = self.segments_by_year()
-        return collect_presidential_exercises(
-            segments_by_year, self.identities(segments_by_year)
-        )
+        return collect_presidential_exercises(segments_by_year, self.identities(segments_by_year))
 
 
 class MajorityPanoramaReader:
-    def __init__(self, fetch_dashboard, today):
+    """Serves the panorama stored by the serving registry; assembles it live when there is none."""
+
+    def __init__(self, fetch_dashboard, today, read_connections=None):
         self.fetch_dashboard, self.today = fetch_dashboard, today
+        self.read_connections = read_connections
 
     def fetch(self):
         today = self.today()
+        return self.fetch_released(today) or self.assemble(today)
+
+    def assemble(self, today):
         return build_majority_panorama(DashboardPanoramaSource(self.fetch_dashboard, today), today)
+
+    def fetch_released(self, today):
+        """The released document, or None (no pool, no release, stale, or any read problem)."""
+        if self.read_connections is None:
+            return None
+        try:
+            return self.read_connections.read(lambda connection: _released(connection, today))
+        except Exception:
+            logger.exception("panorama document unreadable; assembling live")
+            return None
+
+
+def _released(connection, today):
+    from service.majority_panorama.document_codec import decode_document
+    from service.serving.majority_panorama_document import (
+        DATASET_NAME,
+        read_panorama_document,
+    )
+    from service.serving.release import current_release
+
+    if current_release(connection, DATASET_NAME, today) is None:
+        return None
+    document = read_panorama_document(connection)
+    return None if document is None else decode_document(document)
 
 
 class CachedMajorityPanorama:

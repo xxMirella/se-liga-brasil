@@ -43,5 +43,5 @@ INSERT INTO deleted_counts SELECT 'source_record', count(*) FROM gone;
 -- END OF DELETES
 SELECT table_name, deleted FROM deleted_counts ORDER BY table_name;
 ROLLBACK;
--- To make it final: replace ROLLBACK by COMMIT, then outside the transaction run
--- REFRESH MATERIALIZED VIEW se_liga_brasil.person_profile;
+-- To make it final: replace ROLLBACK by COMMIT, then rebuild the serving datasets
+-- (scripts/rebuild_serving_datasets.py).

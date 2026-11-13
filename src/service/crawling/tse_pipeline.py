@@ -7,7 +7,6 @@ from uuid import uuid4
 
 from crawlers.tse.discovery import discover_resources, is_selected_resource
 from crawlers.tse.validator import deserialize_validation, serialize_validation, validate_resource
-from database.operations import refresh_person_profiles
 from service.crawling.acquisition import download_selected_resources, local_run_lock
 from service.crawling.ingestion import (
     build_resource_failure,
@@ -110,7 +109,6 @@ def execute_validation_phase(phase, configuration, downloads, repository, failur
     if not validations:
         raise IngestionError("NO_VALIDATED_ARTIFACTS")
     summaries = ingest_validation_plan(configuration, repository, validations, failures)
-    refresh_profiles_with_progress(repository.connection)
     result = {
         "artifacts": summaries,
         "failures": failures,
@@ -118,9 +116,3 @@ def execute_validation_phase(phase, configuration, downloads, repository, failur
     }
     save_json(configuration.storage_directory / "last-run.json", result)
     return result
-
-
-def refresh_profiles_with_progress(connection) -> None:
-    emit_event("profiles_refresh_started", resource_name="Atualizando consulta de perfis")
-    refresh_person_profiles(connection)
-    emit_event("profiles_refresh_finished")

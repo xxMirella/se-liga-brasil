@@ -40,7 +40,6 @@ class ProjectDataResetRepository:
             self.connection.execute(
                 sql.SQL("TRUNCATE TABLE {} RESTART IDENTITY").format(table_list)
             )
-            self.connection.execute("REFRESH MATERIALIZED VIEW se_liga_brasil.person_profile")
         return {"backup_directory": str(directory), "cleared_tables": len(tables)}
 
     def lock_ingestion(self) -> None:

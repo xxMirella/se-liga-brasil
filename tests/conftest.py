@@ -154,6 +154,8 @@ def integration_database():
             "0018_career_coverage_receipts.sql",
             "0019_voting_refresh_queue.sql",
             "0020_office_legal_scope_versions.sql",
+            "0022_drop_unused_person_profile.sql",
+            "0023_serving_schema.sql",
         ):
             isolated.execute(strip_transaction_wrapper(read_sql_file("migrations/" + filename)))
         yield isolated

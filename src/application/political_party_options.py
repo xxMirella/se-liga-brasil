@@ -2,13 +2,13 @@
 
 import logging
 
-from database.public_people import PublicPeopleRepository
+from database.public_people_directory import open_people_repository
 
 
 def load_party_options(read_connections, as_of):
     """Return ((abbreviation, name), ...) for parties that have current members."""
     rows = read_connections.read(
-        lambda connection: PublicPeopleRepository(connection).list_current_political_parties(
+        lambda connection: open_people_repository(connection, as_of).list_current_political_parties(
             as_of
         )
     )

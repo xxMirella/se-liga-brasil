@@ -43,13 +43,6 @@ def read_sql_file(relative_path: str) -> str:
     return (PROJECT_ROOT / "db" / relative_path).read_text(encoding="utf-8")
 
 
-def refresh_person_profiles(connection) -> None:
-    with connection.transaction():
-        connection.execute("SET LOCAL statement_timeout='120s'")
-        connection.execute("SET LOCAL lock_timeout='10s'")
-        connection.execute("REFRESH MATERIALIZED VIEW se_liga_brasil.person_profile")
-
-
 def strip_transaction_wrapper(sql: str) -> str:
     return re.sub(r"COMMIT;\s*$", "", re.sub(r"^.*?\bBEGIN;", "", sql, count=1, flags=re.S))
 
@@ -107,6 +100,8 @@ def apply_ingestion_extensions(connection):
         apply_career_receipt_schema,
         apply_voting_refresh_queue_schema,
         apply_office_legal_scope_schema,
+        apply_drop_person_profile_view,
+        apply_serving_schema,
     )
     # Materialize results before any(): every migration must run even after a change.
     results = [applier(connection) for applier in appliers]
@@ -124,7 +119,7 @@ def verify_schema(connection) -> dict:
         AND has_schema_privilege(oid,'se_liga_brasil','USAGE')
     """).fetchone()
     if (
-        result["tables"] not in {23, 32, 36, 37, 38, 39, 42, 43, 44, 45, 46}
+        result["tables"] not in {23, 32, 36, 37, 38, 39, 42, 43, 44, 45, 46, 49}
         or result["tables"] != result["rls_tables"]
     ):
         raise IngestionError("SCHEMA_VERIFICATION_FAILED")
@@ -287,10 +282,10 @@ def apply_career_receipt_schema(connection):
     )
 
 
-def apply_extension_table(connection, table_name, filename):
+def apply_extension_table(connection, table_name, filename, schema="se_liga_brasil"):
     installed = connection.execute(
         "SELECT to_regclass(%s) IS NOT NULL AS installed",
-        ("se_liga_brasil." + table_name,),
+        (f"{schema}.{table_name}",),
     ).fetchone()["installed"]
     if installed:
         return False
@@ -306,3 +301,24 @@ def apply_office_legal_scope_schema(connection):
     return apply_extension_table(
         connection, "office_legal_scope_version", "0020_office_legal_scope_versions.sql"
     )
+
+
+def apply_serving_schema(connection):
+    return apply_extension_table(
+        connection,
+        "dataset_release",
+        "0023_serving_schema.sql",
+        schema="se_liga_brasil_serving",
+    )
+
+
+def apply_drop_person_profile_view(connection):
+    """Drop the unused person_profile materialized view; idempotent, reports whether it existed."""
+    existed = connection.execute(
+        "SELECT to_regclass('se_liga_brasil.person_profile') IS NOT NULL AS existed"
+    ).fetchone()["existed"]
+    if existed:
+        connection.execute(
+            strip_transaction_wrapper(read_sql_file("migrations/0022_drop_unused_person_profile.sql"))
+        )
+    return existed

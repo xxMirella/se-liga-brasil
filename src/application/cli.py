@@ -2,6 +2,7 @@
 
 import argparse
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 
 import httpx
@@ -23,6 +24,7 @@ from service.ingestion.repository import IngestionRepository
 from service.ingestion.sql_batches import SqlBatchWriter
 from service.observability.reporting import describe_error, emit_event
 from service.observability.run_reporter import RunReporter
+from service.serving import rebuild_serving_datasets
 
 
 def create_argument_parser() -> argparse.ArgumentParser:
@@ -207,9 +209,11 @@ def execute_crawler_command(arguments) -> dict:
                 TseProjectionWriter(SqlBatchWriter(connection)),
                 progress=emit_event,
             )
-            return execute_ingestion_run(
+            result = execute_ingestion_run(
                 arguments.command, configuration, transport, repository, pipeline=run_pipeline
             )
+            rebuild_serving_datasets(connection, datetime.now(UTC).date())
+            return result
 
 
 def execute_model_command(arguments) -> dict:
