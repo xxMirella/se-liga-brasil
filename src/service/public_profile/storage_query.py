@@ -9,6 +9,7 @@ from service.analytical_datasets.public_voting_timeline import (
 )
 from service.analytical_datasets.storage import connect_analytical_engine
 from service.daily_voting_dataset.contracts import DailyVotingPartition
+from service.dataset_storage.parallel import parallel_map
 from service.dataset_storage.read import DatasetReadError
 from service.public_profile.contracts import PublicProfileError
 
@@ -70,13 +71,18 @@ def query_snapshot(reader, snapshot, query, cursor, exercises):
         TemporaryDirectory(dir=reader.directory) as temporary,
         connect_analytical_engine(temporary) as engine,
     ):
-        for entry in snapshot["entries"]:
+        def fetch(entry):
             manifest = entry["manifest"]
             partition = DailyVotingPartition(
                 entry["source"], date.fromisoformat(manifest["occurred_on"])
             )
-            path = reader.parquet_path(partition, manifest)
-            validate_public_parquet(engine, path, manifest)
+            return reader.parquet_path(partition, manifest)
+
+        # Downloads/hash checks run in parallel; DuckDB validation stays sequential, in order.
+        for entry, path in zip(
+            snapshot["entries"], parallel_map(fetch, snapshot["entries"]), strict=True
+        ):
+            validate_public_parquet(engine, path, entry["manifest"])
             paths.append(str(path))
         office_sql, office_parameters = exercise_predicate(query, exercises)
         cursor_sql = "AND (occurred_on,voting_id)<(?,?)" if cursor else ""

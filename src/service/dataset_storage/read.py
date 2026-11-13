@@ -10,6 +10,7 @@ from tempfile import NamedTemporaryFile
 
 from service.analytical_datasets.storage import file_sha256, validate_manifest
 from service.daily_voting_dataset.contracts import DailyDatasetManifest
+from service.dataset_storage.parallel import parallel_map
 from service.dataset_storage.supabase import MAX_OBJECT_BYTES
 
 MAX_MANIFEST_BYTES = 16 * 1024
@@ -34,6 +35,9 @@ class DailyDatasetReader:
         self.max_cache_bytes = max_cache_bytes
         self.clock = clock
         self.lock = threading.RLock()
+        self._write_lock = threading.Lock()  # parallel readers share the cache budget
+        self.catalog_memo = None  # (expires_at, partitions, version); see catalog.py
+        self.catalog_lock = threading.Lock()
 
     def download(self, object_key, max_bytes, *, allow_missing=False):
         path = self.storage.object_path(object_key)
@@ -67,6 +71,10 @@ class DailyDatasetReader:
             response.close()
 
     def save_bytes(self, path, content):
+        with self._write_lock:
+            self._save_bytes(path, content)
+
+    def _save_bytes(self, path, content):
         used = sum(item.stat().st_size for item in self.directory.rglob("*") if item.is_file())
         replaced = path.stat().st_size if path.exists() else 0
         if used - replaced + len(content) > self.max_cache_bytes:
@@ -115,12 +123,19 @@ class DailyDatasetReader:
 
     def create_snapshot(self, partitions, fingerprint, exercise_context=None):
         self.prune_expired_cache()
-        entries = []
-        for partition in partitions:
+
+        def load(partition):
             manifest = self.current_manifest(partition)
             if manifest is not None:
                 self.parquet_path(partition, manifest)
-                entries.append({"manifest": manifest, "source": partition.institution_code})
+            return partition, manifest
+
+        # Parallel but ordered: entries keep the deterministic partition order.
+        entries = [
+            {"manifest": manifest, "source": partition.institution_code}
+            for partition, manifest in parallel_map(load, partitions)
+            if manifest is not None
+        ]
         payload = {
             "created_at": self.clock(),
             "filters": fingerprint,

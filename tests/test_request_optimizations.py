@@ -1,11 +1,12 @@
 """Request-path optimizations: reads happen once per file version, snapshots are shared."""
 
 import os
-from contextlib import contextmanager, nullcontext
+from contextlib import contextmanager
 from datetime import date
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
 from psycopg.pq import TransactionStatus
 
 from application.public_cache import public_cache_policy
@@ -128,7 +129,17 @@ def test_cache_policy_covers_static_pages_and_people_script_only_when_ok():
     assert "s-maxage=3600" in public_cache_policy("/fontes-dos-dados", 200)
     assert public_cache_policy("/fontes-dos-dados", 503) == "no-store"
     assert public_cache_policy("/assets/people-search-enhance.js", 200).endswith("must-revalidate")
-    assert public_cache_policy("/pessoas/00000000-0000-0000-0000-000000000000", 200) == "no-store"
+    person = "/pessoas/00000000-0000-0000-0000-000000000000"
+    assert public_cache_policy(person, 200) == "public, s-maxage=300, stale-while-revalidate=3600"
+    assert public_cache_policy(person + "?tab=activity", 200).startswith("public, s-maxage=300")
+    assert public_cache_policy("/pessoas?q=ana&cursor=abc", 200) == (
+        "public, s-maxage=300, stale-while-revalidate=600"
+    )
+    for status in (400, 404, 410, 503):
+        assert public_cache_policy(person, status) == "no-store"
+        assert public_cache_policy("/pessoas?cursor=invalido", status) == "no-store"
+    assert public_cache_policy(person + "/votes", 200) == "no-store"
+    assert public_cache_policy(person.replace("/pessoas", "/api/people"), 200) == "no-store"
     assert public_cache_policy("/api/people", 200) == "no-store"
 
 
@@ -138,12 +149,16 @@ class CountingConnection:
     def __init__(self, connection):
         self.connection = connection
         self.info = connection.connection.info
+        self.closed = self.broken = False
         self.statements = 0
         self.transactions = 0
 
     def execute(self, *arguments):
         self.statements += 1
         return self.connection.execute(*arguments)
+
+    def close(self):
+        pass
 
     def transaction(self):
         self.transactions += 1
@@ -164,7 +179,13 @@ def test_person_profile_uses_one_connection_and_no_extra_transactions(
     person_id, *_ = create_public_read_fixture(integration_database)
     counting, opened = CountingConnection(integration_database), []
     monkeypatch.setattr(
-        operations, "connect_database", lambda *_: opened.append(1) or nullcontext(counting)
+        "database.public_read_connections.open_public_read_connection",
+        lambda _env: opened.append(1) or counting,
+    )
+    monkeypatch.setattr(
+        operations,
+        "connect_database",
+        lambda *_: pytest.fail("profile must use the public read pool"),
     )
     profile = PublicPortalApplication(None, None, today=lambda: date(2026, 10, 14)).fetch_person(
         person_id
@@ -174,3 +195,17 @@ def test_person_profile_uses_one_connection_and_no_extra_transactions(
     # The fixture already holds an open transaction, which the snapshots must join.
     assert counting.transactions == 0
     assert counting.statements <= 12
+
+
+def test_search_and_profile_responses_get_etag_and_error_stays_uncached():
+    from application.public_cache import prepare_public_response
+
+    target = "/pessoas?q=ana"
+    body = b"<html>x</html>"
+    status, _, headers = prepare_public_response(target, 200, body, {}, "v1")
+    assert status == 200 and headers["Cache-Control"].startswith("public, s-maxage=300")
+    again = prepare_public_response(target, 200, body, {"If-None-Match": headers["ETag"]}, "v1")
+    assert again[0] == 304
+    assert prepare_public_response(target, 200, body, {}, "v2")[2]["ETag"] != headers["ETag"]
+    _, _, error_headers = prepare_public_response(target, 400, b"erro", {}, "v1")
+    assert error_headers["Cache-Control"] == "no-store" and "ETag" not in error_headers

@@ -4,6 +4,7 @@ from datetime import date
 
 from service.daily_voting_dataset.contracts import DailyVotingPartition
 from service.dataset_storage.catalog import published_partitions
+from service.dataset_storage.parallel import parallel_map
 from service.dataset_storage.read import DatasetReadError
 from service.public_profile.contracts import PublicProfileError, VoteQuery
 from service.public_profile.history_pagination import (
@@ -38,14 +39,14 @@ def take_history_batch(catalog, position):
 
 
 def load_history_batch(reader, entries):
-    loaded = []
-    for item in entries:
+    def load(item):
         partition = DailyVotingPartition(item["source"], date.fromisoformat(item["occurred_on"]))
         manifest = reader.current_manifest(partition)
         if manifest is None:
             raise DatasetReadError("DATASET_CATALOG_CHANGED", 410)
-        loaded.append({"source": item["source"], "manifest": manifest})
-    return loaded
+        return {"source": item["source"], "manifest": manifest}
+
+    return parallel_map(load, entries)
 
 
 def fetch_history_page(reader, query, snapshot, cursor):

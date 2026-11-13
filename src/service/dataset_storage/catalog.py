@@ -8,6 +8,7 @@ from service.dataset_storage.read import MANIFEST_TTL_SECONDS, DatasetReadError,
 
 CATALOG_PAGE_SIZE = 1000
 MAX_CATALOG_PAGES = 100
+CATALOG_MEMORY_TTL_SECONDS = 900  # in-process; the disk copy keeps the shorter manifest TTL
 PARTITION_PATH = re.compile(
     r"legislative/(camara|senado)/person_voting_timeline/"
     r"year=(\d{4})/month=(\d{2})/day=(\d{2})/manifest\.json"
@@ -48,7 +49,31 @@ def list_catalog_page(reader, cursor):
         raise DatasetReadError("DATASET_CATALOG_INVALID") from error
 
 
+def catalog_version(reader):
+    """Cheap fingerprint of the in-memory catalog; None while it is not loaded (no I/O)."""
+    memo = getattr(reader, "catalog_memo", None)
+    if memo is None or memo[0] <= reader.clock():
+        return None
+    return memo[2]
+
+
 def published_partitions(reader):
+    """Process-wide memo over the disk/Storage catalog; failures are never memoized."""
+    lock = getattr(reader, "catalog_lock", None)
+    if lock is None:
+        return load_published_partitions(reader)
+    with lock:  # one lister at a time: concurrent cold requests share the result
+        memo = reader.catalog_memo
+        if memo is not None and memo[0] > reader.clock():
+            return memo[1]
+        partitions = load_published_partitions(reader)
+        newest = partitions[0]["occurred_on"] if partitions else ""
+        version = f"{len(partitions)}:{newest}"
+        reader.catalog_memo = (reader.clock() + CATALOG_MEMORY_TTL_SECONDS, partitions, version)
+        return partitions
+
+
+def load_published_partitions(reader):
     path = reader.directory / "published-history.catalog.json"
     if path.exists():
         cached = read_cache_json(path)
