@@ -3,7 +3,8 @@ UPDATE se_liga_brasil.person_fact
 SET review_status='conflicting'
 WHERE field_name LIKE 'alesp_attendance:%%'
  AND review_status='verified'
- AND normalized_value->>'identityMethod' IS DISTINCT FROM 'official_profile_to_roster_IdSPL';
+ AND coalesce(normalized_value->>'identityMethod','') NOT IN
+ ('official_profile_to_roster_IdSPL','official_author_to_profile_IdSPL');
 DELETE FROM ingestion_batch WHERE classification IN ('conflicting','stale');
 INSERT INTO se_liga_brasil.person_fact(person_id,field_name,original_value,normalized_value,
  evidence_kind,review_status,source_record_id)
