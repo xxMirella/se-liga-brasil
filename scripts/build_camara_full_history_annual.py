@@ -4,6 +4,8 @@ import argparse
 import json
 from pathlib import Path
 
+from serving_rebuild_trigger import rebuild_serving_after_write
+
 from database.operations import connect_database
 from database.political_dashboard_analytical import AnnualDashboardRepository
 from service.political_dashboard_dataset.camara_full_history import (
@@ -40,6 +42,7 @@ def main():
         entries = [store_partition(directory, row) for row in partitions]
         repository.activate_partitions(partitions)
         write_atomic(directory / "camara-full-history-manifest.json", json.dumps(entries).encode())
+    rebuild_serving_after_write(options.env_file, written=True)
     print(json.dumps({"partitions": len(entries), "archived_people": len(histories),
                       "universe_people": len(universe["people"]),
                       "national_counts": {row["year"]: row["total"] for row in partitions

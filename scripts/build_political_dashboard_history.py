@@ -14,6 +14,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from serving_rebuild_trigger import rebuild_serving_after_write  # noqa: E402
+
 from database.operations import connect_database, read_sql_file  # noqa: E402
 from database.political_dashboard_analytical import AnnualDashboardRepository  # noqa: E402
 from database.political_dashboard_history import DashboardHistoryTable  # noqa: E402
@@ -77,6 +79,7 @@ def main():
         else:
             entries, table_exists, digests = run_dry(connection, arguments.territory)
             changed = 0
+    rebuild_serving_after_write(arguments.env_file, written=arguments.apply and changed > 0)
     print(json.dumps({
         "mode": "apply" if arguments.apply else "dry-run (nothing written)",
         "table_existed": table_exists, "territories_changed_in_database": changed,

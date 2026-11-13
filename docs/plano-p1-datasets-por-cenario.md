@@ -18,7 +18,7 @@ Regras comuns: migrations só aditivas e escritas, nunca aplicadas por agente (a
 - Depende de P1-A.
 
 ## Cartão P1-C — `person_profile_snapshot` (perfil)
-- ~700 pessoas com dado rico: `person_id` (PK), `payload jsonb` com as linhas brutas das 14 leituras, `source_version`. A derivação continua em Python.
+- ~700 pessoas com dado rico: `person_id` (PK), `payload jsonb` com as linhas brutas das 13 leituras (`READ_NAMES`; a transação `read_snapshot` não entra no payload), `source_version`. A derivação continua em Python.
 - Decidir proposições (paginação) lendo `fetch_person_propositions`.
 - Pessoas sem snapshot seguem o caminho atual.
 - Aceite: HTML do perfil idêntico entre snapshot e caminho atual numa amostra de pessoas.

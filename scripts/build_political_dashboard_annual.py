@@ -9,6 +9,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from serving_rebuild_trigger import rebuild_serving_after_write  # noqa: E402
+
 from crawlers.camara.cached_roster import (  # noqa: E402
     coherent_roster_observed_on,
     load_cached_current_roster,
@@ -92,6 +94,7 @@ def main():
         entries = [store_partition(arguments.storage, partition) for partition in partitions]
         if arguments.activate:
             activate_database_generation(connection, partitions)
+    rebuild_serving_after_write(arguments.env_file, written=arguments.activate)
     arguments.storage.mkdir(parents=True, exist_ok=True)
     manifest = serialize_manifest(entries)
     write_atomic(arguments.storage / f"manifest-{arguments.year}.json", manifest.encode())

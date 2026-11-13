@@ -4,6 +4,8 @@ import argparse
 import json
 from pathlib import Path
 
+from serving_rebuild_trigger import rebuild_serving_after_write
+
 from crawlers.senado.annual_reports import extract_annual_report_text
 from crawlers.senado.paired_annual_composition import parse_report_senate_composition
 from database.operations import connect_database
@@ -49,6 +51,7 @@ def main():
             partitions, Path("data/political-dashboard"), AnnualDashboardRepository(connection),
             manifest_name="senate-reports-manifest.json",
         )
+    rebuild_serving_after_write(options.env_file, written=True)
     save_json(directory / "validated-compositions.json", {
         "schema_version": "senate_dated_aggregate_compositions.v1",
         "compositions": compositions, "errors": rejected,

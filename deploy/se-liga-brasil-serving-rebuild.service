@@ -1,0 +1,13 @@
+[Unit]
+Description=Se Liga, Brasil daily rebuild of the se_liga_brasil_serving datasets
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/mirella/projetos/se-liga-brasil
+ExecStart=/home/mirella/projetos/se-liga-brasil/.venv/bin/python scripts/rebuild_serving_datasets.py --env-file /home/mirella/projetos/mdqc-knowledge-center/.env
+TimeoutStartSec=3600
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true

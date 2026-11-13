@@ -8,6 +8,8 @@ from urllib.parse import urlsplit
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from serving_rebuild_trigger import rebuild_serving_after_write  # noqa: E402
+
 from database.operations import connect_database  # noqa: E402
 from database.political_dashboard_analytical import AnnualDashboardRepository  # noqa: E402
 from database.state_assembly_rosters import StateAssemblyRosterRepository  # noqa: E402
@@ -89,6 +91,7 @@ def main():
             partitions.append(partition)
         if arguments.activate:
             AnnualDashboardRepository(connection).activate_partitions(partitions)
+    rebuild_serving_after_write(arguments.env_file, written=arguments.activate)
     print(
         json.dumps(
             [

@@ -8,6 +8,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from serving_rebuild_trigger import rebuild_serving_after_write  # noqa: E402
+
 from database.operations import connect_database  # noqa: E402
 from database.political_dashboard_analytical import AnnualDashboardRepository  # noqa: E402
 from service.political_dashboard.contracts import STATE_NAMES  # noqa: E402
@@ -69,6 +71,7 @@ def main():
             with connection.transaction():
                 repository.activate_partitions(partitions)
                 repository.remove_replaced_invalid_district_government()
+    rebuild_serving_after_write(arguments.env_file, written=arguments.activate)
     entries = [store_partition(arguments.storage, row) for row in partitions]
     print(
         json.dumps(

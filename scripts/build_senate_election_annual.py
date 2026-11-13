@@ -4,6 +4,8 @@ import argparse
 import json
 from pathlib import Path
 
+from serving_rebuild_trigger import rebuild_serving_after_write
+
 from database.operations import connect_database
 from database.political_dashboard_analytical import AnnualDashboardRepository
 from database.senate_elections import fetch_election_year_senate_partitions
@@ -27,6 +29,7 @@ def main():
             partitions, Path("data/political-dashboard"), AnnualDashboardRepository(connection),
             manifest_name="senate-elections-manifest.json",
         )
+    rebuild_serving_after_write(arguments.env_file, written=True)
     print(json.dumps({"partitions": len(entries), "election_observations": len(observations)}))
 
 

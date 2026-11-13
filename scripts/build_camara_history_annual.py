@@ -7,6 +7,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from serving_rebuild_trigger import rebuild_serving_after_write  # noqa: E402
+
 from crawlers.camara.cached_roster import load_cached_current_roster  # noqa: E402
 from crawlers.camara.history_archives import (  # noqa: E402
     read_verified_archive,
@@ -72,6 +74,7 @@ def main():
             ):
                 raise ValueError("BROADER_CAMARA_HISTORICAL_DATASET_MUST_BE_PRESERVED")
             repository.activate_partitions(partitions)
+    rebuild_serving_after_write(arguments.env_file, written=arguments.activate)
     write_atomic(
         arguments.storage / "camara-history-manifest.json", serialize_manifest(entries).encode()
     )

@@ -8,6 +8,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from serving_rebuild_trigger import rebuild_serving_after_write  # noqa: E402
+
 from database.operations import connect_database  # noqa: E402
 from database.political_dashboard_analytical import (
     AnnualDashboardRepository,
@@ -44,6 +46,7 @@ def main():
             migration = Path(__file__).resolve().parents[1] / "db/political_dashboard_annual.sql"
             connection.execute(migration.read_text())
             AnnualDashboardRepository(connection).activate_partitions(partitions)
+    rebuild_serving_after_write(arguments.env_file, written=arguments.activate)
     institution_codes = {exercise["institution_code"] for exercise in exercises}
     manifest_name = {
         frozenset({"presidency"}): "presidency-manifest.json",

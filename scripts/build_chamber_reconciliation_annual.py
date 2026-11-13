@@ -5,6 +5,8 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
+from serving_rebuild_trigger import rebuild_serving_after_write
+
 from crawlers.camara.legacy_reconciliation import load_legacy_reconciliation
 from crawlers.camara.reviewed_year_end_evidence import load_reviewed_year_end_cases
 from database.operations import connect_database
@@ -136,6 +138,7 @@ def main():
         entries = [store_partition(options.storage / "partitions", row) for row in partitions]
         preserved = activate_reconciled_partitions(connection, repository, partitions,
                                                   options.storage) if options.apply else {}
+    rebuild_serving_after_write(options.env_file, written=options.apply)
     write_json(options.storage / "annual-manifest.json", entries)
     write_json(options.storage / "audit.json", audits)
     result = {"applied": options.apply, "preserved_2020_2026": preserved,

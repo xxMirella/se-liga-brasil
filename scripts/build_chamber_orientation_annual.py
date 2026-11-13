@@ -5,6 +5,8 @@ import json
 from datetime import date
 from pathlib import Path
 
+from serving_rebuild_trigger import rebuild_serving_after_write
+
 from crawlers.camara.dated_roster import load_dated_roster
 from crawlers.camara.legacy_exercises import (
     corroborated_legacy_entry,
@@ -139,6 +141,7 @@ def main():
                 if row["total"] < previous.get(row["year"], {}).get("total", 0):
                     raise ValueError("CHAMBER_INTEGRATION_WOULD_DROP_VERIFIED_PEOPLE")
             repository.activate_partitions(partitions)
+    rebuild_serving_after_write(options.env_file, written=options.apply)
     summaries = {row["year"]: chamber_orientation_summary(row, row["year"]) for row in partitions}
     write_atomic(options.storage / "audit.json", json.dumps(summaries, ensure_ascii=False,
                                                             indent=2).encode())

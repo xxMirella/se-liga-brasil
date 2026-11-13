@@ -5,6 +5,8 @@ import json
 from datetime import date
 from pathlib import Path
 
+from serving_rebuild_trigger import rebuild_serving_after_write
+
 from database.operations import connect_database
 from database.political_dashboard_analytical import AnnualDashboardRepository
 from database.senate_history import fetch_verified_senator_identities
@@ -57,6 +59,7 @@ def main():
         entries = publish_senate_history(
             partitions, Path("data/political-dashboard"), AnnualDashboardRepository(connection),
         )
+    rebuild_serving_after_write(options.env_file, written=True)
     audit = {
         "partitions": len(entries), "linked_source_people": associated,
         "exercises": len(evidence["exercises"]), "source_people": len(evidence["affiliations"]),

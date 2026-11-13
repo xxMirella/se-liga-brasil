@@ -40,3 +40,21 @@ Validação real: Senado/14-10-2026 gerou dois votos vinculados com ementa ofici
 O coletor nominal Câmara foi validado por contratos oficiais e testes; nenhuma ausência ou modalidade é inferida a partir de lista vazia. Votos de pessoas sem identificação segura ficam pendentes nos arquivos originais; não são associados por nome isolado. Coleta truncada por orçamento não deve encerrar uma tarefa como plenamente enumerada. O serviço não declara cobertura completa da carreira. O canal de comissões do Senado ainda depende de vínculo de matéria/data para projeção canônica e não faz parte deste trabalhador de plenário.
 
 Verificação final: 321 testes locais e dois testes SQL isolados aprovados, Ruff e revisão estrutural sem achados. As duas tarefas reais de Câmara/Senado para 14/10/2026 foram consumidas pelo serviço com processed=true e pipeline_triggered=false no replay.
+
+## Reconstrução diária dos datasets de serving
+
+Os datasets de `se_liga_brasil_serving` são reconstruídos por duas vias: ao fim dos comandos `ingest`/`run` do TSE, `enrich`/`dispatch` (coleta) e da carga histórica do Senado, e por um job diário que cobre os dias sem pipeline. `current_release` considera a release válida por um dia (`max_age_days=1`); sem o job diário, a leitura volta às tabelas canônicas após esse prazo.
+
+O job usa o mesmo mecanismo do trabalhador de votações: unidades de usuário do systemd em `deploy/`, não o `pg_cron` (que apenas executa SQL e não roda os construtores Python) nem o GitHub Actions (o CI não recebe credenciais de produção). `se-liga-brasil-serving-rebuild.timer` dispara todo dia às 09:00 UTC (com `Persistent=true`, recupera disparos perdidos com a máquina desligada) a unidade `oneshot` `se-liga-brasil-serving-rebuild.service`, que executa `scripts/rebuild_serving_datasets.py --env-file CAMINHO_ENV`.
+
+A reconstrução é idempotente (a versão é o hash do conteúdo) e atômica por dataset: constrói em staging, troca por rename e grava a release na mesma transação. Falha em qualquer etapa desfaz a transação e mantém a tabela e a release anteriores servidas. Uma falha isolada não bloqueia os demais datasets; o script imprime `{"as_of", "datasets"}` em JSON e sai com código 1 se algum falhou (visível em `systemctl --user status`).
+
+Ativação (manual, uma vez):
+
+```sh
+cp deploy/se-liga-brasil-serving-rebuild.{service,timer} ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now se-liga-brasil-serving-rebuild.timer
+```
+
+Caminhos e arquivo de ambiente seguem os da unidade do trabalhador; ajuste-os se o checkout mudar. As unidades não foram ativadas nesta máquina por esta tarefa.
