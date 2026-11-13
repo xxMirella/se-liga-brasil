@@ -160,3 +160,36 @@ def test_parallel_map_failure_returns_nothing_and_respects_worker_limit():
     assert peak <= 4
     assert parallel_map(lambda v: v, [7]) == [7]
     assert parallel_map(lambda v: v, []) == []
+
+
+def test_reader_created_after_cache_is_used_for_catalog_and_version(listing):
+    """Serverless apps build the cache without a reader and create the Storage reader lazily."""
+    clock = Clock()
+    cache = VoteResponseCache(None, ttl_seconds=60, capacity=2, clock=clock)
+    assert cache.get_or_load("p1", {}, date(2026, 11, 5), lambda: {"n": 1}, warm_catalog=True) == {
+        "n": 1
+    }
+    assert listing["calls"] == 0  # no reader yet: nothing to warm, and no AttributeError
+
+    late_reader = FakeReader(clock)
+    cache.get_or_load(
+        "p1", {}, date(2026, 11, 5), lambda: {"n": 2}, warm_catalog=True,
+        dataset_reader=late_reader,
+    )
+    assert listing["calls"] == 1
+    assert late_reader.catalog_memo is not None
+
+
+def test_storage_catalog_failure_becomes_public_503_error(monkeypatch):
+    from service.dataset_storage.read import DatasetReadError
+    from service.public_profile.contracts import PublicProfileError
+
+    def unavailable(reader):
+        raise DatasetReadError("DATASET_CATALOG_UNAVAILABLE")
+
+    monkeypatch.setattr(catalog_module, "load_published_partitions", unavailable)
+    clock = Clock()
+    _, cache = make(clock)
+    with pytest.raises(PublicProfileError) as raised:
+        cache.get_or_load("p1", {}, date(2026, 11, 5), lambda: {}, warm_catalog=True)
+    assert (raised.value.code, raised.value.status_code) == ("DATASET_CATALOG_UNAVAILABLE", 503)

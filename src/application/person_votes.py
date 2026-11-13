@@ -12,7 +12,8 @@ def fetch_votes(application, person_id, parameters):
         parameters,
         application.today(),
         lambda: load_votes(application, person_id, parameters),
-        warm_catalog=history and application.dataset_reader is not None,
+        warm_catalog=history,
+        dataset_reader=application.dataset_reader,
     )
 
 

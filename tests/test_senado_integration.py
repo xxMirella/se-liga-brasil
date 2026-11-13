@@ -1,6 +1,6 @@
 """Fictitious Senate profile projection, isolated schema and rollback only."""
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
 import pytest
@@ -17,6 +17,9 @@ from storage.files import hash_file
 from storage.validation_index import ValidationIndex
 
 pytestmark = pytest.mark.integration
+
+# The projection only treats an exercise as current while its end date is in the future.
+EXERCISE_END_EXCLUSIVE = (datetime.now(UTC).date() + timedelta(days=90)).isoformat()
 
 
 def create_test_person(
@@ -59,7 +62,7 @@ def create_profile_artifact(tmp_path, person_id):
         "termStart": "2023-02-01",
         "termEndExclusive": "2031-02-01",
         "exerciseStartsOn": "2023-02-01",
-        "exerciseEndExclusive": "2026-10-31",
+        "exerciseEndExclusive": EXERCISE_END_EXCLUSIVE,
         "capacity": "holder",
         "inExercise": True,
         "observedOn": datetime.now(UTC).date().isoformat(),
@@ -99,7 +102,7 @@ def test_senate_profile_updates_canonical_office_and_is_idempotent(
                     "SELECT ends_before FROM se_liga_brasil.office_exercise"
                 ).fetchone()["ends_before"]
             )
-            == "2026-10-31"
+            == EXERCISE_END_EXCLUSIVE
         )
         assert row == {"has_current_public_office": True, "current_public_office_kind": "senator"}
         assert (

@@ -97,7 +97,7 @@ def test_public_people_sql_filters_aliases_temporal_facts_and_stable_page(integr
     following = repository.search_people(
         PeopleQuery(q="Perfil", limit=1),
         as_of,
-        (page[0]["display_name"], page[0]["person_id"]),
+        (page[0]["sort_key"], page[0]["display_name"], page[0]["person_id"]),
     )
     assert [row["person_id"] for row in following] == [page[1]["person_id"]]
     matching = repository.search_people(PeopleQuery(uf="SP", office_kind="senator"), as_of, None)

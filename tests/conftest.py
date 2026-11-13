@@ -86,6 +86,8 @@ class IsolatedSchemaConnection:
                 if isinstance(value, str) and value.startswith("se_liga_brasil:ingestion:")
                 else value.replace("se_liga_brasil.", f"{self.schema_name}.", 1)
                 if isinstance(value, str) and value.startswith("se_liga_brasil.")
+                else value.replace("se_liga_brasil_serving.", f"{self.schema_name}_serving.", 1)
+                if isinstance(value, str) and value.startswith("se_liga_brasil_serving.")
                 else value
                 for value in parameters
             )

@@ -194,7 +194,9 @@ def test_person_profile_uses_one_connection_and_no_extra_transactions(
     assert opened == [1]
     # The fixture already holds an open transaction, which the snapshots must join.
     assert counting.transactions == 0
-    assert counting.statements <= 12
+    # 12 live reads + 2 lookups (release table exists? release row) that miss before the
+    # snapshot fallback to the live path.
+    assert counting.statements <= 14
 
 
 def test_search_and_profile_responses_get_etag_and_error_stays_uncached():
